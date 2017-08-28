@@ -1,0 +1,247 @@
+プログラムの仕様を決めておく.
+
+.fv ファイルフォーマット
+	L m1 ... mL //header
+	sample, x1, ..., xL //eachSample
+
+.db ファイルフォーマット
+	N L m1 m2, ... mL
+	n 1 g_{n,1,1}, ..., g_{n,1,m1}
+	n . .
+	n . .
+	n L g_{n,L,1}, ..., g_{n,L,mL}
+
+-> 読むもの
+
+main.cpp
+	引数
+	-i : input  file    :: mutation.fv
+	-o : output file    :: result.txt
+	-d : data base file :: database.db
+	--method in {MCMC, VB, ONLINEVB}
+	--updateDataBase
+	-T : truncation number
+
+
+<Int,Real>FeatureData.cpp/hpp
+	public
+		I     :: Int // sample size
+		map<Int, Int>    idxToPosSize
+		map<Int, string> idxToSample
+		J_{i} :: Int // position size
+		maxJ  :: Int
+		x_{i,j,l, }    :: 1 out of m_{l} vector // x_{i,j,l,m}
+		L     :: Int // dimension of feature vector
+		M_{l} :: Int // # of possible state at l-th col of feature vector
+		maxMl :: Int
+
+<Int,Real>DBData.cpp/hpp
+	public
+		N     :: Int // db size
+		L     :: Int // dimension of feature vector
+		M_{l} :: Int // # of possible state at l-th col of feature vector
+		maxMl :: Int
+		g_{n, } :: m_{l}-dimensional non-negative simplex //g_{n,l}
+
+
+<Int,Real>FileReader.cpp/hpp
+	void readFVFile(&<Int,Real>FeatureData data, string fvFilePath)
+		from .fv format
+			I     :: Int // sample size
+			map<Int, Int>    idxToPosSize
+			map<Int, string> idxToSample
+			J_{i} :: Int // position size
+			maxJ  :: Int
+			maxMl :: Int
+			x_{i,j,l, }    :: 1 out of m_{l} vector // x_{i,j,l,m}
+			L     :: Int // dimension of feature vector
+			M_{l} :: Int // # of possible state at l-th col of feature vector
+
+	void readDBFile(&<Int,Real>DBData data, string dbFilePath)
+		from .db format
+			N     :: Int // db size
+			L     :: Int // dimension of feature vector
+			M_{l} :: Int // # of possible state at l-th col of feature vector
+			maxMl :: Int
+			g_{n, } :: m_{l}-dimensional non-negative simplex //g_{n,l}
+
+	bool checkSameDim(const &<Int,Real>DBData data, const &<Int,Real>FeatureData data);
+
+
+Inference.hpp -> Reader.hpp -> data.hpp // メンバは全て constにしてしまう方がいい.
+
+
+Inference.hpp
+ - VB.cpp/hpp
+ - OnlineVB.cpp/hpp
+ - MCMC.cpp/hpp
+
+FixedSizeMultiVector.hpp
+
+<E,IDX,DIMs...>FixedSizeMultiVector.cpp/hpp
+	MultiVector(IDX size, E e);
+	void push_back(E x);
+	IDX at(IDXs... idxs);
+	&<E> [](IDXs... idxs);
+	IDX size();
+	IDX size(IDX d);
+
+-> range based for ができる class 欲しい
+
+FixedSizeMultiVector v(...);
+for(Int i : MultiRange<long long>( v, {from...}, {to...}) ){ // 連続的に {from...} から {to...}に進む
+	std::cout << v[i] << std::endl;
+}
+
+/*
+	for(Int i : MultiRange<long long>( {fixed...} {from...}, {to...}) ){ // 飛び飛びに {from...} から {to...}に進む
+		std::cout << v[i] << std::endl;
+	}
+*/
+template<typename E, typename Int = long long>
+class Range {
+public:
+    class iterator {
+    public:
+        iterator(FixedSizeMultiVector<E, Int> v, std::vector<Int> _from, std::vector<Int> Int _to){
+        	// from, to initialization
+        }
+        iterator& operator++() { num = end >= from ? num + 1: num - 1; return *this; }
+        iterator operator++(int) {iterator retval = *this; ++(*this); return retval;}
+        friend bool operator==(iterator other) const {return num == other.num;}
+        friend bool operator!=(iterator other) const {return !(*this == other);}
+        long operator*() {return num;}
+        // iterator traits
+        using difference_type = Int;
+        using value_type = Int;
+        using pointer = const Int*;
+        using reference = const Int&;
+        using iterator_category = std::forward_iterator_tag;
+    private:
+	    Int num  = 0;
+    	Int from = 0;
+    	Int to  = 0;
+    };
+    iterator begin() {return from;}
+    iterator end() {return to >= from? to+1 : to-1;}
+};
+
+
+vector の場合
+template<long FROM, long TO>
+class Range {
+public:
+    class iterator {
+        long num = FROM;
+    public:
+        iterator(long _num = 0) : num(_num) {}
+        iterator& operator++() {num = TO >= FROM ? num + 1: num - 1; return *this;}
+        iterator operator++(int) {iterator retval = *this; ++(*this); return retval;}
+        bool operator==(iterator other) const {return num == other.num;}
+        bool operator!=(iterator other) const {return !(*this == other);}
+        long operator*() {return num;}
+        // iterator traits
+        using difference_type = long;
+        using value_type = long;
+        using pointer = const long*;
+        using reference = const long&;
+        using iterator_category = std::forward_iterator_tag;
+    };
+    iterator begin() {return FROM;}
+    iterator end() {return TO >= FROM? TO+1 : TO-1;}
+};
+
+for(long l : Range<3, 5>()) {
+        std::cout << l << ' '; // 3 4 5
+}
+でできる.
+
+VBUtils
+
+
+	E-step :
+
+	M-step :
+		void   calDirExp (&FixedSizeMultiVector<E,Int> ansDig,         const &FixedSizeMultiVector<E,Int> alpha, int dim=0; // dig vector　 計算 @ for(i,j,k,...) dim において dig vector 計算
+		double calELogDir(const &Vector logTheta, const &Vector alpha, int start=0, int size=-1):
+
+		ex FixedSizeMultiVector<double>  v(1.0,3,3,3); <- (x,y,z) としておく. for(x,y) { v(x,y, ) = diggamma 計算 } の場合　dim = 2
+		void   calDirExp (&FixedSizeMultiVector<E,Int> ansDig,         const &FixedSizeMultiVector<E,Int> alpha, int dim=0){
+			for(x)for(y)... を dim 回繰り返したものを作りたい.
+		}
+
+		void filter(&FixedSizeMultiVector<E,Int> ansDig, const FixedSizeMultiVector<bool,Int>& filterVec);
+
+		pmswitch::FixedSizeMultiVector createFilter(){
+			
+		}
+
+
+
+MCMCUtils.hpp <- 勉強終わったら組む
+
+//    def calDirExp(self, ar):
+//        ans = np.zeros(len(ar))
+//        dig_sum = digamma( ar.sum() )
+//        ans = [ digamma(a) - dig_sum for a in ar]
+//        return np.asarray(ans)
+
+//    def calELogDir(self, log_theta, alpha):
+//        sum_lgam_alpha = sum([ -gammaln(a) for a in alpha ])
+//        lgam_sum_param = gammaln(alpha.sum())
+//        param_lt = [ (alpha[i]-1) * log_theta[i] for i in range(len(alpha)) ]
+//        sum_par_lt = sum(param_lt)
+//        return sum_lgam_alpha + lgam_sum_param + sum_par_lt
+
+
+必要なデータ形式
+	variable :: type //coment
+	T     :: INT // truncation number
+	N     :: INT // db size
+	I     :: INT // sample size
+	J_{i} :: INT // position size
+	L     :: INT // dimension of feature vector
+	M_{l} :: INT // # of possible state at l-th col of feature vector
+
+	x_{i,j,l, }    :: 1 out of m_{l} vector // x_{i,j,l,m}
+
+	//	k in [T]
+	//	n in [N]
+	//	i in [I]
+	//		j in [J_{i}]
+	//  l in [L]
+	//		m in [M_{l}]
+
+
+	EZ_{i,j, }     :: T-dimensional non-negative simplex // EZ_{i,j,k   }
+	ES_{i, }	   :: 2-dimensional non-negative simplex // ES_{i,{0,1} }
+	EY_{i, }       :: N-dimensional non-negative simplex // EY_{i,n}
+
+###EZ_{i,j, }###
+	v_{i, }        :: T-dimensional real in [0,1] //v_{i, k}
+	dig_v_{i,}     :: T-dimensional real
+	\alpha{i, }    :: T-dimensional real
+
+	f_{k, }        :: m_{l}-dimensional non-negative simplex // f_{k,l}
+	dig_f_{k, }    :: m_{l}-dimensional real vector          // dig_f_{k, l}
+	\eta_{k,}	   :: m_{l}-dimensional real vector 		 // eta_{k, l}
+################
+
+###ES_{i, }###
+	\theta_{i}     :: real in [0,1]
+	dig_\theta_{i,}:: 2-dimensional real vector
+	\beta_{i, }    :: 2-dimensional real vector
+################
+
+###EY_{i, }###
+	\pi_{i}        :: real in [0,1]
+	dig_\pi_{i, }  :: N-dimensional real
+	\gamma_{i, }   :: N-dimensional real
+
+	g_{n, }        :: m_{l}-dimensional non-negative simplex // g_{n,l}
+################
+
+
+
+
+

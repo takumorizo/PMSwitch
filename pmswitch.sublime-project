@@ -1,0 +1,39 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch",
+		}
+	],
+    "settings":
+    {
+        "cc_include_options":
+        [
+			"-isystem", "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1",
+			"-isystem", "/usr/local/include",
+			"-isystem", "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/7.3.0/include",
+			"-isystem", "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+			"-isystem", "/usr/include",
+	        "-F/System/Library/Frameworks",
+	        "-F/Library/Frameworks",
+	        "-isystem", "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src",
+		 	"-isystem", "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/src",
+			"-isystem", "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/libs/gtest-1.7.0/include",
+			"-isystem", "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/libs/boost_1_45_0_subset",
+			// "-lgtest",
+		    "-Wall"
+	  //       "-isystem", "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src",
+		 // 	"-isystem", "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/src",
+			// "-isystem", "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/libs/gtest-1.7.0/include",
+			// "-isystem", "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/libs/boost_1_45_0_subset",
+			// "-lgtest",
+		 //    "-Wall",
+
+	        // "-I/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/libs/boost_1_45_0_subset",
+	        // "-I/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/libs/gtest-1.7.0/include"
+        ],
+    }
+}
+
+
+
