@@ -15,30 +15,29 @@ namespace pmswitch{
 	template<typename Int = long long, typename Real = double>
 	class InferenceData{
 	public:
-		InferenceData(FixedSizeMultiVector<double, Int> _EZ, FixedSizeMultiVector<double, Int> _ES, FixedSizeMultiVector<double, Int> _EY,
-					  FixedSizeMultiVector<double, Int> _alpha, FixedSizeMultiVector<double, Int> _eta,
-					  FixedSizeMultiVector<double, Int> _beta, FixedSizeMultiVector<double, Int> _gamma,
-					  FixedSizeMultiVector<double, Int> _g);
-		~InferenceData();
+		InferenceData(FixedSizeMultiVector<Real, Int> _EZ, FixedSizeMultiVector<Real, Int> _ES, FixedSizeMultiVector<Real, Int> _EY,
+					  FixedSizeMultiVector<Real, Int> _alpha, FixedSizeMultiVector<Real, Int> _eta,
+					  FixedSizeMultiVector<Real, Int> _beta, FixedSizeMultiVector<Real, Int> _gamma,
+					  FixedSizeMultiVector<Real, Int> _g);
 
-		const FixedSizeMultiVector<double, Int> EZ;
-		const FixedSizeMultiVector<double, Int> ES;
-		const FixedSizeMultiVector<double, Int> EY;
+		const FixedSizeMultiVector<Real, Int> EZ;
+		const FixedSizeMultiVector<Real, Int> ES;
+		const FixedSizeMultiVector<Real, Int> EY;
 
-		const FixedSizeMultiVector<double, Int> alpha;
-		const FixedSizeMultiVector<double, Int> eta;
-		const FixedSizeMultiVector<double, Int> beta;
-		const FixedSizeMultiVector<double, Int> gamma;
+		const FixedSizeMultiVector<Real, Int> alpha;
+		const FixedSizeMultiVector<Real, Int> eta;
+		const FixedSizeMultiVector<Real, Int> beta;
+		const FixedSizeMultiVector<Real, Int> gamma;
 
-		const FixedSizeMultiVector<double, Int> g;
+		const FixedSizeMultiVector<Real, Int> g;
 	};
 }
 
 template<typename Int , typename Real >
-pmswitch::InferenceData<Int, Real>::InferenceData(FixedSizeMultiVector<double, Int> _EZ, FixedSizeMultiVector<double, Int> _ES, FixedSizeMultiVector<double, Int> _EY,
-					  FixedSizeMultiVector<double, Int> _alpha, FixedSizeMultiVector<double, Int> _eta,
-					  FixedSizeMultiVector<double, Int> _beta, FixedSizeMultiVector<double, Int> _gamma,
-					  FixedSizeMultiVector<double, Int> _g) : EZ(_EZ), ES(_ES), EY(_EY), alpha(_alpha), eta(_eta), beta(_beta), gamma(_gamma), g(g) {
+pmswitch::InferenceData<Int, Real>::InferenceData(FixedSizeMultiVector<Real, Int> _EZ, FixedSizeMultiVector<Real, Int> _ES, FixedSizeMultiVector<Real, Int> _EY,
+					  FixedSizeMultiVector<Real, Int> _alpha, FixedSizeMultiVector<Real, Int> _eta,
+					  FixedSizeMultiVector<Real, Int> _beta, FixedSizeMultiVector<Real, Int> _gamma,
+					  FixedSizeMultiVector<Real, Int> _g) : EZ(_EZ), ES(_ES), EY(_EY), alpha(_alpha), eta(_eta), beta(_beta), gamma(_gamma), g(_g) {
 }
 
 

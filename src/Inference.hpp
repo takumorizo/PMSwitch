@@ -50,7 +50,7 @@ namespace pmswitch{
 		void subMax(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim, Real INF = 1e300);
 
 		template<typename Int = long long, typename Real = double>
-		void subMin(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim);
+		void subMin(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim, Real INF = 1e300);
 
 		template<typename Int = long long, typename Real = double>
 		void norm(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim);
@@ -130,13 +130,11 @@ namespace pmswitch{
 	class InferenceCreator{
 	public:
 		InferenceCreator();
-		pmswitch::Inference<Int, Real> createInference(std::string pathFV, std::string pathDB,
-													   Int T, Real _alpha, Real beta0, Real beta1,
+	  	pmswitch::Inference<Int, Real> createInference(std::string pathFV, std::string pathDB,
+													   Int T, Real _alpha, Real _beta0, Real _beta1,
 													   Real _gamma, Real _eta );
 	};
 }
-
-
 
 /*
 ################
@@ -179,8 +177,8 @@ pmswitch::FixedSizeMultiVector<Real> pmswitch::math::initEY(Int I, FixedSizeMult
 	return EY;
 }
 
-template<typename Int = long long, typename Real = double>
-void subMax(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim, Real INF){
+template<typename Int, typename Real>
+void pmswitch::math::subMax(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim, Real INF){
 	Int outN = vec.size() / vec.volume(dim);
 	Int inN  = vec.volume(dim);
 	Real localMax = -INF;
@@ -188,13 +186,13 @@ void subMax(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim, Real INF){
 	for(Int i = 0; i < outN; i++){
 		baseIdx = i * inN;
 		localMax = -INF;
-		for(Int j = 0; j < inN; j++){ localMax = std::max(vec[baseIdx + j], localMax) ;}
+		for(Int j = 0; j < inN; j++){ localMax = std::max(vec[baseIdx + j], localMax);}
 		for(Int j = 0; j < inN; j++){ vec[baseIdx + j] -= localMax;}
 	}
 }
 
-template<typename Int = long long, typename Real = double>
-void subMin(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim, Real INF){
+template<typename Int, typename Real>
+void pmswitch::math::subMin(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim, Real INF){
 	Int outN = vec.size() / vec.volume(dim);
 	Int inN  = vec.volume(dim);
 	Real localMin = INF;
@@ -289,7 +287,7 @@ void pmswitch::math::norm(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim
 		baseIdx = i * inN;
 		sum = 0.0;
 		for(Int j = 0; j < inN; j++){ sum += vec[baseIdx + j];}
-		for(Int j = 0; j < inN; j++){ vec[baseIdx + j] /= sum;}
+		if(sum != 0)for(Int j = 0; j < inN; j++){ vec[baseIdx + j] /= sum;}
 	}
 }
 
@@ -297,7 +295,7 @@ template<typename Int, typename Real>
 void pmswitch::math::norm(pmswitch::FixedSizeMultiVector<Real,Int> &vec){
 	Real sum = 0.0;
 	for(Int i = 0; i < vec.size(); i++){ sum += vec[i];}
-	for(Int i = 0; i < vec.size(); i++){ vec[i] /= sum;}
+	if(sum != 0)for(Int i = 0; i < vec.size(); i++){ vec[i] /= sum;}
 }
 
 template<typename Int, typename Real>
@@ -469,7 +467,7 @@ Real pmswitch::math::calELogDir(const pmswitch::FixedSizeMultiVector<Real,Int> &
 
 template<typename Int, typename Real>
 Real pmswitch::math::calELogDir(const pmswitch::FixedSizeMultiVector<Real,Int> &logTheta, const pmswitch::FixedSizeMultiVector<Real,Int> &param, Int dim,
-								   const pmswitch::FixedSizeMultiVector<bool,Int> &filter){
+								const pmswitch::FixedSizeMultiVector<bool,Int> &filter){
 	Int outN = param.size() / param.volume(dim);
 	Int inN  = param.volume(dim);
 	{// size, dim check in debug
@@ -491,12 +489,15 @@ Real pmswitch::math::calELogDir(const pmswitch::FixedSizeMultiVector<Real,Int> &
 				std::cerr << "j: " << j << ", param[baseIdx+j]: " << param[baseIdx+j] << ", filter[baseIdx+j]: " << filter[baseIdx+j] << std::endl;
 			}
 			std::cerr << pmswitch::math::sum(param, baseIdx, dim, filter) << std::endl;
-		*/}
+		*/
+			// Real tmp = pmswitch::math::sum(param, baseIdx, dim, filter);
+			// std::cerr << baseIdx << " : sum : " << tmp << std::endl;
+		}
 		Real local_lgam_sum_param = lgamma(pmswitch::math::sum(param, baseIdx, dim, filter));
 		Real local_sum_lgam_param = 0.0;
 		Real local_sum_par_lt     = 0.0;
 		{
-			for(Int j = 0; j < inN; j++)if(filter[baseIdx + j]){ local_sum_lgam_param -= lgamma(param[baseIdx + j]);}
+			for(Int j = 0; j < inN; j++)if(filter[baseIdx + j]){ local_sum_lgam_param -= lgamma(param[baseIdx + j]); }
 			for(Int j = 0; j < inN; j++)if(filter[baseIdx + j]){ local_sum_par_lt     +=  (param[baseIdx + j]-1.0) * logTheta[baseIdx + j]; }
 		}
 		ans += local_lgam_sum_param + local_sum_lgam_param + local_sum_par_lt;
@@ -577,47 +578,83 @@ pmswitch::Inference<Int, Real>::Inference(FeatureData<Int, Real> _fvData, DBData
 		:fvData(_fvData), dbData(_dbData), prior(_prior){
 }
 
+
 template<typename Int, typename Real>
 pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(Int T, bool updateDB ){
 	using namespace pmswitch;
-	Int N = dbData.N;
-	Int I = fvData.I;
-	FixedSizeMultiVector<Int> Js = fvData.Js;
-	Int maxJ = fvData.maxJ;
-	Int L = dbData.L;
+	Int N = dbData.N; // existing cluster Number
+	Int I = fvData.I; // sample size
+	FixedSizeMultiVector<Int> Js = fvData.Js; // position size list for each sample
+	Int maxJ = fvData.maxJ;					  // position size max
+	Int L = dbData.L;						  // signature size @ each position
 	assert(dbData.L == fvData.L);
-	Int maxMl = dbData.maxMl;
-	FixedSizeMultiVector<Int> ml = fvData.Ml;
-	FixedSizeMultiVector<Int> X  = fvData.X; // i,maxJ,l,maxMl
+	Int maxMl = dbData.maxMl;				  // feature dimension max
+	FixedSizeMultiVector<Int> ml = fvData.Ml; // feature dimension list
+	FixedSizeMultiVector<Int> X  = fvData.X;  // i,maxJ,l,maxMl, each data
 
 	FixedSizeMultiVector<Real, Int> EZ = math::initEZ<Int, Real>(I, Js, maxJ, T); // I, maxJ, T
 	FixedSizeMultiVector<Real, Int> ES = math::initES<Int, Real>(I, Js, maxJ);    // I, maxJ, 2
 	FixedSizeMultiVector<Real, Int> EY = math::initEY<Int, Real>(I, Js, maxJ, N); // I, maxJ, N
+// {
+// 	std::cerr << "EZ dim.size() : " << EZ.dim() << ", :" << EZ.size(0) << ", " << EZ.size(1)  << ", " << EZ.size(2) << std::endl;
+// 	std::cerr << "ES dim.size() : " << ES.dim() << ", :" << ES.size(0) << ", " << ES.size(1)  << ", " << ES.size(2) << std::endl;
+// 	std::cerr << "EY dim.size() : " << EY.dim() << ", :" << EY.size(0) << ", " << EY.size(1)  << ", " << EY.size(2) << std::endl;
+// }
 
-	FixedSizeMultiVector<Real, Int> alpha = prior.alpha; // I, T, 2
+	FixedSizeMultiVector<Real, Int> alpha = prior.alpha; // I, T-1, 2
 	FixedSizeMultiVector<Real, Int> beta  = prior.beta;  // I, 2
 	FixedSizeMultiVector<Real, Int> gamma = prior.gamma; // I, N
 	FixedSizeMultiVector<Real, Int> eta   = prior.eta;   // T, Ml.size(), maxMl
+// {
+// 	std::cerr << "I, T, N, Ml.size, L, maxMl, " << I << ", " << T << ", " << N << ", " << ml.size() << ", " << L << ", " << maxMl << std::endl;
+// 	std::cerr << "I := " << I << std::endl;
+// 	std::cerr << "T := " << T << std::endl;
+// 	std::cerr << "N := " << N << std::endl;
+// 	std::cerr << "Ml.size :=  " << ml.size() << std::endl;
+// 	std::cerr << "L := " << L << std::endl;
+// 	std::cerr << "maxMl := " << maxMl << std::endl;
 
-	FixedSizeMultiVector<Real, Int> dig_v     = math::calDirExp(alpha, 1); // I, T, 2
-	FixedSizeMultiVector<Real, Int> dig_theta = math::calDirExp(beta,  0); // I, 2
-	FixedSizeMultiVector<Real, Int> dig_pi    = math::calDirExp(gamma, 0); // I, N
-	FixedSizeMultiVector<Real, Int> dig_f     = math::calDirExp(eta,   1); // T, L, maxMl
+// 	std::cerr << "alpha(I, T-1, 2) dim.size() : " << alpha.dim() << ", :=" << alpha.size(0) << ", " << alpha.size(1)  << ", " << alpha.size(2) << std::endl;
+// 	std::cerr << "beta(I, 2) dim.size() : " << beta.dim() << ", :=" << beta.size(0) << ", " << beta.size(1) << std::endl;
+// 	std::cerr << "gamma(I, N) dim.size() : " << gamma.dim() << ", :=" << gamma.size(0) << ", " << gamma.size(1) << std::endl;
+// 	std::cerr << "eta(T, Ml.size(), maxMl) dim.size() : " << eta.dim() << ", :=" << eta.size(0) << ", " << eta.size(1) << ", " << eta.size(2) << std::endl;
+// }
+	FixedSizeMultiVector<Real, Int> dig_v     = math::calDirExp<Int, Real>(alpha, 1); // I, T-1, 2
+	FixedSizeMultiVector<Real, Int> dig_theta = math::calDirExp<Int, Real>(beta,  0); // I, 2
+	FixedSizeMultiVector<Real, Int> dig_pi    = math::calDirExp<Int, Real>(gamma, 0); // I, N
+	FixedSizeMultiVector<Real, Int> dig_f     = math::calDirExp<Int, Real>(eta,   1); // T, L, maxMl
 	FixedSizeMultiVector<Real, Int> g         = dbData.g; // N, l, maxMl
-
 	FixedSizeMultiVector<Real, Int> dig_v_sig(0.0, I, T); // I, T
+// {
+// 	std::cerr << "dig_v(I, T-1, 2) dim.size() : " << dig_v.dim() << ", :=" << dig_v.size(0) << ", " << dig_v.size(1)  << ", " << dig_v.size(2) << std::endl;
+// 	std::cerr << "dig_theta(I, 2) dim.size() : " << dig_theta.dim() << ", :=" << dig_theta.size(0) << ", " << dig_theta.size(1) << std::endl;
+// 	std::cerr << "dig_pi(I, N) dim.size() : " << dig_pi.dim() << ", :=" << dig_pi.size(0) << ", " << dig_pi.size(1) << std::endl;
+// 	std::cerr << "dig_f(T, L, maxMl) dim.size() : " << dig_f.dim() << ", :=" << dig_f.size(0) << ", " << dig_f.size(1) << ", " << dig_f.size(2) << std::endl;
+// 	std::cerr << "g(N, l, maxMl) dim.size() : " << g.dim() << ", :=" << g.size(0) << ", " << g.size(1) << ", " << g.size(2) << std::endl;
+// 	std::cerr << "dig_v_sig(I, T) dim.size() : " << dig_v_sig.dim() << ", :=" << dig_v_sig.size(0) << ", " << dig_v_sig.size(1) << std::endl;
+// }
 
 	FixedSizeMultiVector<bool, Int> EZFilter(true, I, maxJ, T);   math::makeFilter(EZFilter,  I, Js, FixedSizeMultiVector<Int, Int>(T, maxJ) );
 	FixedSizeMultiVector<bool, Int> ESFilter(true, I, maxJ, 2);   math::makeFilter(ESFilter,  I, Js, FixedSizeMultiVector<Int, Int>(2, maxJ) );
 	FixedSizeMultiVector<bool, Int> EYFilter(true, I, maxJ, N);   math::makeFilter(EYFilter,  I, Js, FixedSizeMultiVector<Int, Int>(N, maxJ) );
-	FixedSizeMultiVector<bool, Int> etaFilter(true, T, L, maxMl); math::makeFilter(etaFilter, T, FixedSizeMultiVector<Int, Int>(T, L), ml);
-	FixedSizeMultiVector<bool, Int> gFilter(true, I, maxJ, N);    math::makeFilter(gFilter,   N, FixedSizeMultiVector<Int, Int>(N, L), ml);
+	FixedSizeMultiVector<bool, Int> etaFilter(true, T, L, maxMl); math::makeFilter(etaFilter, T, FixedSizeMultiVector<Int, Int>(L, T), ml);
+	FixedSizeMultiVector<bool, Int> gFilter(true, N, L, maxMl);   math::makeFilter(gFilter,   N, FixedSizeMultiVector<Int, Int>(L, N), ml);
 
-	FixedSizeMultiVector<Real, Int> lnEZ = math::applied(EZ, std::log, EZFilter) ; // I, maxJ, T
-	FixedSizeMultiVector<Real, Int> lnES = math::applied(ES, std::log, ESFilter) ; // I, maxJ, 2
-	FixedSizeMultiVector<Real, Int> lnEY = math::applied(EY, std::log, EYFilter) ; // I, maxJ, N
+	FixedSizeMultiVector<Real, Int> lnEZ = math::applied<Int, Real>(EZ, std::log, EZFilter) ; // I, maxJ, T
+	FixedSizeMultiVector<Real, Int> lnES = math::applied<Int, Real>(ES, std::log, ESFilter) ; // I, maxJ, 2
+	FixedSizeMultiVector<Real, Int> lnEY = math::applied<Int, Real>(EY, std::log, EYFilter) ; // I, maxJ, N
+// {
+// 	std::cerr << "EZFilter(I, maxJ, T) dim.size() : " << EZFilter.dim() << ", :=" << EZFilter.size(0) << ", " << EZFilter.size(1)  << ", " << EZFilter.size(2) << std::endl;
+// 	std::cerr << "ESFilter(I, maxJ, 2) dim.size() : " << ESFilter.dim() << ", :=" << ESFilter.size(0) << ", " << ESFilter.size(1)  << ", " << ESFilter.size(2) << std::endl;
+// 	std::cerr << "EYFilter(I, maxJ, N) dim.size() : " << EYFilter.dim() << ", :=" << EYFilter.size(0) << ", " << EYFilter.size(1)  << ", " << EYFilter.size(2) << std::endl;
+// 	std::cerr << "etaFilter(T, Ml.size(), maxMl) dim.size() : " << etaFilter.dim() << ", :=" << etaFilter.size(0) << ", " << etaFilter.size(1)  << ", " << etaFilter.size(2) << std::endl;
+// 	std::cerr << "gFilter(N, l, maxMl) dim.size() : " << gFilter.dim() << ", :=" << gFilter.size(0) << ", " << gFilter.size(1)  << ", " << gFilter.size(2) << std::endl;
 
-	Real minLqConvergence = 1e-6;
+// 	std::cerr << "lnEZ(I, maxJ, T) dim.size() : " << lnEZ.dim() << ", :=" << lnEZ.size(0) << ", " << lnEZ.size(1)  << ", " << lnEZ.size(2) << std::endl;
+// 	std::cerr << "lnES(I, maxJ, 2) dim.size() : " << lnES.dim() << ", :=" << lnES.size(0) << ", " << lnES.size(1)  << ", " << lnES.size(2) << std::endl;
+// 	std::cerr << "lnEY(I, maxJ, N) dim.size() : " << lnEY.dim() << ", :=" << lnEY.size(0) << ", " << lnEY.size(1)  << ", " << lnEY.size(2) << std::endl;
+// }
+	const Real minLqConvergence = 1e-9;
     Real beforeLq = -1.0 * 1e50;
     Real nextLq = -1.0 * 1e50;
     bool first = true;
@@ -625,143 +662,140 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(Int T, boo
 
     Real INF = 1e300;
 
-    while( first || std::abs(beforeLq - nextLq) >=  minLqConvergence  ){
-	    if(first) first = false;
-	    if( beforeLq > nextLq + minLqConvergence ){ std::cerr << "decrease lower bound @ vb" << std::endl; }
-	    assert(beforeLq > nextLq + minLqConvergence);
+    while( first || std::abs(nextLq - beforeLq)/std::abs(beforeLq) >=  minLqConvergence){
+	    beforeLq = nextLq;
+	    nextLq = 0.0;
 	    // E-step
 	    {// EZ
+    	    // std::cerr << "before EZ update" << std::endl;
 		    for(Int i = 0; i < I; i++)for(Int j = 0; j < maxJ; j++)for(Int k = 0; k < T; k++) EZ(i,j,k) = 0.0;
 
 		    for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int k = 0; k < T; k++){
-	    		for(Int kk = 0; kk < k-1; kk++){ EZ(i,j,k) += dig_v(i,kk,1);}
-	    		if(k < T) {EZ(i,j,k) += dig_v(i,k,0);}
-	    		for(Int l = 0; l < L; l++)for(Int m = 0; m < ml(l); m++){
-	    			EZ(i,j,k) += ES(i,j) * X(i,j,l,m) * dig_f(k, l, m);
+	    		for(Int kk = 0; kk <= k-1; kk++){ EZ(i,j,k) += dig_v(i,kk,1);}
+	    		if(k < T-1) {EZ(i,j,k) += dig_v(i,k,0);}
+	    		for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++){
+	    			EZ(i,j,k) += ES(i,j,0) * X(i,j,l,m) * dig_f(k, l, m);
 	    		}
-	    		math::filter(EZ, EZFilter, -INF);
-	    		subByMax(EZ, 1);
-	    		math::apply(EZ, std::exp);
-	    		math::filter(EZ, EZFilter, 0.0);
-	    		math::norm(EZ, 1);
-	    		lnEZ = math::apply(EZ, std::log, EZFilter);
 		    }
+    		// EZ.print();
+    		math::filter<Int, Real>(EZ, EZFilter, -INF);
+    		math::subMax<Int, Real>(EZ, 1, INF);
+    		math::apply<Int, Real>(EZ, std::exp);
+    		math::filter<Int, Real>(EZ, EZFilter, 0.0);
+    		math::norm<Int, Real>(EZ, 1);
+    		lnEZ = math::applied<Int, Real>(EZ, std::log, EZFilter);
 	    }
 	    {// ES
 	    	for(Int i = 0; i < I; i++)for(Int j = 0; j < maxJ; j++){ES(i,j,0) = 0.0; ES(i,j,1) = 0.0;}
-
-	    	for(Int i = 0; i < I; i++) for(Int j =0; j < maxJ; ){
+{
+    		// std::cerr << "done ES update init" << std::endl;
+    		// std::cerr << "I: " << I << ", maxJ: " << maxJ << std::endl;
+    		// std::cerr << "L: " << L << ", T: "    << T << std::endl;
+    		// for(Int l = 0; l < L; l++){ std::cerr << "l: " << l << ", ml[l]: " << ml[l] << std::endl; }
+}
+	    	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++ ){
 	    		ES(i,j,0) += dig_theta(i, 0);
-	    		for(Int l = 0; l < L; l++)for(Int k = 0; k < T; k++)for(Int m = 0; m < ml(l); m++){
+	    		for(Int l = 0; l < L; l++)for(Int k = 0; k < T; k++)for(Int m = 0; m < ml[l]; m++){
 	    			ES(i,j,0) += EZ(i,j,k) * X(i,j,l,m) * dig_f(k, l, m);
 	    		}
-
 	    		ES(i,j,1) += dig_theta(i,1);
-	    		for(Int l = 0; l < L; l++)for(Int n = 0; n < N; n++)for(int m = 0; m < ml(l); m++){
-	    			ES(i,j,1) += EY(i,j,n) * X(i,j,l,m) + std::log(g(n,l,m));
+	    		for(Int l = 0; l < L; l++)for(Int n = 0; n < N; n++)for(int m = 0; m < ml[l]; m++){
+	    			ES(i,j,1) += EY(i,j,n) * X(i,j,l,m) * std::log(g(n,l,m));
 	    		}
-	    		math::filter(ES, ESFilter, -INF);
-	    		subByMax(ES, 1);
-	    		math::apply(ES, std::exp);
-	    		math::filter(ES, ESFilter, 0.0);
-	    		math::norm(ES, 1);
-	    		lnES = math::apply(ES, std::log, ESFilter);
 	    	}
+    		math::filter<Int, Real>(ES, ESFilter, -INF);
+    		math::subMax<Int, Real>(ES, 1);
+    		math::apply<Int, Real>(ES, std::exp);
+    		math::filter<Int, Real>(ES, ESFilter, 0.0);
+    		math::norm<Int, Real>(ES, 1);
+    		lnES = math::applied<Int, Real>(ES, std::log, ESFilter);
 	    }
 		{// EY // I, maxJ, N
 	    	for(Int i = 0; i < I; i++)for(Int j = 0; j < maxJ; j++)for(Int n = 0; n < N; n++){EY(i,j,n) = 0.0;}
 
 	    	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int n = 0; n < N; n++){
 	    		EY(i,j,n) += dig_pi(i,n);
-	    		for(Int l = 0; l < L; l++)for(Int m = 0; m < ml(l); m++){
+	    		for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++){
 	    			EY(i,j,n) += X(i,j,l,m) * ES(i,j,1) * std::log(g(n,l,m));
 	    		}
-	    		math::filter(EY, EYFilter, -INF);
-	    		subByMax(EY, 1);
-	    		math::apply(EY, std::exp);
-	    		math::filter(EY, EYFilter, 0.0);
-	    		math::norm(EY, 1);
-	    		lnEY = math::apply(EY, std::log, EYFilter);
 	    	}
+    		math::filter<Int, Real>(EY, EYFilter, -INF);
+    		math::subMax<Int, Real>(EY, 1);
+    		math::apply<Int, Real>(EY, std::exp);
+    		math::filter<Int, Real>(EY, EYFilter, 0.0);
+    		math::norm<Int, Real>(EY, 1);
+    		lnEY = math::applied<Int, Real>(EY, std::log, EYFilter);
 	    }
+
 	    // M-step
-	    {// FixedSizeMultiVector<Real, Int> eta   = prior.eta;   // T, Ml.size(), maxMl
-	   		FixedSizeMultiVector<Real, Int> eta   = prior.eta;
-	   		for(Int k = 0; k < T; k++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml(l); m++){
+	    {// FixedSizeMultiVector<Real, Int> eta   = prior.eta;   // T, Ml.size(), maxMl   X(
+	   		eta = prior.eta;
+	   		for(Int k = 0; k < T; k++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++){
 	   			for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
-		   			eta(k,l,m) += X(i,j,m,l) * EZ(i,j,k) * ES(i,j);
+		   			eta(k,l,m) += X(i,j,l,m) * EZ(i,j,k) * ES(i,j,0);
 	   			}
 	   		}
-	   		dig_f = math::calDirExp(eta, 1, etaFilter);
+	   		dig_f = math::calDirExp<Int, Real>(eta, 1, etaFilter);
 	    }
-	    {// FixedSizeMultiVector<Real, Int> alpha = prior.alpha; // I, T, 2
-			FixedSizeMultiVector<Real, Int> alpha = prior.alpha; // I, T, 2
-			for(Int i = 0; i < I; i++)for(Int k = 0; k < T; k++){
+	    {// FixedSizeMultiVector<Real, Int> alpha = prior.alpha; // I, T-1, 2
+			alpha = prior.alpha; // I, T-1, 2
+			for(Int i = 0; i < I; i++)for(Int k = 0; k < T-1; k++){
 				for(Int j = 0; j < Js(i); j++){
-					alpha(i,k,0)  += EZ(i,j,k);
-					for(Int t = k+1; t < T; t++) alpha(i,k,1)  += EZ(i,j,t);
+					alpha(i,k,0) += EZ(i,j,k);
+					for(Int t = k+1; t < T; t++){ alpha(i,k,1) += EZ(i,j,t);}
 				}
 			}
-			dig_v = math::calDirExp(alpha, 1); // I, T, 2
+			dig_v = math::calDirExp<Int, Real>(alpha, 1); // I, T-1, 2
 	    }
 	    {// FixedSizeMultiVector<Real, Int> beta  = prior.beta;  // I, 2
-	    	FixedSizeMultiVector<Real, Int> beta  = prior.beta;  // I, 2
+	    	beta  = prior.beta;  // I, 2
 	    	for(Int i = 0; i < I; i++){
 	    		for(Int j = 0; j < Js(i); j++){
 		    		beta(i, 0) += ES(i,j,0); beta(i, 1) += ES(i,j,1);
 	    		}
 	    	}
-	    	dig_theta = math::calDirExp(beta,  0);
+	    	dig_theta = math::calDirExp<Int, Real>(beta,  0);
 	    }
 		{// FixedSizeMultiVector<Real, Int> gamma = prior.gamma; // I, N
-			FixedSizeMultiVector<Real, Int> gamma = prior.gamma; // I, N
+			gamma = prior.gamma; // I, N
 			for(Int i = 0; i < I; i++)for(Int n = 0; n < N; n++){
 				for(Int j = 0; j < Js(i); j++){
 					gamma(i,n) += EY(i,j,n);
 				}
 	    	}
-    	 	dig_pi    = math::calDirExp(gamma, 0); // I, N
+    	 	dig_pi    = math::calDirExp<Int, Real>(gamma, 0); // I, N
 		}
 
-		if(updateDB){
-			for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < maxMl; m++) g(n,l,m) = 0.0;
+		// if(updateDB){
+		// 	for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < maxMl; m++){ g(n,l,m) = 0.0;}
 
-			for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml(l); m++){
-				for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
-					g(n,l,m) *= X(i,j,m,l) * EY(i,j,n) * ES(i,j,1);
-				}
-			}
-    		math::filter(g, gFilter, 0.0);
-    		math::norm(g, 2);
-		}
-	// FixedSizeMultiVector<Int> X  = fvData.X; // i,maxJ,l,maxMl
-	// FixedSizeMultiVector<Real, Int> EZ = math::initEZ<Int, Real>(I, Js, maxJ, T); // I, maxJ, T
-	// FixedSizeMultiVector<Real, Int> ES = math::initES<Int, Real>(I, Js, maxJ);    // I, maxJ, 2
-	// FixedSizeMultiVector<Real, Int> EY = math::initEY<Int, Real>(I, Js, maxJ, N); // I, maxJ, N
+		// 	for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++){
+		// 		for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
+		// 			g(n,l,m) += X(i,j,l,m) * EY(i,j,n) * ES(i,j,1);
+		// 		}
+		// 	}
+  //   		math::filter(g, gFilter, 0.0);
+  //   		std::cerr << "done g filter" << std::endl;
+		// 	g.print();
+		// 	// std::cerr << "==== X =======" << std::endl;
+		// 	// X.print();
+  //   		math::norm<Int, Real>(g, 1);
+  //   		std::cerr << "done g update" << std::endl;
+  //   		g.print();
+		// }
 
-	// FixedSizeMultiVector<Real, Int> alpha = prior.alpha; // I, T, 2
-	// FixedSizeMultiVector<Real, Int> beta  = prior.beta;  // I, 2
-	// FixedSizeMultiVector<Real, Int> gamma = prior.gamma; // I, N
-	// FixedSizeMultiVector<Real, Int> eta   = prior.eta;   // T, Ml.size(), maxMl
-
-	// FixedSizeMultiVector<Real, Int> dig_v     = math::calDirExp(alpha, 1); // I, T, 2
-	// FixedSizeMultiVector<Real, Int> dig_theta = math::calDirExp(beta,  0); // I, 2
-	// FixedSizeMultiVector<Real, Int> dig_pi    = math::calDirExp(gamma, 0); // I, N
-	// FixedSizeMultiVector<Real, Int> dig_f     = math::calDirExp(eta,   1); // T, L, maxMl
-
-	// FixedSizeMultiVector<Real, Int> g         = dbData.g; // N, l, maxMl
 		{// nextLq = 0.0
 			nextLq = 0.0;
-			nextLq += math::calELogDir(dig_f,     prior.eta,    1, etaFilter);
-			nextLq += math::calELogDir(dig_v,     prior.alpha,  1);
-			nextLq += math::calELogDir(dig_theta, prior.beta,   0);
-			nextLq += math::calELogDir(dig_pi,    prior.gamma,  0);
+			nextLq += math::calELogDir<Int, Real>(dig_f,     prior.eta,    1, etaFilter); // T, L, maxMl
+			nextLq += math::calELogDir<Int, Real>(dig_v,     prior.alpha,  1); // I, T-1, 2
+			nextLq += math::calELogDir<Int, Real>(dig_theta, prior.beta,   0); // I, 2
+			nextLq += math::calELogDir<Int, Real>(dig_pi,    prior.gamma,  0); // I, N
 
 			{//dig_v_sig
 				for(Int i = 0; i < I; i++)for(Int k = 0; k < T; k++){ dig_v_sig(i,k) = 0.0; }
 				for(Int i = 0; i < I; i++)for(Int k = 0; k < T; k++){
 					if(k < T-1){ dig_v_sig(i, k) += dig_v(i, k, 0);}
-					for(Int t = 0; t < k-1; t++ ){ dig_v_sig(i, k) += dig_v(i, t, 1);}
+					for(Int t = 0; t <= k-1; t++ ){ dig_v_sig(i, k) += dig_v(i, t, 1);}
 				}
 			}
 
@@ -779,20 +813,21 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(Int T, boo
 				}
 			}
 			for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int l = 0; l < L; l++){
-				for(Int k = 0; k < T; k++)for(Int m = 0; m < ml(l); m++){
+				for(Int k = 0; k < T; k++)for(Int m = 0; m < ml[l]; m++){
 					nextLq += EZ(i,j,k) * ES(i,j,0) * X(i,j,l,m) * dig_f(k,l,m);
 				}
 			}
 
 			for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int l = 0; l < L; l++){
-				for(Int n = 0; n < N; n++)for(Int m = 0; m < ml(l); m++){
+				for(Int n = 0; n < N; n++)for(Int m = 0; m < ml[l]; m++){
 					nextLq += EY(i,j,n) * ES(i,j,1) * X(i,j,l,m) * std::log(g(n,l,m));
 				}
 			}
-			nextLq -= math::calELogDir(dig_f,     eta,    1, etaFilter); // T, L, maxMl
-			nextLq -= math::calELogDir(dig_v,     alpha,  1); 			 // I, T, 2
-			nextLq -= math::calELogDir(dig_theta, beta,   0); 			 // I, 2
-			nextLq -= math::calELogDir(dig_pi,    gamma,  0); 			 // I, N
+
+			nextLq -= math::calELogDir<Int, Real>(dig_f,     eta,    1, etaFilter);  // T, L, maxMl
+			nextLq -= math::calELogDir<Int, Real>(dig_v,     alpha,  1); 			 // I, T-1, 2
+			nextLq -= math::calELogDir<Int, Real>(dig_theta, beta,   0); 			 // I, 2
+			nextLq -= math::calELogDir<Int, Real>(dig_pi,    gamma,  0); 			 // I, N
 
 			for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
 				for(Int k = 0; k < T; k++) nextLq -= EZ(i,j,k) * lnEZ(i,j,k);
@@ -805,9 +840,14 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(Int T, boo
 			}
 		}
 
-	    beforeLq = nextLq;
-	    nextLq = 0.0;
-	    update++;
+    	// std::cerr << "ok vb, update : " << update << ", beforeLq :" << beforeLq << " nextLq : "  << nextLq << ", nextLq-beforeLq/beforeLq :" << (nextLq - beforeLq)/std::abs(beforeLq) << std::endl;
+		if( not first && (beforeLq - nextLq)/std::abs(beforeLq) >=  minLqConvergence ){
+	    	std::cerr << "decrease lower bound @ vb, update : " << update << std::endl;
+	    	std::cerr << "vb, update : " << update << ", beforeLq :" << beforeLq << " nextLq : "  << nextLq << ", nextLq-beforeLq/beforeLq :" << (nextLq - beforeLq)/std::abs(beforeLq) << std::endl;
+		    assert( (beforeLq - nextLq)/std::abs(beforeLq) < minLqConvergence  );
+	    }
+		if(first) first = false;
+		update++;
 	}
 
 	// InferenceData(FixedSizeMultiVector<double, Int> _EZ, FixedSizeMultiVector<double, Int> _ES, FixedSizeMultiVector<double, Int> _EY,
@@ -817,6 +857,7 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(Int T, boo
 	pmswitch::InferenceData<Int, Real> ans(EZ, ES, EY, alpha, eta, beta, gamma, g);
 	return ans;
 }
+
 
 
 /*
@@ -895,15 +936,17 @@ pmswitch::InferenceCreator<Int, Real>::InferenceCreator(){
 
 template<typename Int, typename Real>
 pmswitch::Inference<Int, Real> pmswitch::InferenceCreator<Int, Real>::createInference(std::string pathFV, std::string pathDB,
-													   Int T, Real _alpha, Real beta0, Real beta1,
+													   Int T, Real _alpha, Real _beta0, Real _beta1,
 													   Real _gamma, Real _eta ){
 	using namespace pmswitch;
 	InputFileParser<Int, Real> parser;
-	InferenceCreator inferenceCreator;
 
 	FeatureData<Int, Real> fvData = parser.parseFeatureFile(pathFV);
-	DBData<Int, Real> dbData = parser.parseFeatureFile(pathDB);
-	Inference<Int, Real> inference = inferenceCreator.createInference(fvData, dbData, T, _alpha, beta0, beta1, _gamma, _eta);
+	DBData<Int, Real> dbData = parser.parseDBFile(pathDB);
+	PriorParametersCreator<Int, Real> priorCreator;
+	PriorParameters<Int, Real> prior = priorCreator.createPriorParameters(fvData,  dbData, T, _alpha, _beta0, _beta1, _gamma, _eta);
+
+	Inference<Int, Real> inference(fvData, dbData, prior);
 	return inference;
 }
 

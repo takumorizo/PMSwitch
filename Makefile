@@ -3,7 +3,7 @@ BOOST=libs/boost_1_45_0_subset/
 SRCDIR=src
 OBJDIR=obj
 BINDIR=bin
-CXX=g++ -v
+CXX=g++
 #CXX=clang++
 
 CPPFLAGS=-std=c++11 -DNDEBUG

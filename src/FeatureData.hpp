@@ -25,12 +25,12 @@ namespace pmswitch{
 					FixedSizeMultiVector<Int> X,
 					std::unordered_map<Int, std::string> sampleIdxToSampleName);
 		const Int I;
-		const FixedSizeMultiVector<Int> Js;
 		const Int maxJ;
-		const Int maxMl;
-		const FixedSizeMultiVector<Int> X;
+		const FixedSizeMultiVector<Int> Js;
 		const Int L;
+		const Int maxMl;
 		const FixedSizeMultiVector<Int> Ml;
+		const FixedSizeMultiVector<Int> X;
 
 		const std::unordered_map<Int, std::string> sampleIdxToSampleName;
 		// std::unordered_map<Int, Int> idxToPosSize;

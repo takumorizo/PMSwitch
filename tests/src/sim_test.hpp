@@ -1,4 +1,5 @@
 #include "Inference.hpp"
+// #include "PriorParameters.hpp"
 #include "InputFileParser.hpp"
 #include "gtest/gtest.h"
 #include <iostream>
@@ -8,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-std::string data_path;
+std::string data_path = "../data/";
 
 // The fixture for testing class.
 class PMSwithTest : public ::testing::Test {
@@ -356,6 +357,7 @@ TEST_F(PMSwithTest, math_calDirExp) {
 
     pmswitch::FixedSizeMultiVector<double> D2VecDig1 = math::calDirExp(D2Vec, (long long)0);
     pmswitch::FixedSizeMultiVector<double> D2VecDig2 = math::calDirExp(D2Vec, (long long)1);
+
 {/*
     std::cerr << "##############################################" << std::endl;
     for(long long i = 0; i < 3; i++)for(int j = 0; j < 4; j++)for(int k = 0; k < 5; k++){
@@ -370,8 +372,8 @@ TEST_F(PMSwithTest, math_calDirExp) {
     std::cerr << "D1Vec2Dig(0) : " << D1Vec2Dig(0) << std::endl;
 */}
 
-    EXPECT_EQ(D1Vec1Dig(0), D2VecDig1(0,0));
-    EXPECT_EQ(D1Vec2Dig(0), D2VecDig2(0,0));
+    EXPECT_EQ(D1Vec2Dig(0), D2VecDig2(0,0,0));
+    EXPECT_EQ(D1Vec1Dig(0), D2VecDig1(0,0,0));
 }
 
 TEST_F(PMSwithTest, math_calDirExpFilter) {
@@ -413,7 +415,6 @@ TEST_F(PMSwithTest, math_calELogDir) {
 
     double elogdirD1 = math::calELogDir(D1Vec, D1VecParam);
     double elogdirD2 = math::calELogDir(D2Vec, D2VecParam, (long long)1);
-
     EXPECT_NEAR(elogdirD1*12, elogdirD2, 1e-9);
 }
 
@@ -443,15 +444,47 @@ TEST_F(PMSwithTest, math_calELogDirFilter) {
 
     EXPECT_NEAR(elogdirD1*12, elogdirD2, 1e-9);
 }
+#include <stdio.h>
+#include <stdlib.h>
 
 
 
 
+TEST_F(PMSwithTest, math_vb) {
+    using namespace pmswitch;
 
+    // InputFileParser<long long, double> parser;
+    // std::string testDBPath = data_path + "/simDB.txt";
+    // DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
 
+    // std::string testFVPath = data_path + "/simFV.txt";
+    // FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
 
+    // InferenceCreator<long long, double> creator;
+    // Inference<long long, double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+    // inference.vb(5, true);
 
+    int testNum = 100;
+    for(int i = 0; i < testNum; i++){
+        std::cerr << "vb test Num: " << i << std::endl;
+        int ret;
+        int state;
+        ret = system("python ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/simDataGenerator.py ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/sampleConfig.ini ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simDB.txt ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simFV.txt ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/param.txt");
+        if(WIFEXITED(ret)){ state = WEXITSTATUS(ret);}
+        else{ state = -1; }
+        assert(state != -1);
+        InputFileParser<long long, double> parser;
+        std::string testDBPath = data_path + "/simDB.txt";
+        DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
 
+        std::string testFVPath = data_path + "/simFV.txt";
+        FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
+
+        InferenceCreator<long long, double> creator;
+        Inference<long long, double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+        inference.vb(5, true);
+    }
+}
 
 
 

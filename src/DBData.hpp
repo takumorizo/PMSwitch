@@ -18,8 +18,8 @@ namespace pmswitch{
 
 		const Int N;
 		const Int L;
-		const FixedSizeMultiVector<Int> Ml;
 		const Int maxMl;
+		const FixedSizeMultiVector<Int> Ml;
 		const FixedSizeMultiVector<Real> g;
 	};
 }

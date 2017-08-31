@@ -119,7 +119,11 @@ pmswitch::FixedSizeMultiVector<E,Int>::FixedSizeMultiVector(E e, Dims... dims){
 template<typename E, typename Int >
 template <class... Args>
 Int pmswitch::FixedSizeMultiVector<E,Int>::at(Args... args) const {
-	// assert(len(args) == len(sizeVec))
+	// if(dimVec.size() != sizeof...(args)){
+	// 	std::cerr << "dimVec.size(): " << dimVec.size() << ", " << sizeof...(args) << std::endl;
+	// 	for(auto d : dimVec)std::cerr << "d: " << d << std::endl;
+	// }
+	assert(dimVec.size() == sizeof...(args));
 	return atImpl(0, sizeVec, 0, args...);
 }
 
@@ -197,14 +201,23 @@ Int pmswitch::FixedSizeMultiVector<E,Int>::volume(Int dim) const {
 
 template<typename E, typename Int >
 void pmswitch::FixedSizeMultiVector<E,Int>::print() const {
-	std::cerr << "dimVec" << std::endl;
-	for(auto a : dimVec){ std::cerr << a << std::endl; }
+	for(Int i = 0; i < vec.size(); i++){
+		std::cerr << i / volume(0);
+		Int at = i % volume(0);
+		for(Int d = 1; d < dimVec.size(); d++){
+			std::cerr << ", " << at / volume(d);
+			at = i % volume(d);
+		}
+		std::cerr << " := " << vec[i] << std::endl;
+	}
+	// std::cerr << "dimVec" << std::endl;
+	// for(auto a : dimVec){ std::cerr << a << std::endl; }
 
-	std::cerr << "sizeVec " << std::endl;
-	for(auto a : sizeVec){ std::cerr << a << std::endl; }
+	// std::cerr << "sizeVec " << std::endl;
+	// for(auto a : sizeVec){ std::cerr << a << std::endl; }
 
-	std::cerr << "vec " << std::endl;
-	for(auto a : vec){ std::cerr << a << std::endl; }
+	// std::cerr << "vec " << std::endl;
+	// for(auto a : vec){ std::cerr << a << std::endl; }
 }
 
 template<typename E, typename Int >
