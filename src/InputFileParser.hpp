@@ -107,7 +107,7 @@ pmswitch::DBData<Int, Real > pmswitch::InputFileParser<Int, Real >::parseDBFile(
 		for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++){
 			std::getline (ifs,buffer); record = split(buffer, '\t');
 			if(record.size() != 2 + ml(l)) { die("failed to read content of db file.");}
-			for(Int ll = 0; ll < ml(l); ll++){ g(n,l,ll) = std::stod(record[2+ll]); }
+			for(Int ll = 0; ll < ml(l); ll++){ g(n,l,ll) = (Real)std::stold(record[2+ll]); }
 			buffer = ""; record.clear();
 		}
 	}
