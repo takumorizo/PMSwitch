@@ -453,16 +453,16 @@ TEST_F(PMSwithTest, math_calELogDirFilter) {
 TEST_F(PMSwithTest, math_vb) {
     using namespace pmswitch;
 
-    // InputFileParser<long long, long double> parser;
+    // InputFileParser<long long, double> parser;
     // std::string testDBPath = data_path + "/simDB.txt";
-    // DBData<long long, long double> dbData = parser.parseDBFile(testDBPath);
+    // DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
 
     // std::string testFVPath = data_path + "/simFV.txt";
-    // FeatureData<long long, long double> fvData = parser.parseFeatureFile(testFVPath);
+    // FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
 
-    // InferenceCreator<long long, long double> creator;
-    // Inference<long long, long double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
-    // inference.vb(5, true);
+    // InferenceCreator<long long, double> creator;
+    // Inference<long long, double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+    // inference.vb(5, true, 1e-4);
 
     int testNum = 100;
     for(int i = 0; i < testNum; i++){
@@ -473,20 +473,20 @@ TEST_F(PMSwithTest, math_vb) {
         if(WIFEXITED(ret)){ state = WEXITSTATUS(ret);}
         else{ state = -1; }
         assert(state != -1);
-        InputFileParser<long long, long double> parser;
+        InputFileParser<long long, double> parser;
         std::string testDBPath = data_path + "/simDB.txt";
-        DBData<long long, long double> dbData = parser.parseDBFile(testDBPath);
+        DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
 
         std::string testFVPath = data_path + "/simFV.txt";
-        FeatureData<long long, long double> fvData = parser.parseFeatureFile(testFVPath);
+        FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
 
-        InferenceCreator<long long, long double> creator;
-        Inference<long long, long double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+        InferenceCreator<long long, double> creator;
+        Inference<long long, double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
 
         std::cerr << "  g not update: " << i << std::endl;
-        inference.vb(5, false);
+        inference.vb(5, false, 1e-4);
         std::cerr << "  g update: " << i << std::endl;
-        inference.vb(5, true);
+        inference.vb(5, true, 1e-4);
     }
 }
 
