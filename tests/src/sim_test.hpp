@@ -1,4 +1,5 @@
 #include "Inference.hpp"
+#include "MathUtil.hpp"
 // #include "PriorParameters.hpp"
 #include "InputFileParser.hpp"
 #include "gtest/gtest.h"
