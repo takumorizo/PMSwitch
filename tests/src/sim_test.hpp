@@ -469,8 +469,8 @@ TEST_F(PMSwithTest, fixedSizeMultiVectorToFile) {
     std::string testFVPath = data_path + "/simFV.txt";
     FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
 
-    InferenceCreator<long long, double> creator;
-    Inference<long long, double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+    // InferenceCreator<long long, double> creator;
+    Inference<long long, double> inference = InferenceCreator<long long, double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
     InferenceData<long long, double> data = inference.vb(5, true, 1e-4);
     std::string outputPath = data_path + "/alpha.txt";
     data.alpha.print(outputPath);
@@ -496,41 +496,41 @@ TEST_F(PMSwithTest, fixedSizeMultiVectorToFile) {
 TEST_F(PMSwithTest, math_vb) {
     using namespace pmswitch;
 
-    // InputFileParser<long long, double> parser;
-    // std::string testDBPath = data_path + "/simDB.txt";
-    // DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
+    InputFileParser<long long, double> parser;
+    std::string testDBPath = data_path + "/simDB.txt";
+    DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
 
-    // std::string testFVPath = data_path + "/simFV.txt";
-    // FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
+    std::string testFVPath = data_path + "/simFV.txt";
+    FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
 
     // InferenceCreator<long long, double> creator;
-    // Inference<long long, double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
-    // inference.vb(5, true, 1e-4);
+    Inference<long long, double> inference = InferenceCreator<long long, double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+    inference.vb(5, true, 1e-4);
 
-    int testNum = 100;
-    for(int i = 0; i < testNum; i++){
-        std::cerr << "vb test Num: " << i << std::endl;
-        int ret;
-        int state;
-        ret = system("python ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/simDataGenerator.py ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/sampleConfig.ini ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simDB.txt ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simFV.txt ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/param.txt");
-        if(WIFEXITED(ret)){ state = WEXITSTATUS(ret);}
-        else{ state = -1; }
-        assert(state != -1);
-        InputFileParser<long long, double> parser;
-        std::string testDBPath = data_path + "/simDB.txt";
-        DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
+    // int testNum = 100;
+    // for(int i = 0; i < testNum; i++){
+    //     std::cerr << "vb test Num: " << i << std::endl;
+    //     int ret;
+    //     int state;
+    //     ret = system("python ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/simDataGenerator.py ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/sampleConfig.ini ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simDB.txt ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simFV.txt ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/param.txt");
+    //     if(WIFEXITED(ret)){ state = WEXITSTATUS(ret);}
+    //     else{ state = -1; }
+    //     assert(state != -1);
+    //     InputFileParser<long long, double> parser;
+    //     std::string testDBPath = data_path + "/simDB.txt";
+    //     DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
 
-        std::string testFVPath = data_path + "/simFV.txt";
-        FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
+    //     std::string testFVPath = data_path + "/simFV.txt";
+    //     FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
 
-        InferenceCreator<long long, double> creator;
-        Inference<long long, double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+    //     // InferenceCreator<long long, double> creator;
+    //     Inference<long long, double> inference = InferenceCreator<long long, double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
 
-        std::cerr << "  g not update: " << i << std::endl;
-        inference.vb(5, false, 1e-4);
-        std::cerr << "  g update: " << i << std::endl;
-        inference.vb(5, true, 1e-4);
-    }
+    //     std::cerr << "  g not update: " << i << std::endl;
+    //     inference.vb(5, false, 1e-4);
+    //     std::cerr << "  g update: " << i << std::endl;
+    //     inference.vb(5, true, 1e-4);
+    // }
 }
 
 

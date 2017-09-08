@@ -4,6 +4,7 @@
 #include "FeatureData.hpp"
 #include "DBData.hpp"
 #include "ExceptionUtil.hpp"
+#include "StringUtil.hpp"
 
 #include <cstdlib>
 #include <string>
@@ -21,7 +22,6 @@ namespace pmswitch{
 		pmswitch::FeatureData<Int, Real> parseFeatureFile(std::string pathFV);
 		pmswitch::DBData<Int, Real> parseDBFile(std::string pathDB);
 	private:
-		std::vector<std::string> split(const std::string &str, char delimiter) const;
 
 		void prepareParseFV(std::string pathFV,
 							Int &maxMl, Int &L, FixedSizeMultiVector<Int> &ml,
@@ -92,7 +92,7 @@ pmswitch::DBData<Int, Real > pmswitch::InputFileParser<Int, Real >::parseDBFile(
 	Int N, L, maxMl=0;
 	FixedSizeMultiVector<Int>  ml;
 	{
-		std::getline (ifs,buffer); record = split(buffer, '\t');
+		std::getline (ifs,buffer); record = pmswitch::string::split(buffer, '\t');
 		N = std::stoi(record[0]); L = std::stoi(record[1]);
 		if(record.size() != 2 + L) { die("failed to read header of db file.");}
 		FixedSizeMultiVector<Int>  tmp(0,L);
@@ -105,7 +105,7 @@ pmswitch::DBData<Int, Real > pmswitch::InputFileParser<Int, Real >::parseDBFile(
 	FixedSizeMultiVector<Real> g(0.0, N, L, maxMl);
 	{
 		for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++){
-			std::getline (ifs,buffer); record = split(buffer, '\t');
+			std::getline (ifs,buffer); record = pmswitch::string::split(buffer, '\t');
 			if(record.size() != 2 + ml(l)) { die("failed to read content of db file.");}
 			for(Int ll = 0; ll < ml(l); ll++){ g(n,l,ll) = (Real)std::stold(record[2+ll]); }
 			buffer = ""; record.clear();
@@ -170,14 +170,6 @@ pmswitch::FeatureData<Int, Real > pmswitch::InputFileParser<Int, Real >::parseFe
 /*
 private
 */
-template<typename Int, typename Real >
-std::vector<std::string> pmswitch::InputFileParser<Int, Real >::split(const std::string &str, char delimiter) const {
-	std::vector<std::string> ans;
-	std::istringstream sstr(str);
-	std::string token;
-	while (getline(sstr, token, delimiter)) ans.push_back(token);
-	return ans;
-}
 
 template<typename Int, typename Real >
 void pmswitch::InputFileParser<Int, Real >::prepareParseFV(std::string pathFV,
@@ -193,7 +185,7 @@ void pmswitch::InputFileParser<Int, Real >::prepareParseFV(std::string pathFV,
 	maxMl=0;
 	{// Int maxMl=0, L; FixedSizeMultiVector<Int> ml;
 		std::getline (ifs,buffer);
-		record = split(buffer, '\t');
+		record = pmswitch::string::split(buffer, '\t');
 		getHeadInfoFV(record, maxMl, L, ml );
 		buffer = ""; record.clear();
 	}
@@ -203,7 +195,7 @@ void pmswitch::InputFileParser<Int, Real >::prepareParseFV(std::string pathFV,
 		// std::unordered_map<Int, std::string> idxToSampleName;
 		// std::unordered_map<std::string, Int> sampleNameToIdx;
 		while(std::getline (ifs,buffer)){
-			record = split(buffer, '\t'); std::string sampleName = record[0];
+			record = pmswitch::string::split(buffer, '\t'); std::string sampleName = record[0];
 			updateSampleNameIndexRelationFV(sampleName, I, idxToPosSize, idxToSampleName, sampleNameToIdx);
 			buffer = ""; record.clear();
 		}
@@ -228,7 +220,7 @@ pmswitch::FixedSizeMultiVector<Int> pmswitch::InputFileParser<Int, Real >::parse
 		FixedSizeMultiVector<Int> nowPos(0, I);
 		while(std::getline(ifs, buffer)){
 			std::vector<Int> Xs(L, 0);
-			record = split(buffer, '\t');
+			record = pmswitch::string::split(buffer, '\t');
 			std::string sampleName = record[0];
 			for(Int l = 0; l < L; l++){ Xs[l] = std::stoi(record[l+1]); }
 			Int idx = sampleNameToIdx.at(sampleName);

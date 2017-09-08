@@ -61,21 +61,12 @@ namespace pmswitch{
 	\beta_{i, }    :: 2-dimensional real vector
 	\gamma_{i, }   :: N-dimensional real
 */
-		pmswitch::PriorParameters<Int, Real> testFunc(pmswitch::FeatureData<Int,Real> fvData){
-			pmswitch::FixedSizeMultiVector<Real> alpha(0,1,1);
-			pmswitch::FixedSizeMultiVector<Real> beta(0,1,1);
-			pmswitch::FixedSizeMultiVector<Real> gamma(0,1,1);
-			pmswitch::FixedSizeMultiVector<Real> eta(0,1,1);
-			PriorParameters<Int, Real> prior(alpha,beta,gamma,eta);
-			return prior;
-		}
-
-		pmswitch::PriorParameters<Int, Real> createPriorParameters(
+		static pmswitch::PriorParameters<Int, Real> createPriorParameters(
 														   Int I, Int N, Int T, pmswitch::FixedSizeMultiVector<Int> Ml,
 														   Real _alpha,
 														   Real _beta0, Real _beta1,
 														   Real _gamma, Real _eta);
-		pmswitch::PriorParameters<Int, Real> createPriorParameters(
+		static pmswitch::PriorParameters<Int, Real> createPriorParameters(
 														   pmswitch::FeatureData<Int,Real> fvData,
 														   pmswitch::DBData<Int,Real> dbData,
 														   Int T,

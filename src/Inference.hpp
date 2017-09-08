@@ -37,7 +37,7 @@ namespace pmswitch{
 	class InferenceCreator{
 	public:
 		InferenceCreator();
-	  	pmswitch::Inference<Int, Real> createInference(std::string pathFV, std::string pathDB,
+	  	static pmswitch::Inference<Int, Real> createInference(std::string pathFV, std::string pathDB,
 													   Int T, Real _alpha, Real _beta0, Real _beta1,
 													   Real _gamma, Real _eta );
 	};
@@ -332,8 +332,8 @@ pmswitch::Inference<Int, Real> pmswitch::InferenceCreator<Int, Real>::createInfe
 
 	FeatureData<Int, Real> fvData = parser.parseFeatureFile(pathFV);
 	DBData<Int, Real> dbData = parser.parseDBFile(pathDB);
-	PriorParametersCreator<Int, Real> priorCreator;
-	PriorParameters<Int, Real> prior = priorCreator.createPriorParameters(fvData,  dbData, T, _alpha, _beta0, _beta1, _gamma, _eta);
+	// PriorParametersCreator<Int, Real> priorCreator;
+	PriorParameters<Int, Real> prior = PriorParametersCreator<Int, Real>::createPriorParameters(fvData,  dbData, T, _alpha, _beta0, _beta1, _gamma, _eta);
 
 	Inference<Int, Real> inference(fvData, dbData, prior);
 	return inference;
