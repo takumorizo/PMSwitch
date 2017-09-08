@@ -1,5 +1,7 @@
 #include "Inference.hpp"
+#include "InferenceData.hpp"
 #include "MathUtil.hpp"
+#include "FixedSizeMultiVector.hpp"
 // #include "PriorParameters.hpp"
 #include "InputFileParser.hpp"
 #include "gtest/gtest.h"
@@ -9,6 +11,7 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 
 std::string data_path = "../data/";
 
@@ -445,6 +448,45 @@ TEST_F(PMSwithTest, math_calELogDirFilter) {
 
     EXPECT_NEAR(elogdirD1*12, elogdirD2, 1e-9);
 }
+
+
+
+double strToDouble(std::string str){
+	return std::stod(str);
+}
+
+double strToDoubleRef(const std::string &str){
+	return std::stod(str);
+}
+
+TEST_F(PMSwithTest, fixedSizeMultiVectorToFile) {
+    using namespace pmswitch;
+
+    InputFileParser<long long, double> parser;
+    std::string testDBPath = data_path + "/simDB.txt";
+    DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
+
+    std::string testFVPath = data_path + "/simFV.txt";
+    FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
+
+    InferenceCreator<long long, double> creator;
+    Inference<long long, double> inference = creator.createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+    InferenceData<long long, double> data = inference.vb(5, true, 1e-4);
+    std::string outputPath = data_path + "/alpha.txt";
+    data.alpha.print(outputPath);
+
+    FixedSizeMultiVector<double, long long> alpha = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, strToDouble);
+    FixedSizeMultiVector<double, long long> alphaR = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, strToDoubleRef);
+
+    FixedSizeMultiVector<double, long long> alphaD = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, 0, strToDouble);
+    FixedSizeMultiVector<double, long long> alphaDR = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, 0, strToDoubleRef);
+
+    EXPECT_TRUE(data.alpha == alpha);
+    EXPECT_TRUE(data.alpha == alphaD);
+    EXPECT_TRUE(data.alpha == alphaR);
+    EXPECT_TRUE(data.alpha == alphaDR);
+}
+
 #include <stdio.h>
 #include <stdlib.h>
 

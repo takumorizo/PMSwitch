@@ -1,7 +1,15 @@
 #ifndef FixedSizeMultiVector_h
 #define FixedSizeMultiVector_h
+
+#include "ExceptionUtil.hpp"
+#include "StringUtil.hpp"
+
 #include <vector>
+#include <string>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
 #include <assert.h>
 
 namespace pmswitch{
@@ -9,8 +17,11 @@ namespace pmswitch{
 	class FixedSizeMultiVector{
 	public:
 		FixedSizeMultiVector();
+		FixedSizeMultiVector(std::vector<Int> dims);
+		FixedSizeMultiVector(E e, std::vector<Int> dims);
 		template<class... Dims >
 		FixedSizeMultiVector(E e, Dims... dims);
+
 		template <class... Args> Int at(Args... args) const;
 		template <class... Args> typename std::vector<E>::const_reference operator()(Args... args) const;
 		template <class... Args> typename std::vector<E>::reference operator()(Args... args);
@@ -23,7 +34,8 @@ namespace pmswitch{
 		Int dim() const;
 		bool operator==(const FixedSizeMultiVector<E, Int>& rhs) const;
 
-		void print() const;
+		void print(std::ostream& out = std::cerr, std::string (*eToStr)(E) = NULL) const;
+		void print(std::string path, std::string (*eToStr)(E) = NULL) const;
 
 	private:
 		/*
@@ -50,44 +62,65 @@ namespace pmswitch{
 		Int atImpl(Int Result, const std::vector<Int> &list, Int at, Int e, Args... args) const;
 	};
 
-/*
-	template<typename E, typename Int = long long, bool Forward = true >
-	class Range {
+	template<typename E, typename Int = long long >
+	class FixedSizeMultiVectorCreator{
 	public:
-	    class iterator {
-	    public:
-	        iterator( Int _num );
-	        iterator& operator++(){ num = Forward ? num + 1: num - 1; return *this; }
-	        iterator operator++(int) {iterator retval = *this; ++(*this); return retval;}
-	        bool operator==(iterator other) const {return num == other.num;}
-	        bool operator!=(iterator other) const {return !(*this == other);}
-	        Int operator*() {return num;}
-	        // iterator traits
-	        using difference_type = Int;
-	        using value_type = Int;
-	        using pointer = const Int*;
-	        using reference = const Int&;
-	        using iterator_category = std::forward_iterator_tag;
-	    private:
-		    Int num  = 0;
-	    };
+		FixedSizeMultiVectorCreator();
+		static FixedSizeMultiVector<E, Int> createFixedSizeMultiVector(std::string path, E (*strToE)(std::string));
+		static FixedSizeMultiVector<E, Int> createFixedSizeMultiVector(std::string path, E defaultValue,  E (*strToE)(std::string));
 
-	    iterator begin() {return from;}
-	    iterator end() {return Forward? to+1 : to-1;}
-	    Range( FixedSizeMultiVector<E, Int> v, std::vector<Int> _from, std::vector<Int> _to);
+		static FixedSizeMultiVector<E, Int> createFixedSizeMultiVector(std::string path, E (*strToE)(const std::string&));
+		static FixedSizeMultiVector<E, Int> createFixedSizeMultiVector(std::string path, E defaultValue,  E (*strToE)(const std::string&));
+
 	private:
-		Int from = 0;
-		Int to = 0;
-	};
-*/
-}
+		static void parseHeaderFile(std::string path, Int& size, Int& dim, std::vector<Int> &dimVec, std::vector<Int> &volumeVec);
+		static void updateVector(std::string path, FixedSizeMultiVector<E, Int> &ans, E (*strToE)(std::string), bool checkNum = true);
+		static void updateVector(std::string path, FixedSizeMultiVector<E, Int> &ans, E (*strToE)(const std::string&), bool checkNum = true);
 
+	};
+}
 /*
 	public functions
 */
 
 template<typename E, typename Int >
 pmswitch::FixedSizeMultiVector<E,Int>::FixedSizeMultiVector(){
+}
+
+template<typename E, typename Int >
+pmswitch::FixedSizeMultiVector<E,Int>::FixedSizeMultiVector(std::vector<Int> dims){
+	{//dimVec
+		dimVec = dims;
+	}
+	{//sizeVec 4,3,2 -> 4*3*2, 3*2, 2 -> 4*3*2, 3*2, 2, 1 -> 3*2, 2, 1
+		sizeVec = dims;
+		sizeVec.push_back((Int)1);
+		for(Int i = sizeVec.size()-1; i-1 >=0; i-- ){ sizeVec[i-1] *= sizeVec[i]; }
+		sizeVec.erase(sizeVec.begin());
+	}
+	{//vec
+		Int total = 1;
+		for(auto d : dimVec){ total *= d;}
+		vec = std::vector<E>(total);
+	}
+}
+
+template<typename E, typename Int >
+pmswitch::FixedSizeMultiVector<E,Int>::FixedSizeMultiVector(E e, std::vector<Int> dims){
+	{//dimVec
+		dimVec = dims;
+	}
+	{//sizeVec 4,3,2 -> 4*3*2, 3*2, 2 -> 4*3*2, 3*2, 2, 1 -> 3*2, 2, 1
+		sizeVec = dims;
+		sizeVec.push_back((Int)1);
+		for(Int i = sizeVec.size()-1; i-1 >=0; i-- ){ sizeVec[i-1] *= sizeVec[i]; }
+		sizeVec.erase(sizeVec.begin());
+	}
+	{//vec
+		Int total = 1;
+		for(auto d : dimVec){ total *= d;}
+		vec = std::vector<E>(total, e);
+	}
 }
 
 
@@ -200,25 +233,255 @@ Int pmswitch::FixedSizeMultiVector<E,Int>::volume(Int dim) const {
 }
 
 template<typename E, typename Int >
-void pmswitch::FixedSizeMultiVector<E,Int>::print() const {
+void pmswitch::FixedSizeMultiVector<E,Int>::print(std::ostream& out, std::string (*eToStr)(E)) const {
+	const std::streamsize ss = out.precision();
+   	out << "#size\t" << vec.size()    << std::endl;
+   	out << "#dim\t"  << dimVec.size() << std::endl;
+
+   	out << "#dimVec\t";
+   	if(dimVec.size() > 0){
+	   	for(Int i = 0; i < dimVec.size()-1; i++){ out << dimVec[i] << ",";}
+		out << dimVec[dimVec.size()-1] << std::endl;;
+   	}else { out << std::endl; }
+
+   	out << "#volumeVec\t";
+	if(sizeVec.size() > 0){
+	   	for(Int i = 0; i < sizeVec.size()-1; i++){ out << sizeVec[i] << ",";}
+		out << sizeVec[sizeVec.size()-1] << std::endl;;
+   	}else { out << std::endl; }
+
 	for(Int i = 0; i < vec.size(); i++){
-		std::cerr << i / volume(0);
+		out << i / volume(0);
 		Int at = i % volume(0);
 		for(Int d = 1; d < dimVec.size(); d++){
-			std::cerr << ", " << at / volume(d);
+			out << "," << at / volume(d);
 			at = i % volume(d);
 		}
-		std::cerr << " := " << vec[i] << std::endl;
+		out << "\t";
+		if(    eToStr != NULL){
+			out << eToStr(vec[i]) << std::endl;
+		}else if(eToStr == NULL){
+			out << std::setprecision( std::numeric_limits<int>::max() );
+			out <<        vec[i]  << std::endl;
+			out << std::setprecision( ss );
+		}
 	}
-	// std::cerr << "dimVec" << std::endl;
-	// for(auto a : dimVec){ std::cerr << a << std::endl; }
-
-	// std::cerr << "sizeVec " << std::endl;
-	// for(auto a : sizeVec){ std::cerr << a << std::endl; }
-
-	// std::cerr << "vec " << std::endl;
-	// for(auto a : vec){ std::cerr << a << std::endl; }
 }
+
+template<typename E, typename Int >
+void pmswitch::FixedSizeMultiVector<E,Int>::print(std::string path, std::string (*eToStr)(E)) const {
+	using namespace pmswitch;
+	std::ofstream ofs(path);
+   	std::string buffer; std::vector<std::string> record;
+   	if(ofs.fail()) {die("cannot open output file");}
+
+   	ofs << "#size\t" << vec.size()    << std::endl;
+   	ofs << "#dim\t"  << dimVec.size() << std::endl;
+
+   	ofs << "#dimVec\t";
+   	if(dimVec.size() > 0){
+	   	for(Int i = 0; i < dimVec.size()-1; i++){ ofs << dimVec[i] << ",";}
+		ofs << dimVec[dimVec.size()-1] << std::endl;;
+   	}else { ofs << std::endl; }
+
+   	ofs << "#volumeVec\t";
+	if(sizeVec.size() > 0){
+	   	for(Int i = 0; i < sizeVec.size()-1; i++){ ofs << sizeVec[i] << ",";}
+		ofs << sizeVec[sizeVec.size()-1] << std::endl;;
+   	}else { ofs << std::endl; }
+
+	for(Int i = 0; i < vec.size(); i++){
+		ofs << i / volume(0);
+		Int at = i % volume(0);
+		for(Int d = 1; d < dimVec.size(); d++){
+			ofs << "," << at / volume(d);
+			at = i % volume(d);
+		}
+		ofs << "\t";
+		if(    eToStr != NULL){
+			ofs << eToStr(vec[i]) << std::endl;
+		}else if(eToStr == NULL){
+			ofs << std::setprecision( std::numeric_limits<int>::max() );
+			ofs <<        vec[i]  << std::endl;
+		}
+	}
+   	ofs.close();
+}
+
+
+template<typename E, typename Int >
+void pmswitch::FixedSizeMultiVectorCreator<E, Int>::parseHeaderFile(std::string path, Int& size, Int& dim, std::vector<Int> &dimVec, std::vector<Int> &volumeVec){
+	using namespace pmswitch;
+	std::ifstream ifs(path);
+   	std::string buffer; std::vector<std::string> record;
+   	if(ifs.fail()) {die("cannot open output file");}
+
+   	dimVec.clear(); volumeVec.clear();
+
+   	unsigned int cheked = 0;
+	for(int i = 0; i < 4; i++){
+   		std::getline (ifs,buffer);
+   		record = string::split(buffer, '\t');
+   		if(record.size() != 2) {
+   			die("invalid format header files @ pmswitch::FixedSizeMultiVectorCreator<E, Int>::parseHeaderFile");
+   		}
+   		if(      record[0] == "#size"){
+   			size = (Int)std::stoull(record[1]);
+   			cheked |= (1 << 0);
+   		}else if(record[0] == "#dim"){
+   			dim  =(Int)std::stoull(record[1]);
+   			cheked |= (1 << 1);
+   		}else if(record[0] == "#dimVec"){
+   			record = string::split(record[1], ',');
+   			for(auto strD : record){ dimVec.push_back( (Int)std::stoull(strD) ); }
+			cheked |= (1 << 2);
+   		}else if(record[0] == "#volumeVec"){
+   			record = string::split(record[1], ',');
+   			for(auto strV : record){ volumeVec.push_back( (Int)std::stoull(strV) ); }
+			cheked |= (1 << 3);
+   		}else{
+   			die("unknown header cols @ pmswitch::FixedSizeMultiVectorCreator<E, Int>::parseHeaderFile");
+   		}
+   	}
+   	ifs.close();
+
+   	if(dimVec.size() != dim || volumeVec.size() != dim){
+   		std::cerr << dim  << ", " << dimVec.size() << ", " << volumeVec.size() << std::endl;
+   		die("dim not consistent @ pmswitch::FixedSizeMultiVectorCreator<E, Int>::parseHeaderFile");
+   	}
+   	if(cheked != 15) die("insufficient header @ pmswitch::FixedSizeMultiVectorCreator<E, Int>::parseHeaderFile");
+}
+
+
+template<typename E, typename Int >
+void pmswitch::FixedSizeMultiVectorCreator<E, Int>::updateVector(std::string path, FixedSizeMultiVector<E, Int> &ans, E (*strToE)(std::string), bool checkNum){
+	std::ifstream ifs(path);
+   	std::string buffer; std::vector<std::string> record;
+   	if(ifs.fail()) {die("cannot open output file");}
+
+   	Int inputLine = 0;
+	for(int i = 0; i < 4; i++){std::getline (ifs,buffer);} // pass header
+   	while(std::getline (ifs,buffer)){
+   		record = string::split(buffer, '\t');
+   		if(record.size() != 2) {
+   			die("invalid content format @ pmswitch::FixedSizeMultiVectorCreator<E, Int>::updateVector");
+   		}
+   		Int at = 0;
+   		E value = strToE(record[1]);
+   		record = string::split(record[0], ',');
+   		for(Int i = 0; i < record.size(); i++){
+   			Int d = (Int)std::stoull(record[i]);
+   			at += d * ans.volume(i);
+   		}
+   		ans[at] = value;
+   		inputLine++;
+   	}
+   	ifs.close();
+
+   	if(checkNum and (inputLine != ans.size())){ die("line number is not same as size @ pmswitch::FixedSizeMultiVectorCreator<E, Int>::updateVector");}
+}
+
+template<typename E, typename Int >
+void pmswitch::FixedSizeMultiVectorCreator<E, Int>::updateVector(std::string path, FixedSizeMultiVector<E, Int> &ans, E (*strToE)(const std::string&), bool checkNum){
+	std::ifstream ifs(path);
+   	std::string buffer; std::vector<std::string> record;
+   	if(ifs.fail()) {die("cannot open output file");}
+
+   	Int inputLine = 0;
+	for(int i = 0; i < 4; i++){std::getline (ifs,buffer);} // pass header
+   	while(std::getline (ifs,buffer)){
+   		record = string::split(buffer, '\t');
+   		if(record.size() != 2) {
+   			die("invalid content format @ pmswitch::FixedSizeMultiVectorCreator<E, Int>::updateVector");
+   		}
+   		Int at = 0;
+   		E value = strToE(record[1]);
+   		record = string::split(record[0], ',');
+   		for(Int i = 0; i < record.size(); i++){
+   			Int d = (Int)std::stoull(record[i]);
+   			at += d * ans.volume(i);
+   		}
+   		ans[at] = value;
+   		inputLine++;
+   	}
+   	ifs.close();
+
+   	if(checkNum and (inputLine != ans.size())){ die("line number is not same as size @ pmswitch::FixedSizeMultiVectorCreator<E, Int>::updateVector");}
+}
+
+
+template<typename E, typename Int >
+pmswitch::FixedSizeMultiVector<E, Int> pmswitch::FixedSizeMultiVectorCreator<E, Int>::createFixedSizeMultiVector(std::string path, E (*strToE)(std::string)){
+	using namespace pmswitch;
+
+   	Int size; Int dim;
+   	std::vector<Int> dimVec;
+	std::vector<Int> volumeVec;
+	{
+		parseHeaderFile(path, size, dim, dimVec, volumeVec);
+	}
+
+   	FixedSizeMultiVector<E, Int> ans(dimVec);
+   	{
+   		updateVector(path, ans, strToE, true);
+   	}
+   	return ans;
+}
+
+template<typename E, typename Int >
+pmswitch::FixedSizeMultiVector<E, Int> pmswitch::FixedSizeMultiVectorCreator<E, Int>::createFixedSizeMultiVector(std::string path, E defaultValue, E (*strToE)(std::string)){
+	using namespace pmswitch;
+
+   	Int size; Int dim;
+   	std::vector<Int> dimVec;
+	std::vector<Int> volumeVec;
+	{
+		parseHeaderFile(path, size, dim, dimVec, volumeVec);
+	}
+
+   	FixedSizeMultiVector<E, Int> ans(defaultValue, dimVec);
+   	{
+   		updateVector(path, ans, strToE, false);
+   	}
+   	return ans;
+}
+
+template<typename E, typename Int >
+pmswitch::FixedSizeMultiVector<E, Int> pmswitch::FixedSizeMultiVectorCreator<E, Int>::createFixedSizeMultiVector(std::string path, E (*strToE)(const std::string&)){
+	using namespace pmswitch;
+
+   	Int size; Int dim;
+   	std::vector<Int> dimVec;
+	std::vector<Int> volumeVec;
+	{
+		parseHeaderFile(path, size, dim, dimVec, volumeVec);
+	}
+
+   	FixedSizeMultiVector<E, Int> ans(dimVec);
+   	{
+   		updateVector(path, ans, strToE, true);
+   	}
+   	return ans;
+}
+
+template<typename E, typename Int >
+pmswitch::FixedSizeMultiVector<E, Int> pmswitch::FixedSizeMultiVectorCreator<E, Int>::createFixedSizeMultiVector(std::string path, E defaultValue, E (*strToE)(const std::string&)){
+	using namespace pmswitch;
+
+   	Int size; Int dim;
+   	std::vector<Int> dimVec;
+	std::vector<Int> volumeVec;
+	{
+		parseHeaderFile(path, size, dim, dimVec, volumeVec);
+	}
+
+   	FixedSizeMultiVector<E, Int> ans(defaultValue, dimVec);
+   	{
+   		updateVector(path, ans, strToE, false);
+   	}
+   	return ans;
+}
+
 
 template<typename E, typename Int >
 bool pmswitch::FixedSizeMultiVector<E,Int>::operator==(const FixedSizeMultiVector<E, Int>& rhs) const{

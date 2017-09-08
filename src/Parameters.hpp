@@ -7,12 +7,12 @@
 #include "cmdline.h"
 #include <iostream>
 
-template<typename Int = int>
+template<typename Int = int, typename Real = double>
 class Parameters {
 public:
     Parameters(int argc, const char *argv[]);
     void getFromCommandLineArguments(int argc, const char *argv[]);
-    
+
     typedef enum { VB,ONLINEVB,MCMC } ALGO;
     ALGO method;
     std::string pathFV;
@@ -20,17 +20,18 @@ public:
     std::string pathOutput;
     bool isDBUpdate;
     Int T;
+    Real alpha;
 };
 
-template<typename Int>
-Parameters<Int>::Parameters(int argc, const char *argv[]){
+template<typename Int, typename Real>
+Parameters<Int, Real>::Parameters(int argc, const char *argv[]){
 
 }
 
-template<typename Int>
-void Parameters<Int>::getFromCommandLineArguments(int argc, const char *argv[]){
+template<typename Int, typename Real>
+void Parameters<Int, Real>::getFromCommandLineArguments(int argc, const char *argv[]){
     cmdline::parser a;
-    
+
     a.add<std::string>("input",     'i',  ".fv file for mutation feature",    true, "");
     a.add<std::string>("out",       'o',  "result for mutation feature",      true, "");
     a.add<std::string>("db" ,       'd',  "database for mutation feature",    true, "");
@@ -39,7 +40,7 @@ void Parameters<Int>::getFromCommandLineArguments(int argc, const char *argv[]){
     a.add<Int>("Truncation", 'T', "Truncation number used in dirichlet process inference", false, 10);
 
     a.parse_check(argc, argv);
-    
+
     pathFV = a.get<std::string>("input");
     pathDB = a.get<std::string>("db");
     pathOutput = a.get<std::string>("out");
