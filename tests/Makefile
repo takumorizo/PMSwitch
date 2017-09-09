@@ -10,7 +10,7 @@ BINDIR=bin
 
 CXX=g++
 CPPFLAGS=-std=c++11 #-DLOGDEBUG -DDEBUGREADS #-DNDEBUG -DMMTEST
-CXXFLAGS=-I$(BOOST) -I$(GTEST) -I$(INCLUDEDIR) -I$(SRCDIR) -Wno-deprecated -O3
+CXXFLAGS=-I$(BOOST) -I$(GTEST) -I$(INCLUDEDIR) -I$(SRCDIR) -O3 -Wno-deprecated
 LDFLAGS=-L$(GTESTDIR) -lgtest
 
 SOURCES := $(shell find $(SRCDIR) -name "*.cpp" ! -name "main.cpp")

@@ -459,6 +459,14 @@ double strToDoubleRef(const std::string &str){
 	return std::stod(str);
 }
 
+long double strToLongDouble(std::string str){
+    return std::stold(str);
+}
+
+long double strToLongDoubleRef(const std::string &str){
+    return std::stold(str);
+}
+
 TEST_F(PMSwithTest, fixedSizeMultiVectorToFile) {
     using namespace pmswitch;
 
@@ -470,16 +478,16 @@ TEST_F(PMSwithTest, fixedSizeMultiVectorToFile) {
     FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
 
     // InferenceCreator<long long, double> creator;
-    Inference<long long, double> inference = InferenceCreator<long long, double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
-    InferenceData<long long, double> data = inference.vb(true, 1e-4);
+    Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+    InferenceData<long long, long double> data = inference.vb(true, 1e-4);
     std::string outputPath = data_path + "/alpha.txt";
     data.getAlpha().print(outputPath);
 
-    FixedSizeMultiVector<double, long long> alpha = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, strToDouble);
-    FixedSizeMultiVector<double, long long> alphaR = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, strToDoubleRef);
+    FixedSizeMultiVector<long double, long long> alpha = FixedSizeMultiVectorCreator<long double, long long>::createFixedSizeMultiVector(outputPath, strToLongDouble);
+    FixedSizeMultiVector<long double, long long> alphaR = FixedSizeMultiVectorCreator<long double, long long>::createFixedSizeMultiVector(outputPath, strToLongDoubleRef);
 
-    FixedSizeMultiVector<double, long long> alphaD = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, 0, strToDouble);
-    FixedSizeMultiVector<double, long long> alphaDR = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, 0, strToDoubleRef);
+    FixedSizeMultiVector<long double, long long> alphaD = FixedSizeMultiVectorCreator<long double, long long>::createFixedSizeMultiVector(outputPath, 0, strToLongDouble);
+    FixedSizeMultiVector<long double, long long> alphaDR = FixedSizeMultiVectorCreator<long double, long long>::createFixedSizeMultiVector(outputPath, 0, strToLongDoubleRef);
 
     EXPECT_TRUE(data.getAlpha() == alpha);
     EXPECT_TRUE(data.getAlpha() == alphaD);

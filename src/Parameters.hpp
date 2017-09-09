@@ -41,31 +41,43 @@ template<typename Int, typename Real>
 void Parameters<Int, Real>::getFromCommandLineArguments(int argc, const char *argv[]){
     cmdline::parser a;
 
-    a.add<std::string>("input",     'i',  ".fv file for mutation feature",    true, "");
-    a.add<std::string>("out",       'o',  "result for mutation feature",      true, "");
-    a.add<std::string>("db" ,       'd',  "database for mutation feature",    true, "");
-    a.add<std::string>("algorithm", '\0', "algorithm type used in inference", false, "");
-    a.add("isDBUpdate", '\0', "if true, update existing database frequencies");
-    a.add<Int>("Truncation", 'T', "Truncation number used in dirichlet process inference", false, 10);
+    a.add<std::string>("input",     'i',  ".fv file for mutation feature",                         true,  "");
+    a.add<std::string>("outDir",    'o',  "result directory for mutation feature",                 true,  "");
+    a.add<std::string>("db" ,       'd',  "database for mutation feature",                         true,  "");
+    a.add<std::string>("algorithm", '\0', "algorithm type used in inference",                      false, "");
+    a.add("isDBUpdate",'\0', "if true, update existing database frequencies");
+    a.add<Int>("truncation",        'T',  "truncation number used in dirichlet process inference", false, 10);
 
-    a.add<Real>("alpha", '\0', "alpha value", false, 1e5);
+    a.add<Real>("alpha", '\0', "alpha value",    false, 1e-5);
     a.add<Real>("beta0", '\0', "beta value @ 0", false, 1);
     a.add<Real>("beta1", '\0', "beta value @ 1", false, 100);
-    a.add<Real>("gamma", '\0', "gamma value", false, 1);
-    a.add<Real>("eta", '\0', "gamma value", false, 1);
+    a.add<Real>("gamma", '\0', "gamma value",    false, 1);
+    a.add<Real>("eta",   '\0', "gamma value",    false, 1);
 
     a.add<std::string>("alphaPath", '\0', "alpha vector file", false, "");
-    a.add<std::string>("betaPath", '\0', "beta vector file", false, "");
+    a.add<std::string>("betaPath",  '\0', "beta vector file",  false, "");
     a.add<std::string>("gammaPath", '\0', "gamma vector file", false, "");
-    a.add<std::string>("etaPath", '\0', "gamma vector file", false, "");
+    a.add<std::string>("etaPath",   '\0', "gamma vector file", false, "");
 
     a.parse_check(argc, argv);
 
-    pathFV = a.get<std::string>("input");
-    pathDB = a.get<std::string>("db");
-    pathOutputDir = a.get<std::string>("out");
-    isDBUpdate = a.exist("isDBUpdate") ? true : false;
     std::string methodStr = a.get<std::string>("algorithm");
+    if(methodStr == "VB"){
+        method = Parameters<Int>::VB;
+    }else if(methodStr == "ONLINEVB"){
+        method = Parameters<Int>::ONLINEVB;
+    }else if(methodStr == "MCMC"){
+        method = Parameters<Int>::MCMC;
+    }else{
+        std::cerr << "algorithm you specified is not in VB, ONLINEVB, MCMC. Specify only one of these." << std::endl; ;
+        exit(1);
+    }
+
+    pathFV        = a.get<std::string>("input");
+    pathDB        = a.get<std::string>("db");
+    pathOutputDir = a.get<std::string>("outDir");
+    isDBUpdate    = a.exist("isDBUpdate") ? true : false;
+    T             = a.get<Int>("truncation");
 
     alpha = a.get<Real>("alpha");
     beta0 = a.get<Real>("beta0");
@@ -78,16 +90,6 @@ void Parameters<Int, Real>::getFromCommandLineArguments(int argc, const char *ar
     gammaPath = a.get<std::string>("gammaPath");
     etaPath = a.get<std::string>("etaPath");
 
-    if(methodStr == "VB"){
-        method = Parameters<Int>::VB;
-    }else if(methodStr == "ONLINEVB"){
-        method = Parameters<Int>::ONLINEVB;
-    }else if(methodStr == "MCMC"){
-        method = Parameters<Int>::MCMC;
-    }else{
-        std::cerr << "algorithm you specified is not in VB, ONLINEVB, MCMC. Specify only one of these." << std::endl; ;
-        exit(1);
-    }
 }
 
 }

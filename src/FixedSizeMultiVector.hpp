@@ -11,6 +11,7 @@
 #include <sstream>
 #include <iomanip>
 #include <assert.h>
+#include <limits>
 
 namespace pmswitch{
 	template<typename E, typename Int = long long >
@@ -60,6 +61,9 @@ namespace pmswitch{
 
 		template <class... Args >
 		Int atImpl(Int Result, const std::vector<Int> &list, Int at, Int e, Args... args) const;
+
+		bool isReal() const;
+		bool isInt()  const;
 	};
 
 	template<typename E, typename Int = long long >
@@ -233,6 +237,34 @@ Int pmswitch::FixedSizeMultiVector<E,Int>::volume(Int dim) const {
 }
 
 template<typename E, typename Int >
+bool pmswitch::FixedSizeMultiVector<E,Int>::isReal() const {
+	return
+		(typeid(E) == typeid(float)) ||
+		(typeid(E) == typeid(double)) ||
+		(typeid(E) == typeid(long double));
+}
+
+
+template<typename E, typename Int >
+bool pmswitch::FixedSizeMultiVector<E,Int>::isInt() const {
+	return
+		(typeid(E) == typeid(char)) ||
+		(typeid(E) == typeid(signed char)) ||
+		(typeid(E) == typeid(unsigned char)) ||
+		(typeid(E) == typeid(wchar_t)) ||
+		(typeid(E) == typeid(char16_t)) ||
+		(typeid(E) == typeid(char32_t)) ||
+		(typeid(E) == typeid(short)) ||
+		(typeid(E) == typeid(unsigned short)) ||
+		(typeid(E) == typeid(int)) ||
+		(typeid(E) == typeid(unsigned int)) ||
+		(typeid(E) == typeid(long)) ||
+		(typeid(E) == typeid(unsigned long)) ||
+		(typeid(E) == typeid(long long)) ||
+		(typeid(E) == typeid(unsigned long long));
+}
+
+template<typename E, typename Int >
 void pmswitch::FixedSizeMultiVector<E,Int>::print(std::ostream& out, std::string (*eToStr)(E)) const {
 	const std::streamsize ss = out.precision();
    	out << "#size\t" << vec.size()    << std::endl;
@@ -261,7 +293,7 @@ void pmswitch::FixedSizeMultiVector<E,Int>::print(std::ostream& out, std::string
 		if(    eToStr != NULL){
 			out << eToStr(vec[i]) << std::endl;
 		}else if(eToStr == NULL){
-			out << std::setprecision( std::numeric_limits<int>::max() );
+			if(isReal()){ out << std::setprecision( std::numeric_limits<long double>::max_digits10);}
 			out <<        vec[i]  << std::endl;
 			out << std::setprecision( ss );
 		}
@@ -301,7 +333,7 @@ void pmswitch::FixedSizeMultiVector<E,Int>::print(std::string path, std::string 
 		if(    eToStr != NULL){
 			ofs << eToStr(vec[i]) << std::endl;
 		}else if(eToStr == NULL){
-			ofs << std::setprecision( std::numeric_limits<int>::max() );
+			if(isReal()){ ofs << std::setprecision( std::numeric_limits<long double>::max_digits10);}
 			ofs <<        vec[i]  << std::endl;
 		}
 	}

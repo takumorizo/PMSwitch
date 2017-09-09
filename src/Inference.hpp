@@ -347,7 +347,6 @@ pmswitch::Inference<Int, Real> pmswitch::InferenceCreator<Int, Real>::createInfe
 	// PriorParametersCreator<Int, Real> priorCreator;
 	PriorParameters<Int, Real> prior = PriorParametersCreator<Int, Real>::createPriorParameters(fvData,  dbData, _T, _alpha, _beta0, _beta1, _gamma, _eta,
  																								alphaPath,  betaPath, gammaPath,  etaPath, strToE);
-
 	Inference<Int, Real> inference(fvData, dbData, prior, _T);
 	return inference;
 }
@@ -355,9 +354,9 @@ pmswitch::Inference<Int, Real> pmswitch::InferenceCreator<Int, Real>::createInfe
 
 template<typename Int, typename Real>
 pmswitch::Inference<Int, Real> pmswitch::InferenceCreator<Int, Real>::createInference(pmswitch::Parameters<Int, Real> param){
-	return createInference(param.pathFV, param.pathDB, param.T, param.alpha, param.beta0, param.beta1,
-						   param.gamma, param.eta, param.alphaPath, param.betaPath, param.gammaPath, param.etaPath,
-						   pmswitch::InferenceCreator<Int, Real>::strToReal);
+	return pmswitch::InferenceCreator<Int, Real>::createInference(param.pathFV, param.pathDB, param.T, param.alpha, param.beta0, param.beta1,
+																  param.gamma,  param.eta, param.alphaPath, param.betaPath, param.gammaPath, param.etaPath,
+																  pmswitch::InferenceCreator<Int, Real>::strToReal);
 }
 
 template<typename Int, typename Real>

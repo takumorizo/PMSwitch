@@ -41,14 +41,14 @@ namespace pmswitch{
 	template<typename Int = long long, typename Real = double>
 	class PriorParameters{
 	public:
-		PriorParameters(pmswitch::FixedSizeMultiVector<Real> alpha,
-						pmswitch::FixedSizeMultiVector<Real> beta,
-						pmswitch::FixedSizeMultiVector<Real> gamma,
-						pmswitch::FixedSizeMultiVector<Real> eta);
-		const pmswitch::FixedSizeMultiVector<Real> alpha;
-		const pmswitch::FixedSizeMultiVector<Real> beta;
-		const pmswitch::FixedSizeMultiVector<Real> gamma;
-		const pmswitch::FixedSizeMultiVector<Real> eta;
+		PriorParameters(pmswitch::FixedSizeMultiVector<Real, Int> alpha,
+						pmswitch::FixedSizeMultiVector<Real, Int> beta,
+						pmswitch::FixedSizeMultiVector<Real, Int> gamma,
+						pmswitch::FixedSizeMultiVector<Real, Int> eta);
+		const pmswitch::FixedSizeMultiVector<Real, Int> alpha;
+		const pmswitch::FixedSizeMultiVector<Real, Int> beta;
+		const pmswitch::FixedSizeMultiVector<Real, Int> gamma;
+		const pmswitch::FixedSizeMultiVector<Real, Int> eta;
 	private:
 	};
 
@@ -180,10 +180,10 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::PriorParametersCreator<Int, 
 }
 
 template<typename Int, typename Real>
-pmswitch::PriorParameters<Int, Real>::PriorParameters(pmswitch::FixedSizeMultiVector<Real> _alpha,
-													  pmswitch::FixedSizeMultiVector<Real> _beta,
-													  pmswitch::FixedSizeMultiVector<Real> _gamma,
-													  pmswitch::FixedSizeMultiVector<Real> _eta) : alpha(_alpha), beta(_beta), gamma(_gamma), eta(_eta){
+pmswitch::PriorParameters<Int, Real>::PriorParameters(pmswitch::FixedSizeMultiVector<Real, Int> _alpha,
+													  pmswitch::FixedSizeMultiVector<Real, Int> _beta,
+													  pmswitch::FixedSizeMultiVector<Real, Int> _gamma,
+													  pmswitch::FixedSizeMultiVector<Real, Int> _eta) : alpha(_alpha), beta(_beta), gamma(_gamma), eta(_eta){
 
 }
 
@@ -231,7 +231,6 @@ pmswitch::PriorParameters<Int, Real> pmswitch::PriorParametersCreator<Int, Real>
    	else { 			  ifs.close(); eta = makeEta(T, Ml.size(), Ml, _eta);}
 
 	pmswitch::PriorParameters<Int, Real> prior(alpha, beta, gamma, eta);
-
 	return prior;
 }
 
