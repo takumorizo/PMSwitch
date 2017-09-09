@@ -471,9 +471,9 @@ TEST_F(PMSwithTest, fixedSizeMultiVectorToFile) {
 
     // InferenceCreator<long long, double> creator;
     Inference<long long, double> inference = InferenceCreator<long long, double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
-    InferenceData<long long, double> data = inference.vb(5, true, 1e-4);
+    InferenceData<long long, double> data = inference.vb(true, 1e-4);
     std::string outputPath = data_path + "/alpha.txt";
-    data.alpha.print(outputPath);
+    data.getAlpha().print(outputPath);
 
     FixedSizeMultiVector<double, long long> alpha = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, strToDouble);
     FixedSizeMultiVector<double, long long> alphaR = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, strToDoubleRef);
@@ -481,10 +481,10 @@ TEST_F(PMSwithTest, fixedSizeMultiVectorToFile) {
     FixedSizeMultiVector<double, long long> alphaD = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, 0, strToDouble);
     FixedSizeMultiVector<double, long long> alphaDR = FixedSizeMultiVectorCreator<double, long long>::createFixedSizeMultiVector(outputPath, 0, strToDoubleRef);
 
-    EXPECT_TRUE(data.alpha == alpha);
-    EXPECT_TRUE(data.alpha == alphaD);
-    EXPECT_TRUE(data.alpha == alphaR);
-    EXPECT_TRUE(data.alpha == alphaDR);
+    EXPECT_TRUE(data.getAlpha() == alpha);
+    EXPECT_TRUE(data.getAlpha() == alphaD);
+    EXPECT_TRUE(data.getAlpha() == alphaR);
+    EXPECT_TRUE(data.getAlpha() == alphaDR);
 }
 
 #include <stdio.h>
@@ -505,7 +505,11 @@ TEST_F(PMSwithTest, math_vb) {
 
     // InferenceCreator<long long, double> creator;
     Inference<long long, double> inference = InferenceCreator<long long, double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
-    inference.vb(5, true, 1e-4);
+    inference.vb(true, 1e-4);
+
+    InferenceData<long long, double> ans0 = inference.vb(true, 1e-4);
+    InferenceData<long long, double> ans1 = inference.vb(true, 1e-5);
+    ans0 = ans1;
 
     // int testNum = 100;
     // for(int i = 0; i < testNum; i++){
@@ -527,9 +531,9 @@ TEST_F(PMSwithTest, math_vb) {
     //     Inference<long long, double> inference = InferenceCreator<long long, double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
 
     //     std::cerr << "  g not update: " << i << std::endl;
-    //     inference.vb(5, false, 1e-4);
+    //     inference.vb(false, 1e-4);
     //     std::cerr << "  g update: " << i << std::endl;
-    //     inference.vb(5, true, 1e-4);
+    //     inference.vb(true, 1e-4);
     // }
 }
 

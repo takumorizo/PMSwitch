@@ -7,6 +7,8 @@
 #include "PriorParameters.hpp"
 #include "InputFileParser.hpp"
 #include "MathUtil.hpp"
+#include "Parameters.hpp"
+
 
 #include <vector>
 #include <iostream>
@@ -20,13 +22,14 @@ namespace pmswitch{
 	template<typename Int = long long, typename Real = double>
 	class Inference{
 	public:
-		Inference(FeatureData<Int, Real> _fvData, DBData<Int, Real> _dbData, PriorParameters<Int, Real> prior);
-		InferenceData<Int, Real> vb(Int T, bool updateDB = true, const Real epsilon = 1e-9);
+		Inference(FeatureData<Int, Real> _fvData, DBData<Int, Real> _dbData, PriorParameters<Int, Real> prior, Int _T);
+		InferenceData<Int, Real> vb(bool updateDB = true, const Real epsilon = 1e-9);
 		InferenceData<Int, Real> onlineVb();
 	private:
 		FeatureData<Int, Real> fvData;
 		DBData<Int, Real> dbData;
 		PriorParameters<Int, Real> prior;
+		Int T;
 
 		FixedSizeMultiVector<Real> initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T);
 		FixedSizeMultiVector<Real> initES(Int I, FixedSizeMultiVector<Int> Js, Int maxJ);
@@ -39,20 +42,26 @@ namespace pmswitch{
 		InferenceCreator();
 	  	static pmswitch::Inference<Int, Real> createInference(std::string pathFV, std::string pathDB,
 													   Int T, Real _alpha, Real _beta0, Real _beta1,
-													   Real _gamma, Real _eta );
+													   Real _gamma, Real _eta,
+													   std::string alphaPath = "", std::string betaPath = "",
+													   std::string gammaPath = "", std::string etaPath = "",
+													   Real (*strToE)(std::string) = NULL);
+	  	static pmswitch::Inference<Int, Real> createInference(pmswitch::Parameters<Int, Real> param);
+	 private:
+	 	static Real strToReal(std::string str);
 	};
 }
 /*
 	public functions
 */
 template<typename Int, typename Real>
-pmswitch::Inference<Int, Real>::Inference(FeatureData<Int, Real> _fvData, DBData<Int, Real> _dbData, PriorParameters<Int, Real> _prior)
-		:fvData(_fvData), dbData(_dbData), prior(_prior){
+pmswitch::Inference<Int, Real>::Inference(FeatureData<Int, Real> _fvData, DBData<Int, Real> _dbData, PriorParameters<Int, Real> _prior, Int _T)
+		:fvData(_fvData), dbData(_dbData), prior(_prior), T(_T){
 }
 
 
 template<typename Int, typename Real>
-pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(Int T, bool updateDB, const Real epsilon ){
+pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updateDB, const Real epsilon ){
 	using namespace pmswitch;
 	Int N = dbData.N; // existing cluster Number
 	Int I = fvData.I; // sample size
@@ -287,7 +296,7 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(Int T, boo
 		if(first) first = false;
 		update++;
 	}
-	pmswitch::InferenceData<Int, Real> ans(EZ, ES, EY, alpha, eta, beta, gamma, g);
+	pmswitch::InferenceData<Int, Real> ans(EZ, ES, EY, alpha, eta, beta, gamma, g, nextLq);
 	return ans;
 }
 
@@ -325,19 +334,37 @@ pmswitch::InferenceCreator<Int, Real>::InferenceCreator(){
 
 template<typename Int, typename Real>
 pmswitch::Inference<Int, Real> pmswitch::InferenceCreator<Int, Real>::createInference(std::string pathFV, std::string pathDB,
-													   Int T, Real _alpha, Real _beta0, Real _beta1,
-													   Real _gamma, Real _eta ){
+													   Int _T, Real _alpha, Real _beta0, Real _beta1,
+													   Real _gamma, Real _eta,
+   													   std::string alphaPath, std::string betaPath,
+													   std::string gammaPath, std::string etaPath,
+													   Real (*strToE)(std::string)){
 	using namespace pmswitch;
 	InputFileParser<Int, Real> parser;
 
 	FeatureData<Int, Real> fvData = parser.parseFeatureFile(pathFV);
 	DBData<Int, Real> dbData = parser.parseDBFile(pathDB);
 	// PriorParametersCreator<Int, Real> priorCreator;
-	PriorParameters<Int, Real> prior = PriorParametersCreator<Int, Real>::createPriorParameters(fvData,  dbData, T, _alpha, _beta0, _beta1, _gamma, _eta);
+	PriorParameters<Int, Real> prior = PriorParametersCreator<Int, Real>::createPriorParameters(fvData,  dbData, _T, _alpha, _beta0, _beta1, _gamma, _eta,
+ 																								alphaPath,  betaPath, gammaPath,  etaPath, strToE);
 
-	Inference<Int, Real> inference(fvData, dbData, prior);
+	Inference<Int, Real> inference(fvData, dbData, prior, _T);
 	return inference;
 }
+
+
+template<typename Int, typename Real>
+pmswitch::Inference<Int, Real> pmswitch::InferenceCreator<Int, Real>::createInference(pmswitch::Parameters<Int, Real> param){
+	return createInference(param.pathFV, param.pathDB, param.T, param.alpha, param.beta0, param.beta1,
+						   param.gamma, param.eta, param.alphaPath, param.betaPath, param.gammaPath, param.etaPath,
+						   pmswitch::InferenceCreator<Int, Real>::strToReal);
+}
+
+template<typename Int, typename Real>
+Real pmswitch::InferenceCreator<Int, Real>::strToReal(std::string str){
+	return (Real) std::stold(str);
+}
+
 
 /*
 	private functions
