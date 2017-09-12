@@ -22,6 +22,8 @@ namespace pmswitch{
 
 		void printHyperParameters(std::string baseDir) const;
 		void printLatents(std::string baseDir)		   const;
+		void printDB(std::string baseDir)              const;
+		void printAllData(std::string baseDir)         const;
 
 		FixedSizeMultiVector<Real, Int> getAlpha() const {return alpha;}
 		FixedSizeMultiVector<Real, Int> getBeta()  const {return beta;}
@@ -77,6 +79,19 @@ void pmswitch::InferenceData<Int, Real>::printLatents(std::string baseDir) const
 	EZ.print(EZPath);
 	ES.print(ESPath);
 	EY.print(EYPath);
+}
+
+template<typename Int , typename Real >
+void pmswitch::InferenceData<Int, Real>::printDB(std::string baseDir) const {
+	std::string gPath = baseDir + "/g.txt";
+	g.print(gPath);
+}
+
+template<typename Int , typename Real >
+void pmswitch::InferenceData<Int, Real>::printAllData(std::string baseDir) const {
+	printHyperParameters(baseDir);
+	printLatents(baseDir);
+	printDB(baseDir);
 }
 
 

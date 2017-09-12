@@ -63,11 +63,11 @@ void Parameters<Int, Real>::getFromCommandLineArguments(int argc, const char *ar
 
     std::string methodStr = a.get<std::string>("algorithm");
     if(methodStr == "VB"){
-        method = Parameters<Int>::VB;
+        method = Parameters<Int, Real>::VB;
     }else if(methodStr == "ONLINEVB"){
-        method = Parameters<Int>::ONLINEVB;
+        method = Parameters<Int, Real>::ONLINEVB;
     }else if(methodStr == "MCMC"){
-        method = Parameters<Int>::MCMC;
+        method = Parameters<Int, Real>::MCMC;
     }else{
         std::cerr << "algorithm you specified is not in VB, ONLINEVB, MCMC. Specify only one of these." << std::endl; ;
         exit(1);
