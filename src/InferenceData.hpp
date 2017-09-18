@@ -18,18 +18,27 @@ namespace pmswitch{
 		InferenceData(FixedSizeMultiVector<Real, Int> _EZ, FixedSizeMultiVector<Real, Int> _ES, FixedSizeMultiVector<Real, Int> _EY,
 					  FixedSizeMultiVector<Real, Int> _alpha, FixedSizeMultiVector<Real, Int> _eta,
 					  FixedSizeMultiVector<Real, Int> _beta, FixedSizeMultiVector<Real, Int> _gamma,
+					  FixedSizeMultiVector<Real, Int> _s, FixedSizeMultiVector<Real, Int> _u,
 					  FixedSizeMultiVector<Real, Int> _g, Real _Lq = 0.0);
 
-		void printHyperParameters(std::string baseDir) const;
-		void printLatents(std::string baseDir)		   const;
-		void printDB(std::string baseDir)              const;
-		void printAllData(std::string baseDir)         const;
+		InferenceData(FixedSizeMultiVector<Real, Int> _EZ, FixedSizeMultiVector<Real, Int> _ES, FixedSizeMultiVector<Real, Int> _EY,
+					  FixedSizeMultiVector<Real, Int> _alpha, FixedSizeMultiVector<Real, Int> _eta,
+					  FixedSizeMultiVector<Real, Int> _beta, FixedSizeMultiVector<Real, Int> _gamma,
+					  FixedSizeMultiVector<Real, Int> _g, Real _Lq = 0.0);
+
+		void printHyperParameters(std::string baseDir) 		const;
+		void printLatents(std::string baseDir)		   		const;
+		void printDB(std::string baseDir)              		const;
+		void printAllData(std::string baseDir)         		const;
+		void printGammaHyperParameters(std::string baseDir) const;
 
 		FixedSizeMultiVector<Real, Int> getAlpha() const {return alpha;}
 		FixedSizeMultiVector<Real, Int> getBeta()  const {return beta;}
 		FixedSizeMultiVector<Real, Int> getGamma() const {return gamma;}
 		FixedSizeMultiVector<Real, Int> getEta()   const {return eta;}
 		FixedSizeMultiVector<Real, Int> getG()     const {return g;}
+		FixedSizeMultiVector<Real, Int> getS()     const {return g;}
+		FixedSizeMultiVector<Real, Int> getU()     const {return g;}
 
 		FixedSizeMultiVector<Real, Int> getEZ()    const {return EZ;}
 		FixedSizeMultiVector<Real, Int> getES()    const {return ES;}
@@ -47,6 +56,9 @@ namespace pmswitch{
 		FixedSizeMultiVector<Real, Int> beta;
 		FixedSizeMultiVector<Real, Int> gamma;
 
+		FixedSizeMultiVector<Real, Int> s;
+		FixedSizeMultiVector<Real, Int> u;
+
 		FixedSizeMultiVector<Real, Int> g;
 		Real Lq;
 	};
@@ -60,15 +72,29 @@ pmswitch::InferenceData<Int, Real>::InferenceData(FixedSizeMultiVector<Real, Int
 }
 
 template<typename Int , typename Real >
+pmswitch::InferenceData<Int, Real>::InferenceData(FixedSizeMultiVector<Real, Int> _EZ, FixedSizeMultiVector<Real, Int> _ES, FixedSizeMultiVector<Real, Int> _EY,
+					  FixedSizeMultiVector<Real, Int> _alpha, FixedSizeMultiVector<Real, Int> _eta,
+					  FixedSizeMultiVector<Real, Int> _beta, FixedSizeMultiVector<Real, Int> _gamma,
+					  FixedSizeMultiVector<Real, Int> _s, FixedSizeMultiVector<Real, Int> _u,
+					  FixedSizeMultiVector<Real, Int> _g,
+					  Real _Lq) : EZ(_EZ), ES(_ES), EY(_EY), alpha(_alpha), eta(_eta), beta(_beta), gamma(_gamma), g(_g), s(_s), u(_u), Lq(_Lq) {
+}
+
+template<typename Int , typename Real >
 void pmswitch::InferenceData<Int, Real>::printHyperParameters(std::string baseDir) const {
 	std::string alphaPath = baseDir + "/alpha.txt";
 	std::string betaPath  = baseDir + "/beta.txt";
 	std::string gammaPath = baseDir + "/gamma.txt";
 	std::string etaPath   = baseDir + "/eta.txt";
+	std::string sPath     = baseDir + "/s.txt";
+	std::string uPath     = baseDir + "/u.txt";
+
 	alpha.print(alphaPath);
-	beta.print(betaPath);
+  	 beta.print( betaPath);
 	gamma.print(gammaPath);
-	eta.print(etaPath);
+	  eta.print(  etaPath);
+	    s.print(    sPath);
+	    u.print(    uPath);
 }
 
 template<typename Int , typename Real >

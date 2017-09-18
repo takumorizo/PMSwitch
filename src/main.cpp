@@ -20,10 +20,14 @@ int main(int argc, const char *argv[]){
 
 	if(param.method == Parameters<long long, long double>::VB){
 	    Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(param);
-
-	    InferenceData<long long, long double> ans = inference.vb(param.isDBUpdate, 1e-4);
+		InferenceData<long long, long double> maxAns = inference.vbFull(param.isDBUpdate, 1e-4);
+		for(int i = 0; i < 10-1; i++){
+		    InferenceData<long long, long double> ans = inference.vbFull(param.isDBUpdate, 1e-4);
+		    if(maxAns.getLq() < ans.getLq()) maxAns = ans;
+		}
 	    std::cerr << "end VB" << std::endl;
-	 	ans.printHyperParameters(param.pathOutputDir);
-	 	ans.printDB(param.pathOutputDir);
+	 	maxAns.printHyperParameters(param.pathOutputDir);
+	 	maxAns.printLatents(param.pathOutputDir);
+	 	maxAns.printDB(param.pathOutputDir);
 	}
 }

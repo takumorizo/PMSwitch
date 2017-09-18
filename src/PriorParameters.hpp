@@ -44,11 +44,15 @@ namespace pmswitch{
 		PriorParameters(pmswitch::FixedSizeMultiVector<Real, Int> alpha,
 						pmswitch::FixedSizeMultiVector<Real, Int> beta,
 						pmswitch::FixedSizeMultiVector<Real, Int> gamma,
-						pmswitch::FixedSizeMultiVector<Real, Int> eta);
+						pmswitch::FixedSizeMultiVector<Real, Int> eta,
+						pmswitch::FixedSizeMultiVector<Real, Int> s,
+						pmswitch::FixedSizeMultiVector<Real, Int> u);
 		const pmswitch::FixedSizeMultiVector<Real, Int> alpha;
 		const pmswitch::FixedSizeMultiVector<Real, Int> beta;
 		const pmswitch::FixedSizeMultiVector<Real, Int> gamma;
 		const pmswitch::FixedSizeMultiVector<Real, Int> eta;
+		const pmswitch::FixedSizeMultiVector<Real, Int> s;
+		const pmswitch::FixedSizeMultiVector<Real, Int> u;
 	private:
 	};
 
@@ -69,8 +73,11 @@ namespace pmswitch{
 														   Real _alpha,
 														   Real _beta0, Real _beta1,
 														   Real _gamma, Real _eta,
+														   Real _s0,    Real _s1,
+														   Real _u0,    Real _u1,
 														   std::string alphaPath = "", std::string betaPath = "",
 														   std::string gammaPath = "", std::string etaPath = "",
+														   std::string sPath = "",     std::string uPath = "",
 														   Real (*strToE)(std::string) = NULL);
 	private:
 		static pmswitch::FixedSizeMultiVector<Real, Int> makeAlpha(Int I, Int T, Real _alpha);
@@ -84,6 +91,13 @@ namespace pmswitch{
 
 		static pmswitch::FixedSizeMultiVector<Real, Int> makeEta(Int T, Int L, pmswitch::FixedSizeMultiVector<Int> Ml, Real _eta);
 		template<typename String> static pmswitch::FixedSizeMultiVector<Real, Int> makeEta(Int T, Int L, pmswitch::FixedSizeMultiVector<Int> Ml, std::string path, Real (*strToE)(String) );
+
+		static pmswitch::FixedSizeMultiVector<Real, Int> makeS(Real _s0, Real _s1);
+		template<typename String> static pmswitch::FixedSizeMultiVector<Real, Int> makeS(std::string path, Real (*strToE)(String));
+
+		static pmswitch::FixedSizeMultiVector<Real, Int> makeU(Real _s0, Real _s1);
+		template<typename String> static pmswitch::FixedSizeMultiVector<Real, Int> makeU(std::string path, Real (*strToE)(String));
+
 	};
 }
 
@@ -180,10 +194,47 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::PriorParametersCreator<Int, 
 }
 
 template<typename Int, typename Real>
+pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::PriorParametersCreator<Int, Real>::makeS(Real _s0, Real _s1){
+	pmswitch::FixedSizeMultiVector<Real, Int> s(0, 2);
+	s(0) = _s0; s(1) = _s1;
+	return s;
+}
+
+template<typename Int, typename Real>
+template<typename String>
+pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::PriorParametersCreator<Int, Real>::makeS(std::string path, Real (*strToE)(String)){
+	pmswitch::FixedSizeMultiVector<Real, Int> s = FixedSizeMultiVectorCreator<Real, Int>::createFixedSizeMultiVector(path,  strToE);
+	if( s.dim()   != 1  ){ die("s.dim() differs @ pmswitch::PriorParametersCreator<Int, Real>::makeS(std::string path, Real (*strToE)(String))"); }
+	if( s.size(0) != 2  ){
+		die("s.size(each) differs @ pmswitch::PriorParametersCreator<Int, Real>::makeS(std::string path, Real (*strToE)(String))");
+	}
+	return s;
+}
+
+
+template<typename Int, typename Real>
+pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::PriorParametersCreator<Int, Real>::makeU(Real _u0, Real _u1){
+	return makeS(_u0,_u1);
+}
+
+template<typename Int, typename Real>
+template<typename String>
+pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::PriorParametersCreator<Int, Real>::makeU(std::string path, Real (*strToE)(String)){
+	return makeS(path, strToE);
+}
+
+
+// static pmswitch::FixedSizeMultiVector<Real, Int> makeS(Real _s0, Real _s1);
+// template<typename String> static pmswitch::FixedSizeMultiVector<Real, Int> makeS(std::string path, Real (*strToE)(String));
+
+
+template<typename Int, typename Real>
 pmswitch::PriorParameters<Int, Real>::PriorParameters(pmswitch::FixedSizeMultiVector<Real, Int> _alpha,
 													  pmswitch::FixedSizeMultiVector<Real, Int> _beta,
 													  pmswitch::FixedSizeMultiVector<Real, Int> _gamma,
-													  pmswitch::FixedSizeMultiVector<Real, Int> _eta) : alpha(_alpha), beta(_beta), gamma(_gamma), eta(_eta){
+													  pmswitch::FixedSizeMultiVector<Real, Int> _eta,
+													  pmswitch::FixedSizeMultiVector<Real, Int> _s,
+													  pmswitch::FixedSizeMultiVector<Real, Int> _u) : alpha(_alpha), beta(_beta), gamma(_gamma), eta(_eta), s(_s), u(_u){
 
 }
 
@@ -200,8 +251,11 @@ pmswitch::PriorParameters<Int, Real> pmswitch::PriorParametersCreator<Int, Real>
 														   Real _alpha,
 														   Real _beta0, Real _beta1,
 														   Real _gamma, Real _eta,
+														   Real _s0,    Real _s1,
+														   Real _u0,    Real _u1,
 														   std::string alphaPath, std::string betaPath,
 														   std::string gammaPath, std::string etaPath,
+														   std::string sPath,     std::string uPath,
 														   Real (*strToE)(std::string) ){
 	Int I = fvData.I;
 	Int N = dbData.N;
@@ -212,6 +266,9 @@ pmswitch::PriorParameters<Int, Real> pmswitch::PriorParametersCreator<Int, Real>
 	pmswitch::FixedSizeMultiVector<Real, Int> beta;  //(0.0, I, 2);
 	pmswitch::FixedSizeMultiVector<Real, Int> gamma; //(_gamma, I, N);
 	pmswitch::FixedSizeMultiVector<Real, Int> eta;   //(_eta, T, Ml.size(), maxMl);
+	pmswitch::FixedSizeMultiVector<Real, Int> s;     //(2)
+	pmswitch::FixedSizeMultiVector<Real, Int> u;     //(2)
+
 
 	std::ifstream ifs;
 	ifs.open(alphaPath);
@@ -230,7 +287,16 @@ pmswitch::PriorParameters<Int, Real> pmswitch::PriorParametersCreator<Int, Real>
    	if(!ifs.fail()) { ifs.close(); eta = makeEta(T, Ml.size(), Ml, etaPath, strToE);}
    	else { 			  ifs.close(); eta = makeEta(T, Ml.size(), Ml, _eta);}
 
-	pmswitch::PriorParameters<Int, Real> prior(alpha, beta, gamma, eta);
+   	ifs.open(sPath);
+   	if(!ifs.fail()) { ifs.close(); s = makeS(sPath, strToE);}
+   	else { 			  ifs.close(); s = makeS(_s0, _s1);}
+
+   	ifs.open(uPath);
+   	if(!ifs.fail()) { ifs.close(); u = makeU(uPath, strToE);}
+   	else { 			  ifs.close(); u = makeU(_u0, _u1);}
+
+
+	pmswitch::PriorParameters<Int, Real> prior(alpha, beta, gamma, eta, s, u);
 	return prior;
 }
 

@@ -76,6 +76,21 @@ namespace pmswitch{
 		static FixedSizeMultiVector<E, Int> createFixedSizeMultiVector(std::string path, E (*strToE)(const std::string&));
 		static FixedSizeMultiVector<E, Int> createFixedSizeMultiVector(std::string path, E defaultValue,  E (*strToE)(const std::string&));
 
+		template<typename Real>
+		static Real strToReal(std::string str);
+		template<typename Real>
+		static Real constStrToReal(const std::string &str);
+
+		template<typename Integer>
+		static Integer strToInt(std::string str);
+		template<typename Integer>
+		static Integer constStrToInt(const std::string &str);
+
+		template<typename UnsignedInteger>
+		static UnsignedInteger strToUInt(std::string str);
+		template<typename UnsignedInteger>
+		static UnsignedInteger constStrToUInt(const std::string &str);
+
 	private:
 		static void parseHeaderFile(std::string path, Int& size, Int& dim, std::vector<Int> &dimVec, std::vector<Int> &volumeVec);
 		static void updateVector(std::string path, FixedSizeMultiVector<E, Int> &ans, E (*strToE)(std::string), bool checkNum = true);
@@ -512,6 +527,36 @@ pmswitch::FixedSizeMultiVector<E, Int> pmswitch::FixedSizeMultiVectorCreator<E, 
    		updateVector(path, ans, strToE, false);
    	}
    	return ans;
+}
+
+template<typename E, typename Int > template<typename Real>
+Real pmswitch::FixedSizeMultiVectorCreator<E, Int>::strToReal(std::string str){
+	return (Real) std::stold(str);
+}
+
+template<typename E, typename Int > template<typename Real>
+Real pmswitch::FixedSizeMultiVectorCreator<E, Int>::constStrToReal(const std::string &str){
+	return (Real) std::stold(str);
+}
+
+template<typename E, typename Int > template<typename Integer>
+Integer pmswitch::FixedSizeMultiVectorCreator<E, Int>::strToInt(std::string str){
+	return (Integer) std::stoll(str);
+}
+
+template<typename E, typename Int > template<typename Integer>
+Integer pmswitch::FixedSizeMultiVectorCreator<E, Int>::constStrToInt(const std::string &str){
+	return (Integer) std::stoll(str);
+}
+
+template<typename E, typename Int > template<typename UnsignedInteger>
+UnsignedInteger pmswitch::FixedSizeMultiVectorCreator<E, Int>::strToUInt(std::string str){
+	return (UnsignedInteger) std::stoull(str);
+}
+
+template<typename E, typename Int > template<typename UnsignedInteger>
+UnsignedInteger pmswitch::FixedSizeMultiVectorCreator<E, Int>::constStrToUInt(const std::string &str){
+	return (UnsignedInteger) std::stoull(str);
 }
 
 

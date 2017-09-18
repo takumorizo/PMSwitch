@@ -25,11 +25,15 @@ public:
     Real beta0, beta1;
     Real gamma;
     Real eta;
+    Real s0, s1;
+    Real u0, u1;
 
     std::string alphaPath;
     std::string betaPath;
     std::string gammaPath;
     std::string etaPath;
+    std::string sPath;
+    std::string uPath;
 };
 
 template<typename Int, typename Real>
@@ -49,15 +53,22 @@ void Parameters<Int, Real>::getFromCommandLineArguments(int argc, const char *ar
     a.add<Int>("truncation",        'T',  "truncation number used in dirichlet process inference", false, 10);
 
     a.add<Real>("alpha", '\0', "alpha value",    false, 1e-5);
-    a.add<Real>("beta0", '\0', "beta value @ 0", false, 1);
-    a.add<Real>("beta1", '\0', "beta value @ 1", false, 100);
+    a.add<Real>("beta0", '\0', "beta  value @ 0", false, 1);
+    a.add<Real>("beta1", '\0', "beta  value @ 1", false, 100);
     a.add<Real>("gamma", '\0', "gamma value",    false, 1);
     a.add<Real>("eta",   '\0', "gamma value",    false, 1);
+    a.add<Real>("s0",    '\0', "s0    value",    false, 1);
+    a.add<Real>("s1",    '\0', "s1    value",    false, 1);
+    a.add<Real>("u0",    '\0', "s0    value",    false, 1);
+    a.add<Real>("u1",    '\0', "s1    value",    false, 1);
+
 
     a.add<std::string>("alphaPath", '\0', "alpha vector file", false, "");
     a.add<std::string>("betaPath",  '\0', "beta vector file",  false, "");
     a.add<std::string>("gammaPath", '\0', "gamma vector file", false, "");
     a.add<std::string>("etaPath",   '\0', "gamma vector file", false, "");
+    a.add<std::string>("sPath",     '\0', "s vector file",     false, "");
+    a.add<std::string>("uPath",     '\0', "u vector file",     false, "");
 
     a.parse_check(argc, argv);
 
@@ -83,13 +94,19 @@ void Parameters<Int, Real>::getFromCommandLineArguments(int argc, const char *ar
     beta0 = a.get<Real>("beta0");
     beta1 = a.get<Real>("beta1");
     gamma = a.get<Real>("gamma");
-    eta = a.get<Real>("eta");
+    eta   = a.get<Real>("eta");
+    s0    = a.get<Real>("s0");
+    s1    = a.get<Real>("s1");
+    u0    = a.get<Real>("u0");
+    u1    = a.get<Real>("u1");
+
 
     alphaPath = a.get<std::string>("alphaPath");
-    betaPath = a.get<std::string>("betaPath");
+    betaPath  = a.get<std::string>("betaPath");
     gammaPath = a.get<std::string>("gammaPath");
-    etaPath = a.get<std::string>("etaPath");
-
+    etaPath   = a.get<std::string>("etaPath");
+    sPath     = a.get<std::string>("sPath");
+    uPath     = a.get<std::string>("uPath");
 }
 
 }

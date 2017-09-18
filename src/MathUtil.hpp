@@ -10,6 +10,7 @@
 #include <boost/math/special_functions/digamma.hpp>
 #include <math.h>
 #include <cmath>
+#include <random>
 
 namespace pmswitch{
 	namespace math{
@@ -101,25 +102,63 @@ namespace pmswitch{
 		template<typename Int = long long, typename Real = double>
 		Real calELogDir(const pmswitch::FixedSizeMultiVector<Real,Int> &logTheta, const pmswitch::FixedSizeMultiVector<Real,Int> &param,
 						const pmswitch::FixedSizeMultiVector<bool,Int> &filter);
+
+		namespace random{
+			template<typename URNG,typename Real>
+			Real sampleGamma(URNG& engine, Real a, Real b);
+
+			template<typename URNG, typename Real, typename Int = long long>
+			std::vector<Real> sampleGamma(URNG& engine, Real a, Real b, Int num);
+
+			template<typename URNG, typename Real, typename Int = long long>
+			std::vector<Real> sampleDirichlet(URNG& engine, std::vector<Real> alpha);
+
+			template<typename URNG, typename Real, typename Int = long long>
+			pmswitch::FixedSizeMultiVector<Real, Int> sampleDirichlet(URNG& engine, std::vector<Real> alpha, Int num);
+		}
 	}
 }
 
-/*
-################
-namespace pmswitch{
-	namespace math{
-		template<typename Int = long long, typename Real = double>
-		FixedSizeMultiVector<Real> initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T);
 
-		template<typename Int = long long, typename Real = double>
-		FixedSizeMultiVector<Real> initES(Int I, Int N);
-
-		template<typename Int = long long, typename Real = double>
-		FixedSizeMultiVector<Real> initEY(Int I, Int N);
-	}
+template<typename URNG,typename Real>
+Real pmswitch::math::random::sampleGamma(URNG& engine, Real a, Real b){
+ 	std::gamma_distribution<Real> distGamma(a,b);
+ 	Real p = distGamma(engine);
+ 	return p;
 }
-################
-*/
+
+template<typename URNG, typename Real, typename Int>
+std::vector<Real> pmswitch::math::random::sampleGamma(URNG& engine, Real a, Real b, Int num){
+	std::vector<Real> ans;
+	std::gamma_distribution<Real> distGamma(a,b);
+	for(Int i = 0; i < num; i++) ans.push_back(distGamma(engine));
+ 	return ans;
+}
+
+template<typename URNG, typename Real, typename Int>
+std::vector<Real> pmswitch::math::random::sampleDirichlet(URNG& engine, std::vector<Real> alpha){
+	std::vector<Real> ans;
+	Real total = 0.0;
+	for(Int i = 0; i < alpha.size(); i++){
+		std::gamma_distribution<Real> distGamma(alpha[i],1);
+		ans.push_back(distGamma(engine));
+		total += ans[i];
+	}
+	for(Int i = 0; i < alpha.size(); i++) ans[i] /= total;
+ 	return ans;
+}
+
+template<typename URNG, typename Real, typename Int>
+pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::math::random::sampleDirichlet(URNG& engine, std::vector<Real> alpha, Int num){
+	pmswitch::FixedSizeMultiVector<Real, Int> ans(0, num, alpha.size());
+	for(Int n = 0; n < num; n++)for(Int i = 0; i < alpha.size(); i++){
+		std::gamma_distribution<Real> distGamma(alpha[i],1);
+		ans(n,i) = distGamma(engine);
+	}
+	pmswitch::math::norm<Int, Real>(ans, 0);
+ 	return ans;
+}
+
 
 template<typename Int, typename Real>
 void pmswitch::math::subMax(pmswitch::FixedSizeMultiVector<Real,Int> &vec, Int dim, Real INF){

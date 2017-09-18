@@ -478,7 +478,7 @@ TEST_F(PMSwithTest, fixedSizeMultiVectorToFile) {
     FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
 
     // InferenceCreator<long long, double> creator;
-    Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+    Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95, 1, 1, 1, 1);
     InferenceData<long long, long double> data = inference.vb(true, 1e-4);
     std::string outputPath = data_path + "/alpha.txt";
     data.getAlpha().print(outputPath);
@@ -498,9 +498,6 @@ TEST_F(PMSwithTest, fixedSizeMultiVectorToFile) {
 #include <stdio.h>
 #include <stdlib.h>
 
-
-
-
 TEST_F(PMSwithTest, math_vb) {
     using namespace pmswitch;
 
@@ -512,12 +509,12 @@ TEST_F(PMSwithTest, math_vb) {
     FeatureData<long long, long double> fvData = parser.parseFeatureFile(testFVPath);
 
     // InferenceCreator<long long, long double> creator;
-    Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
+    Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95, 1.0, 1.0, 1.0, 1.0);
     inference.vb(true, 1e-4);
 
     InferenceData<long long, long double> ans0 = inference.vb(true, 1e-4);
 
-    // int testNum = 100;
+    // int testNum = 20;
     // for(int i = 0; i < testNum; i++){
     //     std::cerr << "vb test Num: " << i << std::endl;
     //     int ret;
@@ -526,16 +523,10 @@ TEST_F(PMSwithTest, math_vb) {
     //     if(WIFEXITED(ret)){ state = WEXITSTATUS(ret);}
     //     else{ state = -1; }
     //     assert(state != -1);
-    //     InputFileParser<long long, double> parser;
+
     //     std::string testDBPath = data_path + "/simDB.txt";
-    //     DBData<long long, double> dbData = parser.parseDBFile(testDBPath);
-
     //     std::string testFVPath = data_path + "/simFV.txt";
-    //     FeatureData<long long, double> fvData = parser.parseFeatureFile(testFVPath);
-
-    //     // InferenceCreator<long long, double> creator;
-    //     Inference<long long, double> inference = InferenceCreator<long long, double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95);
-
+    //     Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95, 1, 1, 1, 1);
     //     std::cerr << "  g not update: " << i << std::endl;
     //     inference.vb(false, 1e-4);
     //     std::cerr << "  g update: " << i << std::endl;
@@ -543,5 +534,53 @@ TEST_F(PMSwithTest, math_vb) {
     // }
 }
 
+
+TEST_F(PMSwithTest, math_vbFull) {
+    using namespace pmswitch;
+
+    bool isBugSearch = true;
+    int testNum = 10;
+    if(isBugSearch){
+        for(int i = 0; i < testNum; i++){
+            std::cerr << "vb test Num: " << i << " / " << testNum << std::endl;
+            int ret;
+            int state;
+            ret = system("python ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/simDataGenerator.py ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/sampleConfig.ini ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simDB.txt ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simFV.txt ~/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/param.txt");
+            if(WIFEXITED(ret)){ state = WEXITSTATUS(ret);}
+            else{ state = -1; }
+            assert(state != -1);
+
+            std::string testDBPath = data_path + "/simDB.txt";
+            std::string testFVPath = data_path + "/simFV.txt";
+            Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95, 1.0, 1.0, 1.0, 1.0);
+            std::cerr << "  g not update: " << i << std::endl;
+            std::cerr << "      vb fixed" << std::endl;
+            inference.vb(false, 1e-5, data_path+"/err");
+            std::cerr << "      vb full"  << std::endl;
+            inference.vbFull(false, 1e-5, data_path+"/err");
+
+            std::cerr << "  g update: " << i << std::endl;
+            std::cerr << "      vb fixed" << std::endl;
+            inference.vb(true, 1e-5, data_path+"/err");
+            std::cerr << "      vb full"  << std::endl;
+            inference.vbFull(true, 1e-5, data_path+"/err");
+        }
+    }else{
+        std::string testDBPath = data_path + "/simDB.txt";
+        std::string testFVPath = data_path + "/simFV.txt";
+        Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95, 1.0, 1.0, 1.0, 1.0);
+        std::cerr << "  g not update" << std::endl;
+        std::cerr << "      vb fixed" << std::endl;
+        inference.vb(false, 1e-5, "", data_path+"/err");
+        std::cerr << "      vb full"  << std::endl;
+        inference.vbFull(false, 1e-5, "", data_path+"/err");
+
+        std::cerr << "  g update" << std::endl;
+        std::cerr << "      vb fixed" << std::endl;
+        inference.vb(true, 1e-5, "", data_path+"/err");
+        std::cerr << "      vb full"  << std::endl;
+        inference.vbFull(true, 1e-5, "", data_path+"/err");
+    }
+}
 
 
