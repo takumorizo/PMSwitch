@@ -57,10 +57,10 @@ void Parameters<Int, Real>::getFromCommandLineArguments(int argc, const char *ar
     a.add<Real>("beta1", '\0', "beta  value @ 1", false, 100);
     a.add<Real>("gamma", '\0', "gamma value",    false, 1);
     a.add<Real>("eta",   '\0', "gamma value",    false, 1);
-    a.add<Real>("s0",    '\0', "s0    value",    false, 1);
-    a.add<Real>("s1",    '\0', "s1    value",    false, 1);
-    a.add<Real>("u0",    '\0', "s0    value",    false, 1);
-    a.add<Real>("u1",    '\0', "s1    value",    false, 1);
+    a.add<Real>("s0",    '\0', "s0    value",    false, 1.1);
+    a.add<Real>("s1",    '\0', "s1    value",    false, 0.001);
+    a.add<Real>("u0",    '\0', "u0    value",    false, 1.1);
+    a.add<Real>("u1",    '\0', "u1    value",    false, 0.001);
 
 
     a.add<std::string>("alphaPath", '\0', "alpha vector file", false, "");

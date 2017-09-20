@@ -12,9 +12,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <cmath>
 
 std::string data_path = "../data/";
-
 // The fixture for testing class.
 class PMSwithTest : public ::testing::Test {
 protected:
@@ -534,6 +534,61 @@ TEST_F(PMSwithTest, math_vb) {
     // }
 }
 
+// void myLogGamma(std::vector<long double> &sums, long double x){
+//     if(x < 10){
+//         sums.push_back(std::lgamma(x));
+//     }else{
+//         sums.push_back(log(x-1));
+//         myLogGamma(sums, x-1);
+//     }
+// }
+
+// long double myLogGamma(long double x){
+//     std::vector<long double> sums;
+//     myLogGamma(sums, x);
+//     sort(sums.begin(), sums.end());
+//     long double ans = 0.0;
+//     for(auto v : sums){ans+=v;}
+//     return ans;
+// }
+
+// long double myLogGamma(long double x){
+//     std::vector<long double> sums;
+//     while(x > 10){
+//         sums.push_back(std::log(x-1));
+//         x = x-1;
+//     }
+//     sums.push_back(std::lgamma(x));
+//     sort(sums.begin(), sums.end());
+//     long double ans = 0.0;
+//     for(auto v : sums){ans+=v;}
+//     return ans;
+// }
+
+
+// TEST_F(PMSwithTest, lgamma_accuracy) {
+//     // int M = 10000;
+//     long long M = (long long)100000;
+//     // for(int n = 1; n <= M; n++){
+//         std::cerr << M << ": lgamma" << std::endl;
+//         long double b = std::lgamma(M);
+//         std::cerr << b << ": std::lgamma(M)" << std::endl;
+//         long double a = myLogGamma(M);
+//         std::cerr << a << ": myLogGamma(M)" << std::endl;
+//         EXPECT_NEAR(b, a, 1e-12);
+//     // }
+// }
+
+std::string data_specialCase = "/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/170909_signatureSwitch/result/debug";
+
+TEST_F(PMSwithTest, math_vb_specialCase) {
+    using namespace pmswitch;
+    std::string testDBPath = data_specialCase + "/data/simDB.txt";
+    std::string testFVPath = data_specialCase + "/data/simFV.txt";
+    Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 10, 0.0001, 1, 10000, 1.0, 1.0,  1.1, 0.001, 1.1, 0.001);
+    inference.vb(true, 1e-4, data_specialCase+"/err", data_specialCase+"/data/");
+}
+
 
 TEST_F(PMSwithTest, math_vbFull) {
     using namespace pmswitch;
@@ -552,35 +607,33 @@ TEST_F(PMSwithTest, math_vbFull) {
 
             std::string testDBPath = data_path + "/simDB.txt";
             std::string testFVPath = data_path + "/simFV.txt";
-            Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95, 1.0, 1.0, 1.0, 1.0);
-            std::cerr << "  g not update: " << i << std::endl;
-            std::cerr << "      vb fixed" << std::endl;
-            inference.vb(false, 1e-5, data_path+"/err");
-            std::cerr << "      vb full"  << std::endl;
-            inference.vbFull(false, 1e-5, data_path+"/err");
+            Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 0.1, 1.0, 0.95, 2.0, 200000.0, 200000.0, 2.0);
+            // std::cerr << "  g not update: " << i << std::endl;
+            // std::cerr << "      vb fixed" << std::endl;
+            // inference.vb(false, 1e-5, data_path+"/err");
+            // std::cerr << "      vb full"  << std::endl;
+            // inference.vbFull(false, 1e-5, data_path+"/err");
 
             std::cerr << "  g update: " << i << std::endl;
-            std::cerr << "      vb fixed" << std::endl;
-            inference.vb(true, 1e-5, data_path+"/err");
+            // std::cerr << "      vb fixed" << std::endl;
+            // inference.vb(true, 1e-5, data_path+"/err");
             std::cerr << "      vb full"  << std::endl;
             inference.vbFull(true, 1e-5, data_path+"/err");
         }
     }else{
         std::string testDBPath = data_path + "/simDB.txt";
         std::string testFVPath = data_path + "/simFV.txt";
-        Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 10, 1.0, 0.95, 1.0, 1.0, 1.0, 1.0);
+        Inference<long long, long double> inference = InferenceCreator<long long, long double>::createInference(testFVPath, testDBPath, 5, 10, 1, 0.1, 1.0, 0.95, 2.0, 200000.0, 200000.0, 2.0);
         std::cerr << "  g not update" << std::endl;
-        std::cerr << "      vb fixed" << std::endl;
-        inference.vb(false, 1e-5, "", data_path+"/err");
+        // std::cerr << "      vb fixed" << std::endl;
+        // inference.vb(false, 1e-5, data_path+"/err", data_path+"/err");
         std::cerr << "      vb full"  << std::endl;
-        inference.vbFull(false, 1e-5, "", data_path+"/err");
+        inference.vbFull(false, 1e-5, data_path+"/err", data_path+"/err");
 
         std::cerr << "  g update" << std::endl;
-        std::cerr << "      vb fixed" << std::endl;
-        inference.vb(true, 1e-5, "", data_path+"/err");
+        // std::cerr << "      vb fixed" << std::endl;
+        // inference.vb(true, 1e-5, data_path+"/err", data_path+"/err");
         std::cerr << "      vb full"  << std::endl;
-        inference.vbFull(true, 1e-5, "", data_path+"/err");
+        inference.vbFull(true, 1e-5, data_path+"/err", data_path+"/err");
     }
 }
-
-

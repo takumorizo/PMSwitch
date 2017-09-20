@@ -47,6 +47,8 @@ namespace pmswitch{
 						pmswitch::FixedSizeMultiVector<Real, Int> eta,
 						pmswitch::FixedSizeMultiVector<Real, Int> s,
 						pmswitch::FixedSizeMultiVector<Real, Int> u);
+		void print() const;
+		void print(std::string path) const;
 		const pmswitch::FixedSizeMultiVector<Real, Int> alpha;
 		const pmswitch::FixedSizeMultiVector<Real, Int> beta;
 		const pmswitch::FixedSizeMultiVector<Real, Int> gamma;
@@ -236,6 +238,32 @@ pmswitch::PriorParameters<Int, Real>::PriorParameters(pmswitch::FixedSizeMultiVe
 													  pmswitch::FixedSizeMultiVector<Real, Int> _s,
 													  pmswitch::FixedSizeMultiVector<Real, Int> _u) : alpha(_alpha), beta(_beta), gamma(_gamma), eta(_eta), s(_s), u(_u){
 
+}
+
+template<typename Int, typename Real>
+void pmswitch::PriorParameters<Int, Real>::print() const{
+	std::cerr<<"==================== PriorParameters.alpha ====================" << std::endl;
+	alpha.print(std::cerr);
+	std::cerr<<"==================== PriorParameters.beta ====================" << std::endl;
+	beta.print(std::cerr);
+	std::cerr<<"==================== PriorParameters.gamma ====================" << std::endl;
+	gamma.print(std::cerr);
+	std::cerr<<"==================== PriorParameters.eta ====================" << std::endl;
+	eta.print(std::cerr);
+	std::cerr<<"==================== PriorParameters.s ====================" << std::endl;
+	s.print(std::cerr);
+	std::cerr<<"==================== PriorParameters.u ====================" << std::endl;
+	u.print(std::cerr);
+}
+
+template<typename Int, typename Real>
+void pmswitch::PriorParameters<Int, Real>::print(std::string path) const{
+	alpha.print(path + "/alpha.txt");
+	beta.print(path + "/beta.txt");
+	eta.print(path + "/eta.txt");
+	gamma.print(path + "/gamma.txt");
+	s.print(path + "/s.txt");
+	u.print(path + "/u.txt");
 }
 
 template<typename Int, typename Real>

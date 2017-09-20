@@ -89,12 +89,12 @@ void pmswitch::InferenceData<Int, Real>::printHyperParameters(std::string baseDi
 	std::string sPath     = baseDir + "/s.txt";
 	std::string uPath     = baseDir + "/u.txt";
 
-	alpha.print(alphaPath);
-  	 beta.print( betaPath);
-	gamma.print(gammaPath);
-	  eta.print(  etaPath);
-	    s.print(    sPath);
-	    u.print(    uPath);
+	if(alpha.size() > 0) alpha.print(alphaPath);
+  	if( beta.size() > 0)  beta.print( betaPath);
+	if(gamma.size() > 0)  gamma.print(gammaPath);
+	if(  eta.size() > 0)    eta.print(  etaPath);
+	if(    s.size() > 0)     s.print(    sPath);
+	if(    u.size() > 0)     u.print(    uPath);
 }
 
 template<typename Int , typename Real >
@@ -102,15 +102,16 @@ void pmswitch::InferenceData<Int, Real>::printLatents(std::string baseDir) const
 	std::string EZPath = baseDir + "/EZ.txt";
 	std::string ESPath = baseDir + "/ES.txt";
 	std::string EYPath = baseDir + "/EY.txt";
-	EZ.print(EZPath);
-	ES.print(ESPath);
-	EY.print(EYPath);
+
+	if(EZ.size() > 0) EZ.print(EZPath);
+	if(ES.size() > 0) ES.print(ESPath);
+	if(EY.size() > 0) EY.print(EYPath);
 }
 
 template<typename Int , typename Real >
 void pmswitch::InferenceData<Int, Real>::printDB(std::string baseDir) const {
 	std::string gPath = baseDir + "/g.txt";
-	g.print(gPath);
+	if(g.size() > 0) g.print(gPath);
 }
 
 template<typename Int , typename Real >

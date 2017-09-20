@@ -26,8 +26,8 @@ namespace pmswitch{
 	class Inference{
 	public:
 		Inference(FeatureData<Int, Real> _fvData, DBData<Int, Real> _dbData, PriorParameters<Int, Real> prior, Int _T);
-		InferenceData<Int, Real> vb(bool updateDB = true, const Real epsilon = 1e-9, std::string outputErrLatentDir = "", std::string inputLatentDir = "");
-		InferenceData<Int, Real> vbFull(bool updateDB = true, const Real epsilon = 1e-9, std::string outputErrLatentDir = "", std::string inputLatentDir = "");
+		InferenceData<Int, Real> vb(bool updateDB = true, const Real epsilon = 1e-9, std::string outputErrLatentDir = "", std::string inputLatentDir = "") const;
+		InferenceData<Int, Real> vbFull(bool updateDB = true, const Real epsilon = 1e-9, std::string outputErrLatentDir = "", std::string inputLatentDir = "") const;
 		InferenceData<Int, Real> onlineVb();
 	private:
 		FeatureData<Int, Real> fvData;
@@ -35,9 +35,9 @@ namespace pmswitch{
 		PriorParameters<Int, Real> prior;
 		Int T;
 
-		FixedSizeMultiVector<Real, Int> initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T, std::string inputPath = "");
-		FixedSizeMultiVector<Real, Int> initES(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, 		 std::string inputPath = "");
-		FixedSizeMultiVector<Real, Int> initEY(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int N, std::string inputPath = "");
+		FixedSizeMultiVector<Real, Int> initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T, std::string inputPath = "") const;
+		FixedSizeMultiVector<Real, Int> initES(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, 		 std::string inputPath = "") const;
+		FixedSizeMultiVector<Real, Int> initEY(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int N, std::string inputPath = "") const;
 
 		void updateEZ(FixedSizeMultiVector<Real, Int> &EZ, FixedSizeMultiVector<Real, Int> &lnEZ, const FixedSizeMultiVector<bool, Int> &EZFilter,
 					  const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, const Int &N,
@@ -96,7 +96,7 @@ namespace pmswitch{
 		void makeAvgAlpha(FixedSizeMultiVector<Real, Int> &ans, const FixedSizeMultiVector<Real, Int> &s, Int I, Int T) const;
 		void makeAvgBeta(FixedSizeMultiVector<Real, Int> &ans,  const FixedSizeMultiVector<Real, Int> &u, Int I) const;
 
-		Real lnProbGamma(const FixedSizeMultiVector<Real, Int> &param) const;
+		Real lnProbGamma(const FixedSizeMultiVector<Real, Int> &param, const FixedSizeMultiVector<Real, Int> &trueParam) const;
 	};
 
 	template<typename Int = long long, typename Real = double>
@@ -126,18 +126,18 @@ pmswitch::Inference<Int, Real>::Inference(FeatureData<Int, Real> _fvData, DBData
 }
 
 template<typename Int, typename Real>
-Real pmswitch::Inference<Int, Real>::lnProbGamma(const FixedSizeMultiVector<Real, Int> &param) const{
+Real pmswitch::Inference<Int, Real>::lnProbGamma(const FixedSizeMultiVector<Real, Int> &param, const FixedSizeMultiVector<Real, Int> &trueParam) const{
 	// E[ -ln x - s1 * x + s0 * ln_x - lnGamma(s0) + s0 * ln_s1 ]
 	// E[ x ] = s0 / s1
 	// E[ ln_x ] = diggamma(s0) - log(s1)
-	Real E_ln_x = boost::math::digamma(param(0)) - std::log(param(1));
-	Real E_x    = param(0) / param(1);
+	Real E_ln_x = boost::math::digamma(trueParam(0)) - std::log(trueParam(1));
+	Real E_x    = trueParam(0) / trueParam(1);
 	return  -1.0*E_ln_x - param(1)*E_x + param(0)*E_ln_x - std::lgamma(param(0)) + param(0)*std::log(param(1));
 }
 
 template<typename Int, typename Real>
 pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool updateDB, const Real epsilon,
-																		  std::string outputErrLatentDir, std::string inputLatentDir){
+																		  std::string outputErrLatentDir, std::string inputLatentDir) const{
 	using namespace pmswitch;
 	Int N = dbData.N; // existing cluster Number
 	Int I = fvData.I; // sample size
@@ -159,8 +159,8 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 
 	FixedSizeMultiVector<Real, Int> S     = prior.s;     // 2
 	FixedSizeMultiVector<Real, Int> U     = prior.u;     // 2
-	FixedSizeMultiVector<Real, Int> avg_alpha = makeAvgAlpha(S, I, T);
-	FixedSizeMultiVector<Real, Int> avg_beta  = makeAvgBeta(U, I);
+	FixedSizeMultiVector<Real, Int> avg_alpha = makeAvgAlpha(S, I, T); // I, T-1, 2
+	FixedSizeMultiVector<Real, Int> avg_beta  = makeAvgBeta(U, I); // I, 2
 
 	FixedSizeMultiVector<Real, Int> gamma = prior.gamma; // I, N
 	FixedSizeMultiVector<Real, Int> eta   = prior.eta;   // T, Ml.size(), maxMl
@@ -198,15 +198,7 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 	    beforeLq = nextLq;
 	    nextLq = 0.0;
 
-		assert( !(std::isnan(beforeLq) || std::isnan(nextLq) ) ) ;
-    	assert( !(std::isinf(beforeLq) || std::isinf(nextLq) ) ) ;
-		if( not first && (beforeLq - nextLq)/std::abs(beforeLq) >=  epsilon ){
-	    	std::cerr << "decrease lower bound @ vb, update : " << update << std::endl;
-	    	std::cerr << "vb, update : " << update << ", beforeLq :" << beforeLq << " nextLq : "  << nextLq << ", nextLq-beforeLq/beforeLq :" << (nextLq - beforeLq)/std::abs(beforeLq) << std::endl;
-		    assert( (beforeLq - nextLq)/std::abs(beforeLq) < epsilon  );
-	    }
-
-		if(updateDB){
+	    if(updateDB){
 			updateG(g, lng, gFilter, I, Js, maxJ, T, L, ml, maxMl, N, EY, ES, X);
 		}
 
@@ -216,29 +208,28 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 		updateEY(EY, lnEY, EYFilter, I, Js, maxJ, L, ml, N, lng, ES, X, dig_pi);
 
 	    // M-step
-	    // updateS, updateU
-	    if(first){//updateS
-	    	S(0) = prior.s(0) + (Real)( I * (T-1) );
+		udpateF(eta, etaFilter, dig_f, I, Js, T, L, ml, prior, X, EZ, ES);
+		updatePi(gamma, dig_pi, I, Js, N, prior, EY);
+		updateVWithAlphaDistributed(alpha, dig_v, I, Js, T, avg_alpha, EZ);
+		updateThetaWithBetaDistributed(beta, dig_theta, I, Js, avg_beta, ES);
+		// updateS, updateU
+	    {//updateS // TODO: candidate bug
+	    	S(0) = prior.s(0) + ( I * (T-1) );
 	    	S(1) = prior.s(1);
 	    	for(Int i = 0; i < I; i++)for(Int k = 0; k < T-1; k++) S(1) -= dig_v(i,k,1);
     		makeAvgAlpha(avg_alpha, S, I, T); // updateAvgAlpha
 	    }
-	    if(first){//updateU
-	    	U(0) = prior.u(0) + (Real)I ;
+	    {//updateU // TODO: candidate bug
+	    	U(0) = prior.u(0) + I ;
 	    	U(1) = prior.u(1);
 	    	for(Int i = 0; i < I; i++) U(1) -= dig_theta(i,1);
 		    makeAvgBeta(avg_beta, U, I); //updateAvgBeta
 	    }
 
-		udpateF(eta, etaFilter, dig_f, I, Js, T, L, ml, prior, X, EZ, ES);
-		updateVWithAlphaDistributed(alpha, dig_v, I, Js, T, avg_alpha, EZ);
-		updateThetaWithBetaDistributed(beta, dig_theta, I, Js, avg_beta, ES);
-		updatePi(gamma, dig_pi, I, Js, N, prior, EY);
-
 		{// nextLq = 0.0
 			nextLq = 0.0;
-			nextLq += lnProbGamma(prior.s);
-			nextLq += lnProbGamma(prior.u);
+			nextLq += lnProbGamma(prior.s, S);
+			nextLq += lnProbGamma(prior.u, U);
 			nextLq += math::calELogDir<Int, Real>(dig_f,     prior.eta,    1, etaFilter); // T, L, maxMl
 			nextLq += math::calELogDir<Int, Real>(dig_v,     avg_alpha,    1); // I, T-1, 2
 			nextLq += math::calELogDir<Int, Real>(dig_theta, avg_beta,     0); // I, 2
@@ -275,8 +266,8 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 					nextLq     += tmpXLogY[ ! (std::isnan(tmpXLogY[1]) or std::isinf(tmpXLogY[1]) ) ];
 			}
 
-			nextLq -= lnProbGamma(S);
-			nextLq -= lnProbGamma(U);
+			nextLq -= lnProbGamma(S, S);
+			nextLq -= lnProbGamma(U, U);
 			nextLq -= math::calELogDir<Int, Real>(dig_f,     eta,    1, etaFilter);  // T, L, maxMl
 			nextLq -= math::calELogDir<Int, Real>(dig_v,     alpha,  1); 			 // I, T-1, 2
 			nextLq -= math::calELogDir<Int, Real>(dig_theta, beta,   0); 			 // I, 2
@@ -308,21 +299,64 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 		assert( !(std::isnan(beforeLq) || std::isnan(nextLq) ) ) ;
 		assert( !(std::isinf(beforeLq) || std::isinf(nextLq) ) ) ;
 		if( not first && (beforeLq - nextLq)/std::abs(beforeLq) >=  epsilon ){
-	    	std::cerr << "decrease lower bound @ vb, update : " << update << std::endl;
+	    	std::cerr << "!decrease lower bound @ vb, update : " << update << std::endl;
 	    	std::cerr << "vb, update : " << update << ", beforeLq :" << beforeLq << " nextLq : "  << nextLq << ", nextLq-beforeLq/beforeLq :" << (nextLq - beforeLq)/std::abs(beforeLq) << std::endl;
 
-	    	std::ofstream ofsEZ(outputErrLatentDir + "/EZ.txt");
-		   	if( !ofsEZ.fail()) {firstEZ.print(outputErrLatentDir + "/EZ.txt");}
-		   	ofsEZ.close();
+	    	std::ofstream ofs(outputErrLatentDir + "/EZ.txt");
+		   	if( !ofs.fail()) {firstEZ.print(outputErrLatentDir + "/EZ.txt");}
+			else{ std::cerr << "failed to open EZ.txt \n";}
+		   	ofs.close();
 
-	    	std::ofstream ofsES(outputErrLatentDir + "/ES.txt");
-		   	if( !ofsES.fail()) {firstES.print(outputErrLatentDir + "/ES.txt");}
-		   	ofsES.close();
+	    	ofs.open(outputErrLatentDir + "/ES.txt");
+		   	if( !ofs.fail()) {firstES.print(outputErrLatentDir + "/ES.txt");}
+		   	else{ std::cerr << "failed to open ES.txt \n";}
+		   	ofs.close();
 
-	    	std::ofstream ofsEY(outputErrLatentDir + "/EY.txt");
-		   	if( !ofsEY.fail()) {firstEY.print(outputErrLatentDir + "/EY.txt");}
-		   	ofsEY.close();
+	    	ofs.open(outputErrLatentDir + "/EY.txt");
+		   	if( !ofs.fail()) {firstEY.print(outputErrLatentDir + "/EY.txt");}
+		   	else{ std::cerr << "failed to open EY.txt \n";}
 
+		   	ofs.open(outputErrLatentDir + "/EZnew.txt");
+		   	if( !ofs.fail()) {EZ.print(outputErrLatentDir + "/EZnew.txt");}
+		   	else{ std::cerr << "failed to open EZnew.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/ESnew.txt");
+		   	if( !ofs.fail()) {ES.print(outputErrLatentDir + "/ESnew.txt");}
+		   	else{ std::cerr << "failed to open ESnew.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/EYnew.txt");
+		   	if( !ofs.fail()) {EY.print(outputErrLatentDir + "/EYnew.txt");}
+		   	else{ std::cerr << "failed to open EYnew.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/alpha.txt");
+		   	if( !ofs.fail()) {alpha.print(outputErrLatentDir + "/alpha.txt");}
+		   	else{ std::cerr << "failed to open alpha.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/beta.txt");
+		   	if( !ofs.fail()) {beta.print(outputErrLatentDir + "/beta.txt");}
+		   	else{ std::cerr << "failed to open beta.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/g.txt");
+		   	if( !ofs.fail()) {g.print(outputErrLatentDir + "/g.txt");}
+		   	else{ std::cerr << "failed to open g.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/s.txt");
+		   	if( !ofs.fail()) {S.print(outputErrLatentDir + "/s.txt");}
+		   	else{ std::cerr << "failed to open s.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/u.txt");
+		   	if( !ofs.fail()) {U.print(outputErrLatentDir + "/u.txt");}
+		   	else{ std::cerr << "failed to open u.txt \n";}
+		   	ofs.close();
+
+		   	ofs.close();
 		    assert( (beforeLq - nextLq)/std::abs(beforeLq) < epsilon  );
 	    }
 		if(first) first = false;
@@ -336,7 +370,7 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 
 template<typename Int, typename Real>
 pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updateDB, const Real epsilon,
-																	  std::string outputErrLatentDir, std::string inputLatentDir){
+																	  std::string outputErrLatentDir, std::string inputLatentDir) const{
 	using namespace pmswitch;
 	Int N = dbData.N; // existing cluster Number
 	Int I = fvData.I; // sample size
@@ -390,6 +424,12 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 	    beforeLq = nextLq;
 	    nextLq = 0.0;
 
+	    // M-step
+		udpateF(eta, etaFilter, dig_f, I, Js, T, L, ml, prior, X, EZ, ES);
+		updatePi(gamma, dig_pi, I, Js, N, prior, EY);
+		updateV(alpha, dig_v, I, Js, T, prior,EZ);
+		updateTheta(beta, dig_theta, I, Js, prior, ES);
+
 		if(updateDB){ // update < 275 -> pass ,update < 276 -> not pass
 			updateG(g, lng, gFilter, I, Js, maxJ, T, L, ml, maxMl, N, EY, ES, X);
 			// std::cerr << "update := " << update << ", g := " << std::endl;
@@ -400,13 +440,6 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
     	updateEZ(EZ, lnEZ, EZFilter, I, Js, maxJ, T, L, ml, N, dig_f, ES, X, dig_v);
      	updateES(ES, lnES, ESFilter, I, Js, maxJ, T, L, ml, N, dig_f, EZ, lng, EY, X, dig_theta);
 		updateEY(EY, lnEY, EYFilter, I, Js, maxJ, L, ml, N, lng, ES, X, dig_pi);
-
-	    // M-step
-		udpateF(eta, etaFilter, dig_f, I, Js, T, L, ml, prior, X, EZ, ES);
-		updateV(alpha, dig_v, I, Js, T, prior,EZ);
-		updateTheta(beta, dig_theta, I, Js, prior, ES);
-		updatePi(gamma, dig_pi, I, Js, N, prior, EY);
-
 
 		{// nextLq = 0.0
 			nextLq = 0.0;
@@ -443,7 +476,8 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 
 			for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++){
 					tmpXLogY[1] = EY(i,j,n) * ES(i,j,1) * X(i,j,l,m) * lng(n,l,m);
-					nextLq     += tmpXLogY[ ! (std::isnan(tmpXLogY[1]) or std::isinf(tmpXLogY[1]) ) ];
+					// nextLq     += tmpXLogY[ ! (std::isnan(tmpXLogY[1]) or std::isinf(tmpXLogY[1]) ) ];
+					nextLq     += tmpXLogY[ (EY(i,j,n) * ES(i,j,1) * X(i,j,l,m) != 0.0)  ];
 			}
 
 			nextLq -= math::calELogDir<Int, Real>(dig_f,     eta,    1, etaFilter);  // T, L, maxMl
@@ -472,9 +506,9 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 			}
 		}
 
-		// if(updateDB){std::cerr << "ok vb, with g update, update : ";}
-		// else{std::cerr << "ok vb, update : ";}
-    	// std::cerr << update << ", beforeLq :" << beforeLq << " nextLq : "  << nextLq << ", nextLq-beforeLq/beforeLq :" << (nextLq - beforeLq)/std::abs(beforeLq) << std::endl;
+		if(updateDB){std::cerr << "ok vb, with g update, update : ";}
+		else{std::cerr << "ok vb, update : ";}
+    	std::cerr << update << ", beforeLq :" << beforeLq << " nextLq : "  << nextLq << ", nextLq-beforeLq/beforeLq :" << (nextLq - beforeLq)/std::abs(beforeLq) << std::endl;
     	assert( !(std::isnan(beforeLq) || std::isnan(nextLq) ) ) ;
     	assert( !(std::isinf(beforeLq) || std::isinf(nextLq) ) ) ;
 		if( not first && (beforeLq - nextLq)/std::abs(beforeLq) >=  epsilon ){
@@ -493,6 +527,36 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 		   	if( !ofsEY.fail()) {firstEY.print(outputErrLatentDir + "/EY.txt");}
 		   	ofsEY.close();
 
+		   	std::ofstream ofs(outputErrLatentDir + "/EZnew.txt");
+		   	if( !ofs.fail()) {EZ.print(outputErrLatentDir + "/EZnew.txt");}
+		   	else{ std::cerr << "failed to open EZnew.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/ESnew.txt");
+		   	if( !ofs.fail()) {ES.print(outputErrLatentDir + "/ESnew.txt");}
+		   	else{ std::cerr << "failed to open ESnew.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/EYnew.txt");
+		   	if( !ofs.fail()) {EY.print(outputErrLatentDir + "/EYnew.txt");}
+		   	else{ std::cerr << "failed to open EYnew.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/alpha.txt");
+		   	if( !ofs.fail()) {alpha.print(outputErrLatentDir + "/alpha.txt");}
+		   	else{ std::cerr << "failed to open alpha.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/beta.txt");
+		   	if( !ofs.fail()) {beta.print(outputErrLatentDir + "/beta.txt");}
+		   	else{ std::cerr << "failed to open beta.txt \n";}
+		   	ofs.close();
+
+		   	ofs.open(outputErrLatentDir + "/g.txt");
+		   	if( !ofs.fail()) {g.print(outputErrLatentDir + "/g.txt");}
+		   	else{ std::cerr << "failed to open g.txt \n";}
+		   	ofs.close();
+
 		    assert( (beforeLq - nextLq)/std::abs(beforeLq) < epsilon  );
 	    }
 		if(first) first = false;
@@ -506,7 +570,7 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 
 // EZ_{i,j, }     :: T-dimensional non-negative simplex // EZ_{i,j,k   }
 template<typename Int, typename Real>
-pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T, std::string inputPath){
+pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T, std::string inputPath) const{
 	std::ifstream ifs(inputPath);
 	if(ifs.fail()) {
 		ifs.close();
@@ -530,7 +594,7 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initEZ
 
 // ES_{i, }	   :: 2-dimensional non-negative simplex // ES_{i,{0,1} }
 template<typename Int, typename Real>
-pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initES(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, std::string inputPath){
+pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initES(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, std::string inputPath) const{
 	std::ifstream ifs(inputPath);
 	if(ifs.fail()) {
 		ifs.close();
@@ -554,7 +618,7 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initES
 
 // EY_{i, }       :: N-dimensional non-negative simplex // EY_{i,n}
 template<typename Int, typename Real>
-pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initEY(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int N, std::string inputPath){
+pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initEY(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int N, std::string inputPath) const{
 	std::ifstream ifs(inputPath);
 	if(ifs.fail()) {
 		ifs.close();
@@ -598,7 +662,7 @@ void pmswitch::Inference<Int, Real>::updateEZ(FixedSizeMultiVector<Real, Int> &E
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>:: updateES(FixedSizeMultiVector<Real, Int> &ES, FixedSizeMultiVector<Real, Int> &lnES, const FixedSizeMultiVector<bool, Int> &ESFilter,
+void pmswitch::Inference<Int, Real>::updateES(FixedSizeMultiVector<Real, Int> &ES, FixedSizeMultiVector<Real, Int> &lnES, const FixedSizeMultiVector<bool, Int> &ESFilter,
 			 const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, const Int &N,
 			  const FixedSizeMultiVector<Real, Int> &dig_f, const FixedSizeMultiVector<Real, Int> &EZ,
 			  const FixedSizeMultiVector<Real, Int> &lng,   const FixedSizeMultiVector<Real, Int> &EY,
@@ -728,7 +792,7 @@ void pmswitch::Inference<Int, Real>::updateG(FixedSizeMultiVector<Real, Int> &g,
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++)for(Int n = 0; n < N; n++){
 		g(n,l,m) += X(i,j,l,m) * EY(i,j,n) * ES(i,j,1);
 	}
-	math::filter(g, gFilter, (Real)0);
+	math::filter<Int, Real>(g, gFilter, 0);
 	math::norm<Int, Real>(g, 1);
 	lng  = math::applied<Int, Real>(g,  std::log,  gFilter) ; // I, maxJ, N
 }
@@ -736,8 +800,8 @@ void pmswitch::Inference<Int, Real>::updateG(FixedSizeMultiVector<Real, Int> &g,
 template<typename Int, typename Real>
 pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::makeAvgAlpha(const FixedSizeMultiVector<Real, Int> &s, Int I, Int T) const{
 	using namespace pmswitch;
-	FixedSizeMultiVector<Real, Int> ans((Real)0, I, T, 2);
-	for(Int i = 0; i < I; i++)for(Int k = 0; k < T; k++){
+	FixedSizeMultiVector<Real, Int> ans((Real)0, I, T-1, 2);
+	for(Int i = 0; i < I; i++)for(Int k = 0; k < T-1; k++){
 		ans(i,k,0) = (Real) 1.0;
 		ans(i,k,1) = (Real) ( s(0) / s(1) );
 	}
@@ -746,7 +810,7 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::makeAv
 
 template<typename Int, typename Real>
 void pmswitch::Inference<Int, Real>::makeAvgAlpha(FixedSizeMultiVector<Real, Int> &ans, const FixedSizeMultiVector<Real, Int> &s, Int I, Int T) const{
-	for(Int i = 0; i < I; i++)for(Int k = 0; k < T; k++){
+	for(Int i = 0; i < I; i++)for(Int k = 0; k < T-1; k++){
 		ans(i,k,0) = (Real) 1.0;
 		ans(i,k,1) = (Real) ( s(0) / s(1) );
 	}
@@ -758,7 +822,8 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::makeAv
 	using namespace pmswitch;
 	FixedSizeMultiVector<Real, Int> ans((Real)0, I, 2);
 	for(Int i = 0; i < I; i++){
-		ans(i,0) = (Real) 1.0; ans(i,1) = (Real) ( u(0) / u(1) );
+		ans(i,0) = (Real) 1.0;
+		ans(i,1) = (Real) ( u(0) / u(1) );
 	}
 	return ans;
 }
@@ -766,7 +831,8 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::makeAv
 template<typename Int, typename Real>
 void pmswitch::Inference<Int, Real>::makeAvgBeta(FixedSizeMultiVector<Real, Int> &ans, const FixedSizeMultiVector<Real, Int> &u, Int I) const{
 	for(Int i = 0; i < I; i++){
-		ans(i,0) = (Real) 1.0; ans(i,1) = (Real) ( u(0) / u(1) );
+		ans(i,0) = (Real) 1.0;
+		ans(i,1) = (Real) ( u(0) / u(1) );
 	}
 }
 
