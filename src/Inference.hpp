@@ -88,7 +88,7 @@ namespace pmswitch{
 		void updateG(FixedSizeMultiVector<Real, Int> &g, FixedSizeMultiVector<Real, Int> &lng, const FixedSizeMultiVector<bool, Int> &gFilter,
 					 const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, Int maxMl, const Int &N,
 					 const FixedSizeMultiVector<Real, Int> &EY, const FixedSizeMultiVector<Real, Int> &ES,
-					 const FixedSizeMultiVector<Int, Int> &X) const;
+					 const FixedSizeMultiVector<Int, Int> &X, Real eps = 1e-300) const;
 
 		FixedSizeMultiVector<Real, Int> makeAvgAlpha(const FixedSizeMultiVector<Real, Int> &s, Int I, Int T) const;
 		FixedSizeMultiVector<Real, Int> makeAvgBeta(const FixedSizeMultiVector<Real, Int> &u, Int I) const;
@@ -169,8 +169,8 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 	// FixedSizeMultiVector<Real, Int> prior_beta  = makeAvgBeta(U, I);
 	FixedSizeMultiVector<Real, Int> alpha       = avg_alpha;
 	FixedSizeMultiVector<Real, Int> beta        = avg_beta;
-	FixedSizeMultiVector<Real, Int> dig_v       = math::calDirExp<Int, Real>(avg_alpha, 1); // I, T-1, 2 // TODO: modify
-	FixedSizeMultiVector<Real, Int> dig_theta   = math::calDirExp<Int, Real>(avg_beta,  0); // I, 2      // TODO: modify
+	FixedSizeMultiVector<Real, Int> dig_v       = math::calDirExp<Int, Real>(avg_alpha, 1); // I, T-1, 2
+	FixedSizeMultiVector<Real, Int> dig_theta   = math::calDirExp<Int, Real>(avg_beta,  0); // I, 2
 	FixedSizeMultiVector<Real, Int> dig_pi      = math::calDirExp<Int, Real>(gamma, 0); // I, N
 	FixedSizeMultiVector<Real, Int> dig_f       = math::calDirExp<Int, Real>(eta,   1); // T, L, maxMl
 	FixedSizeMultiVector<Real, Int> g           = dbData.g; // N, l, maxMl
@@ -185,7 +185,7 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 	FixedSizeMultiVector<Real, Int> lnEZ = math::applied<Int, Real>(EZ, std::log, EZFilter) ; // I, maxJ, T
 	FixedSizeMultiVector<Real, Int> lnES = math::applied<Int, Real>(ES, std::log, ESFilter) ; // I, maxJ, 2
 	FixedSizeMultiVector<Real, Int> lnEY = math::applied<Int, Real>(EY, std::log, EYFilter) ; // I, maxJ, N
-	FixedSizeMultiVector<Real, Int> lng  = math::applied<Int, Real>(g,  std::log,  gFilter) ; // I, maxJ, N
+	FixedSizeMultiVector<Real, Int> lng  = math::applied<Int, Real>(g,  std::log,  gFilter) ; // N, L, maxM
 
     Real beforeLq = -1.0 * 1e50;
     Real nextLq = -1.0 * 1e50;
@@ -213,13 +213,13 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 		updateVWithAlphaDistributed(alpha, dig_v, I, Js, T, avg_alpha, EZ);
 		updateThetaWithBetaDistributed(beta, dig_theta, I, Js, avg_beta, ES);
 		// updateS, updateU
-	    {//updateS // TODO: candidate bug
+	    {//updateS
 	    	S(0) = prior.s(0) + ( I * (T-1) );
 	    	S(1) = prior.s(1);
 	    	for(Int i = 0; i < I; i++)for(Int k = 0; k < T-1; k++) S(1) -= dig_v(i,k,1);
     		makeAvgAlpha(avg_alpha, S, I, T); // updateAvgAlpha
 	    }
-	    {//updateU // TODO: candidate bug
+	    {//updateU
 	    	U(0) = prior.u(0) + I ;
 	    	U(1) = prior.u(1);
 	    	for(Int i = 0; i < I; i++) U(1) -= dig_theta(i,1);
@@ -413,8 +413,8 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 	FixedSizeMultiVector<Real, Int> lnEY = math::applied<Int, Real>(EY, std::log, EYFilter) ; // I, maxJ, N
 	FixedSizeMultiVector<Real, Int> lng  = math::applied<Int, Real>(g,  std::log,  gFilter) ; // I, maxJ, N
 
-    Real beforeLq = -1.0 * 1e50;
-    Real nextLq = -1.0 * 1e50;
+    Real beforeLq = -1.0 * 1e30;
+    Real nextLq = -1.0 * 1e30;
     bool first = true;
     Int update = 0;
 
@@ -476,8 +476,8 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 
 			for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++){
 					tmpXLogY[1] = EY(i,j,n) * ES(i,j,1) * X(i,j,l,m) * lng(n,l,m);
-					// nextLq     += tmpXLogY[ ! (std::isnan(tmpXLogY[1]) or std::isinf(tmpXLogY[1]) ) ];
-					nextLq     += tmpXLogY[ (EY(i,j,n) * ES(i,j,1) * X(i,j,l,m) != 0.0)  ];
+					nextLq     += tmpXLogY[ ! (std::isnan(tmpXLogY[1]) or std::isinf(tmpXLogY[1]) ) ];
+					// nextLq     += tmpXLogY[ (EY(i,j,n) * ES(i,j,1) * X(i,j,l,m) != 0.0)  ];
 			}
 
 			nextLq -= math::calELogDir<Int, Real>(dig_f,     eta,    1, etaFilter);  // T, L, maxMl
@@ -786,7 +786,7 @@ template<typename Int, typename Real>
 void pmswitch::Inference<Int, Real>::updateG(FixedSizeMultiVector<Real, Int> &g, FixedSizeMultiVector<Real, Int> &lng, const FixedSizeMultiVector<bool, Int> &gFilter,
 			 const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, Int maxMl, const Int &N,
 			 const FixedSizeMultiVector<Real, Int> &EY, const FixedSizeMultiVector<Real, Int> &ES,
-			  const FixedSizeMultiVector<Int, Int> &X) const { // update < 275 -> pass ,update < 276 -> not pass
+			  const FixedSizeMultiVector<Int, Int> &X, Real eps) const { // update < 275 -> pass ,update < 276 -> not pass
 	for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < maxMl; m++){ g(n,l,m) = 0.0;}
 
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++)for(Int n = 0; n < N; n++){
@@ -794,6 +794,7 @@ void pmswitch::Inference<Int, Real>::updateG(FixedSizeMultiVector<Real, Int> &g,
 	}
 	math::filter<Int, Real>(g, gFilter, 0);
 	math::norm<Int, Real>(g, 1);
+	for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++)if(g(n,l,m) < eps) g(n,l,m) = eps;
 	lng  = math::applied<Int, Real>(g,  std::log,  gFilter) ; // I, maxJ, N
 }
 
