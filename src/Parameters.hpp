@@ -14,7 +14,7 @@ public:
     Parameters(int argc, const char *argv[]);
     void getFromCommandLineArguments(int argc, const char *argv[]);
 
-    typedef enum { VB,ONLINEVB,MCMC } ALGO;
+    typedef enum { VBFULL, VB, VBFIXED ,ONLINEVB,MCMC } ALGO;
     ALGO method;
     std::string pathFV;
     std::string pathDB;
@@ -55,8 +55,8 @@ void Parameters<Int, Real>::getFromCommandLineArguments(int argc, const char *ar
     a.add<Real>("alpha", '\0', "alpha value",    false, 1e-5);
     a.add<Real>("beta0", '\0', "beta  value @ 0", false, 1);
     a.add<Real>("beta1", '\0', "beta  value @ 1", false, 100);
-    a.add<Real>("gamma", '\0', "gamma value",    false, 1);
-    a.add<Real>("eta",   '\0', "gamma value",    false, 1);
+    a.add<Real>("gamma", '\0', "gamma value",    false, 0.5);
+    a.add<Real>("eta",   '\0', "eta value",    false, 0.5);
     a.add<Real>("s0",    '\0', "s0    value",    false, 1.1);
     a.add<Real>("s1",    '\0', "s1    value",    false, 0.001);
     a.add<Real>("u0",    '\0', "u0    value",    false, 1.1);
@@ -73,7 +73,9 @@ void Parameters<Int, Real>::getFromCommandLineArguments(int argc, const char *ar
     a.parse_check(argc, argv);
 
     std::string methodStr = a.get<std::string>("algorithm");
-    if(methodStr == "VB"){
+    if(methodStr == "VBFULL"){
+        method = Parameters<Int, Real>::VBFULL;
+    }else if(methodStr == "VB"){
         method = Parameters<Int, Real>::VB;
     }else if(methodStr == "ONLINEVB"){
         method = Parameters<Int, Real>::ONLINEVB;

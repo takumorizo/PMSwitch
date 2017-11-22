@@ -35,49 +35,49 @@ namespace pmswitch{
 		PriorParameters<Int, Real> prior;
 		Int T;
 
-		FixedSizeMultiVector<Real, Int> initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T, std::string inputPath = "") const;
-		FixedSizeMultiVector<Real, Int> initES(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, 		 std::string inputPath = "") const;
-		FixedSizeMultiVector<Real, Int> initEY(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int N, std::string inputPath = "") const;
+		FixedSizeMultiVector<Real> initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T, std::string inputPath = "") const;
+		FixedSizeMultiVector<Real> initES(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, 		std::string inputPath = "") const;
+		FixedSizeMultiVector<Real> initEY(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int N, std::string inputPath = "") const;
 
-		void updateEZ(FixedSizeMultiVector<Real, Int> &EZ, FixedSizeMultiVector<Real, Int> &lnEZ, const FixedSizeMultiVector<bool, Int> &EZFilter,
-					  const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, const Int &N,
-			          const FixedSizeMultiVector<Real, Int> &dig_f, const FixedSizeMultiVector<Real, Int> &ES,
-			          const FixedSizeMultiVector<Int, Int>  &X,     const FixedSizeMultiVector<Real, Int> &dig_v) const;
-		void updateES(FixedSizeMultiVector<Real, Int> &ES, FixedSizeMultiVector<Real, Int> &lnES, const FixedSizeMultiVector<bool, Int> &ESFilter,
-					  const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, const Int &N,
-					  const FixedSizeMultiVector<Real, Int> &dig_f, const FixedSizeMultiVector<Real, Int> &EZ,
-					  const FixedSizeMultiVector<Real, Int> &lng,   const FixedSizeMultiVector<Real, Int> &EY,
-					  const FixedSizeMultiVector<Int, Int>  &X,     const FixedSizeMultiVector<Real, Int> &dig_theta) const;
+		void updateEZ(FixedSizeMultiVector<Real> &EZ, FixedSizeMultiVector<Real> &lnEZ, const FixedSizeMultiVector<bool> &EZFilter,
+					  const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int> &ml, const Int &N,
+			          const FixedSizeMultiVector<Real> &dig_f, const FixedSizeMultiVector<Real> &ES,
+			          const FixedSizeMultiVector<Int>  &X,     const FixedSizeMultiVector<Real> &dig_v) const;
+		void updateES(FixedSizeMultiVector<Real> &ES, FixedSizeMultiVector<Real> &lnES, const FixedSizeMultiVector<bool> &ESFilter,
+					  const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int> &ml, const Int &N,
+					  const FixedSizeMultiVector<Real> &dig_f, const FixedSizeMultiVector<Real> &EZ,
+					  const FixedSizeMultiVector<Real> &lng,   const FixedSizeMultiVector<Real> &EY,
+					  const FixedSizeMultiVector<Int>  &X,     const FixedSizeMultiVector<Real> &dig_theta) const;
 
-		void updateEY(FixedSizeMultiVector<Real, Int> &EY, FixedSizeMultiVector<Real, Int> &lnEY, const FixedSizeMultiVector<bool, Int> &EYFilter,
-					  const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, const Int &N,
-					  const FixedSizeMultiVector<Real, Int> &lng,   const FixedSizeMultiVector<Real, Int> &ES,
-					  const FixedSizeMultiVector<Int, Int>  &X,     const FixedSizeMultiVector<Real, Int> &dig_pi) const;
+		void updateEY(FixedSizeMultiVector<Real> &EY, FixedSizeMultiVector<Real> &lnEY, const FixedSizeMultiVector<bool> &EYFilter,
+					  const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &maxJ, const Int &L, const FixedSizeMultiVector<Int> &ml, const Int &N,
+					  const FixedSizeMultiVector<Real> &lng,   const FixedSizeMultiVector<Real> &ES,
+					  const FixedSizeMultiVector<Int>  &X,     const FixedSizeMultiVector<Real> &dig_pi) const;
 
-		void udpateF(FixedSizeMultiVector<Real, Int> &eta, const FixedSizeMultiVector<bool, Int> &etaFilter, FixedSizeMultiVector<Real, Int> &dig_f,
-					const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml,
-					const PriorParameters<Int, Real> &prior,   const FixedSizeMultiVector<Int, Int>  &X,
-					const FixedSizeMultiVector<Real, Int> &EZ, const FixedSizeMultiVector<Real, Int> &ES) const;
+		void udpateF(FixedSizeMultiVector<Real> &eta, const FixedSizeMultiVector<bool> &etaFilter, FixedSizeMultiVector<Real> &dig_f,
+					const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &T, const Int &L, const FixedSizeMultiVector<Int> &ml,
+					const PriorParameters<Int, Real> &prior,   const FixedSizeMultiVector<Int>  &X,
+					const FixedSizeMultiVector<Real> &EZ, const FixedSizeMultiVector<Real> &ES) const;
 
-		void updateTheta(FixedSizeMultiVector<Real, Int> &beta, FixedSizeMultiVector<Real, Int> &dig_theta,
-						 const Int &I, const FixedSizeMultiVector<Int, Int> &Js,
-						 const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real, Int> &ES) const;
+		void updateTheta(FixedSizeMultiVector<Real> &beta, FixedSizeMultiVector<Real> &dig_theta,
+						 const Int &I, const FixedSizeMultiVector<Int> &Js,
+						 const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real> &ES) const;
 
-		void updateThetaWithBetaDistributed(FixedSizeMultiVector<Real, Int> &beta, FixedSizeMultiVector<Real, Int> &dig_theta,
-											const Int &I, const FixedSizeMultiVector<Int, Int> &Js,
-											const FixedSizeMultiVector<Real, Int> &avgBeta, const FixedSizeMultiVector<Real, Int> &ES) const;
+		void updateThetaWithBetaDistributed(FixedSizeMultiVector<Real> &beta, FixedSizeMultiVector<Real> &dig_theta,
+											const Int &I, const FixedSizeMultiVector<Int> &Js,
+											const FixedSizeMultiVector<Real> &avgBeta, const FixedSizeMultiVector<Real> &ES) const;
 
-		void updatePi(FixedSizeMultiVector<Real, Int> &gamma, FixedSizeMultiVector<Real, Int> &dig_pi,
-					  const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &N,
-					  const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real, Int> &EY) const;
+		void updatePi(FixedSizeMultiVector<Real> &gamma, FixedSizeMultiVector<Real> &dig_pi,
+					  const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &N,
+					  const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real> &EY) const;
 
-		void updateV(FixedSizeMultiVector<Real, Int> &alpha, FixedSizeMultiVector<Real, Int> &dig_v,
-			         const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &T,
-			         const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real, Int> &EZ) const;
+		void updateV(FixedSizeMultiVector<Real> &alpha, FixedSizeMultiVector<Real> &dig_v,
+			         const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &T,
+			         const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real> &EZ) const;
 
-		void updateVWithAlphaDistributed(FixedSizeMultiVector<Real, Int> &alpha, FixedSizeMultiVector<Real, Int> &dig_v,
-								         const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &T,
-								         const FixedSizeMultiVector<Real, Int> &avgAlpha, const FixedSizeMultiVector<Real, Int> &EZ) const;
+		void updateVWithAlphaDistributed(FixedSizeMultiVector<Real> &alpha, FixedSizeMultiVector<Real> &dig_v,
+								         const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &T,
+								         const FixedSizeMultiVector<Real> &avgAlpha, const FixedSizeMultiVector<Real> &EZ) const;
 
 		void updateAlpha() const; 		                //updateAlpha
 
@@ -85,18 +85,18 @@ namespace pmswitch{
 
 		void updateBeta() const;
 
-		void updateG(FixedSizeMultiVector<Real, Int> &g, FixedSizeMultiVector<Real, Int> &lng, const FixedSizeMultiVector<bool, Int> &gFilter,
-					 const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, Int maxMl, const Int &N,
-					 const FixedSizeMultiVector<Real, Int> &EY, const FixedSizeMultiVector<Real, Int> &ES,
-					 const FixedSizeMultiVector<Int, Int> &X, Real eps = 1e-300) const;
+		void updateG(FixedSizeMultiVector<Real> &g, FixedSizeMultiVector<Real> &lng, const FixedSizeMultiVector<bool> &gFilter,
+					 const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int> &ml, Int maxMl, const Int &N,
+					 const FixedSizeMultiVector<Real> &EY, const FixedSizeMultiVector<Real> &ES,
+					 const FixedSizeMultiVector<Int> &X, Real eps = 1e-300) const;
 
-		FixedSizeMultiVector<Real, Int> makeAvgAlpha(const FixedSizeMultiVector<Real, Int> &s, Int I, Int T) const;
-		FixedSizeMultiVector<Real, Int> makeAvgBeta(const FixedSizeMultiVector<Real, Int> &u, Int I) const;
+		FixedSizeMultiVector<Real> makeAvgAlpha(const FixedSizeMultiVector<Real> &s, Int I, Int T) const;
+		FixedSizeMultiVector<Real> makeAvgBeta(const FixedSizeMultiVector<Real> &u, Int I) const;
 
-		void makeAvgAlpha(FixedSizeMultiVector<Real, Int> &ans, const FixedSizeMultiVector<Real, Int> &s, Int I, Int T) const;
-		void makeAvgBeta(FixedSizeMultiVector<Real, Int> &ans,  const FixedSizeMultiVector<Real, Int> &u, Int I) const;
+		void makeAvgAlpha(FixedSizeMultiVector<Real> &ans, const FixedSizeMultiVector<Real> &s, Int I, Int T) const;
+		void makeAvgBeta(FixedSizeMultiVector<Real> &ans,  const FixedSizeMultiVector<Real> &u, Int I) const;
 
-		Real lnProbGamma(const FixedSizeMultiVector<Real, Int> &param, const FixedSizeMultiVector<Real, Int> &trueParam) const;
+		Real lnProbGamma(const FixedSizeMultiVector<Real> &param, const FixedSizeMultiVector<Real> &trueParam) const;
 	};
 
 	template<typename Int = long long, typename Real = double>
@@ -126,7 +126,7 @@ pmswitch::Inference<Int, Real>::Inference(FeatureData<Int, Real> _fvData, DBData
 }
 
 template<typename Int, typename Real>
-Real pmswitch::Inference<Int, Real>::lnProbGamma(const FixedSizeMultiVector<Real, Int> &param, const FixedSizeMultiVector<Real, Int> &trueParam) const{
+Real pmswitch::Inference<Int, Real>::lnProbGamma(const FixedSizeMultiVector<Real> &param, const FixedSizeMultiVector<Real> &trueParam) const{
 	// E[ -ln x - s1 * x + s0 * ln_x - lnGamma(s0) + s0 * ln_s1 ]
 	// E[ x ] = s0 / s1
 	// E[ ln_x ] = diggamma(s0) - log(s1)
@@ -149,43 +149,50 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 	FixedSizeMultiVector<Int> ml = fvData.Ml; // feature dimension list
 	FixedSizeMultiVector<Int> X  = fvData.X;  // i,maxJ,l,maxMl, each data
 
-	FixedSizeMultiVector<Real, Int> firstEZ = initEZ(I, Js, maxJ, T, inputLatentDir + "/EZ.txt"); // I, maxJ, T
-	FixedSizeMultiVector<Real, Int> firstES = initES(I, Js, maxJ   , inputLatentDir + "/ES.txt");    // I, maxJ, 2
-	FixedSizeMultiVector<Real, Int> firstEY = initEY(I, Js, maxJ, N, inputLatentDir + "/EY.txt"); // I, maxJ, N
+	FixedSizeMultiVector<Real> firstEZ = initEZ(I, Js, maxJ, T, inputLatentDir + "/EZ.txt"); // I, maxJ, T
+	FixedSizeMultiVector<Real> firstES = initES(I, Js, maxJ   , inputLatentDir + "/ES.txt");    // I, maxJ, 2
+	FixedSizeMultiVector<Real> firstEY = initEY(I, Js, maxJ, N, inputLatentDir + "/EY.txt"); // I, maxJ, N
 
-	FixedSizeMultiVector<Real, Int> EZ = firstEZ;
-	FixedSizeMultiVector<Real, Int> ES = firstES;
-	FixedSizeMultiVector<Real, Int> EY = firstEY;
+	FixedSizeMultiVector<Real> EZ = firstEZ;
+	FixedSizeMultiVector<Real> ES = firstES;
+	FixedSizeMultiVector<Real> EY = firstEY;
 
-	FixedSizeMultiVector<Real, Int> S     = prior.s;     // 2
-	FixedSizeMultiVector<Real, Int> U     = prior.u;     // 2
-	FixedSizeMultiVector<Real, Int> avg_alpha = makeAvgAlpha(S, I, T); // I, T-1, 2
-	FixedSizeMultiVector<Real, Int> avg_beta  = makeAvgBeta(U, I); // I, 2
+	FixedSizeMultiVector<Real> S     = prior.s;     // 2
+	FixedSizeMultiVector<Real> U     = prior.u;     // 2
+	FixedSizeMultiVector<Real> avg_alpha = makeAvgAlpha(S, I, T); // I, T-1, 2
+	FixedSizeMultiVector<Real> avg_beta  = makeAvgBeta(U, I); // I, 2
 
-	FixedSizeMultiVector<Real, Int> gamma = prior.gamma; // I, N
-	FixedSizeMultiVector<Real, Int> eta   = prior.eta;   // T, Ml.size(), maxMl
+	FixedSizeMultiVector<Real> gamma = prior.gamma; // I, N
+	FixedSizeMultiVector<Real> eta   = prior.eta;   // T, Ml.size(), maxMl
 
-	// FixedSizeMultiVector<Real, Int> prior_alpha = makeAvgAlpha(S, I, T);
-	// FixedSizeMultiVector<Real, Int> prior_beta  = makeAvgBeta(U, I);
-	FixedSizeMultiVector<Real, Int> alpha       = avg_alpha;
-	FixedSizeMultiVector<Real, Int> beta        = avg_beta;
-	FixedSizeMultiVector<Real, Int> dig_v       = math::calDirExp<Int, Real>(avg_alpha, 1); // I, T-1, 2
-	FixedSizeMultiVector<Real, Int> dig_theta   = math::calDirExp<Int, Real>(avg_beta,  0); // I, 2
-	FixedSizeMultiVector<Real, Int> dig_pi      = math::calDirExp<Int, Real>(gamma, 0); // I, N
-	FixedSizeMultiVector<Real, Int> dig_f       = math::calDirExp<Int, Real>(eta,   1); // T, L, maxMl
-	FixedSizeMultiVector<Real, Int> g           = dbData.g; // N, l, maxMl
-	FixedSizeMultiVector<Real, Int> dig_v_sig(0.0, I, T); // I, T
+	// FixedSizeMultiVector<Real> prior_alpha = makeAvgAlpha(S, I, T);
+	// FixedSizeMultiVector<Real> prior_beta  = makeAvgBeta(U, I);
+	FixedSizeMultiVector<Real> alpha       = avg_alpha;
+	FixedSizeMultiVector<Real> beta        = avg_beta;
+	FixedSizeMultiVector<Real> dig_v       = math::calDirExp<Real>(avg_alpha, 1); // I, T-1, 2
+	FixedSizeMultiVector<Real> dig_theta   = math::calDirExp<Real>(avg_beta,  0); // I, 2
+	FixedSizeMultiVector<Real> dig_pi      = math::calDirExp<Real>(gamma, 0); // I, N
+	FixedSizeMultiVector<Real> dig_f       = math::calDirExp<Real>(eta,   1); // T, L, maxMl
+	FixedSizeMultiVector<Real> g           = dbData.g; // N, l, maxMl
+	FixedSizeMultiVector<Real> dig_v_sig(0.0, I, T); // I, T
 
-	FixedSizeMultiVector<bool, Int> EZFilter(true, I, maxJ, T);   math::makeFilter(EZFilter,  I, Js, FixedSizeMultiVector<Int, Int>(T, maxJ) );
-	FixedSizeMultiVector<bool, Int> ESFilter(true, I, maxJ, 2);   math::makeFilter(ESFilter,  I, Js, FixedSizeMultiVector<Int, Int>(2, maxJ) );
-	FixedSizeMultiVector<bool, Int> EYFilter(true, I, maxJ, N);   math::makeFilter(EYFilter,  I, Js, FixedSizeMultiVector<Int, Int>(N, maxJ) );
-	FixedSizeMultiVector<bool, Int> etaFilter(true, T, L, maxMl); math::makeFilter(etaFilter, T, FixedSizeMultiVector<Int, Int>(L, T), ml);
-	FixedSizeMultiVector<bool, Int> gFilter(true, N, L, maxMl);   math::makeFilter(gFilter,   N, FixedSizeMultiVector<Int, Int>(L, N), ml);
+	FixedSizeMultiVector<bool> EZFilter(true, I, maxJ, T);   math::makeFilter(EZFilter,  I, Js, FixedSizeMultiVector<Int>(T, maxJ) );
+	FixedSizeMultiVector<bool> ESFilter(true, I, maxJ, 2);   math::makeFilter(ESFilter,  I, Js, FixedSizeMultiVector<Int>(2, maxJ) );
+	FixedSizeMultiVector<bool> EYFilter(true, I, maxJ, N);   math::makeFilter(EYFilter,  I, Js, FixedSizeMultiVector<Int>(N, maxJ) );
+	FixedSizeMultiVector<bool> etaFilter(true, T, L, maxMl); math::makeFilter(etaFilter, T, FixedSizeMultiVector<Int>(L, T), ml);
+	FixedSizeMultiVector<bool> gFilter(true, N, L, maxMl);   math::makeFilter(gFilter,   N, FixedSizeMultiVector<Int>(L, N), ml);
 
-	FixedSizeMultiVector<Real, Int> lnEZ = math::applied<Int, Real>(EZ, std::log, EZFilter) ; // I, maxJ, T
-	FixedSizeMultiVector<Real, Int> lnES = math::applied<Int, Real>(ES, std::log, ESFilter) ; // I, maxJ, 2
-	FixedSizeMultiVector<Real, Int> lnEY = math::applied<Int, Real>(EY, std::log, EYFilter) ; // I, maxJ, N
-	FixedSizeMultiVector<Real, Int> lng  = math::applied<Int, Real>(g,  std::log,  gFilter) ; // N, L, maxM
+	FixedSizeMultiVector<Real> lnEZ = math::applied<Real>(EZ, std::log, EZFilter) ; // I, maxJ, T
+	FixedSizeMultiVector<Real> lnES = math::applied<Real>(ES, std::log, ESFilter) ; // I, maxJ, 2
+	FixedSizeMultiVector<Real> lnEY = math::applied<Real>(EY, std::log, EYFilter) ; // I, maxJ, N
+	FixedSizeMultiVector<Real> lng  = math::applied<Real>(g,  std::log,  gFilter) ; // N, L, maxM
+
+	// {   // init g
+	// 	Real eps = 1e-300;
+	// 	math::filter<Int, Real>(g, gFilter, 0);
+	// 	math::norm<Int, Real>(g, 1);
+	// 	for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++)if(g(n,l,m) < eps) g(n,l,m) = eps;
+	// }
 
     Real beforeLq = -1.0 * 1e50;
     Real nextLq = -1.0 * 1e50;
@@ -230,10 +237,10 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 			nextLq = 0.0;
 			nextLq += lnProbGamma(prior.s, S);
 			nextLq += lnProbGamma(prior.u, U);
-			nextLq += math::calELogDir<Int, Real>(dig_f,     prior.eta,    1, etaFilter); // T, L, maxMl
-			nextLq += math::calELogDir<Int, Real>(dig_v,     avg_alpha,    1); // I, T-1, 2
-			nextLq += math::calELogDir<Int, Real>(dig_theta, avg_beta,     0); // I, 2
-			nextLq += math::calELogDir<Int, Real>(dig_pi,    prior.gamma,  0); // I, N
+			nextLq += math::calELogDir<Real>(dig_f,     prior.eta,    1, etaFilter); // T, L, maxMl
+			nextLq += math::calELogDir<Real>(dig_v,     avg_alpha,    1); // I, T-1, 2
+			nextLq += math::calELogDir<Real>(dig_theta, avg_beta,     0); // I, 2
+			nextLq += math::calELogDir<Real>(dig_pi,    prior.gamma,  0); // I, N
 
 	    	std::vector<Real> tmpXLogY = {0, 0};
 			{//dig_v_sig
@@ -268,10 +275,10 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vbFull(bool u
 
 			nextLq -= lnProbGamma(S, S);
 			nextLq -= lnProbGamma(U, U);
-			nextLq -= math::calELogDir<Int, Real>(dig_f,     eta,    1, etaFilter);  // T, L, maxMl
-			nextLq -= math::calELogDir<Int, Real>(dig_v,     alpha,  1); 			 // I, T-1, 2
-			nextLq -= math::calELogDir<Int, Real>(dig_theta, beta,   0); 			 // I, 2
-			nextLq -= math::calELogDir<Int, Real>(dig_pi,    gamma,  0); 			 // I, N
+			nextLq -= math::calELogDir<Real>(dig_f,     eta,    1, etaFilter);  // T, L, maxMl
+			nextLq -= math::calELogDir<Real>(dig_v,     alpha,  1); 			 // I, T-1, 2
+			nextLq -= math::calELogDir<Real>(dig_theta, beta,   0); 			 // I, 2
+			nextLq -= math::calELogDir<Real>(dig_pi,    gamma,  0); 			 // I, N
 
 			for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
 				for(Int k = 0; k < T; k++){
@@ -382,36 +389,43 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 	FixedSizeMultiVector<Int> ml = fvData.Ml; // feature dimension list
 	FixedSizeMultiVector<Int> X  = fvData.X;  // i,maxJ,l,maxMl, each data
 
-	FixedSizeMultiVector<Real, Int> firstEZ = initEZ(I, Js, maxJ, T, inputLatentDir + "/EZ.txt"); // I, maxJ, T
-	FixedSizeMultiVector<Real, Int> firstES = initES(I, Js, maxJ   , inputLatentDir + "/ES.txt");    // I, maxJ, 2
-	FixedSizeMultiVector<Real, Int> firstEY = initEY(I, Js, maxJ, N, inputLatentDir + "/EY.txt"); // I, maxJ, N
+	FixedSizeMultiVector<Real> firstEZ = initEZ(I, Js, maxJ, T, inputLatentDir + "/EZ.txt"); // I, maxJ, T
+	FixedSizeMultiVector<Real> firstES = initES(I, Js, maxJ   , inputLatentDir + "/ES.txt");    // I, maxJ, 2
+	FixedSizeMultiVector<Real> firstEY = initEY(I, Js, maxJ, N, inputLatentDir + "/EY.txt"); // I, maxJ, N
 
-	FixedSizeMultiVector<Real, Int> EZ = firstEZ;
-	FixedSizeMultiVector<Real, Int> ES = firstES;
-	FixedSizeMultiVector<Real, Int> EY = firstEY;
+	FixedSizeMultiVector<Real> EZ = firstEZ;
+	FixedSizeMultiVector<Real> ES = firstES;
+	FixedSizeMultiVector<Real> EY = firstEY;
 
-	FixedSizeMultiVector<Real, Int> alpha = prior.alpha; // I, T-1, 2
-	FixedSizeMultiVector<Real, Int> beta  = prior.beta;  // I, 2
-	FixedSizeMultiVector<Real, Int> gamma = prior.gamma; // I, N
-	FixedSizeMultiVector<Real, Int> eta   = prior.eta;   // T, Ml.size(), maxMl
+	FixedSizeMultiVector<Real> alpha = prior.alpha; // I, T-1, 2
+	FixedSizeMultiVector<Real> beta  = prior.beta;  // I, 2
+	FixedSizeMultiVector<Real> gamma = prior.gamma; // I, N
+	FixedSizeMultiVector<Real> eta   = prior.eta;   // T, Ml.size(), maxMl
 
-	FixedSizeMultiVector<Real, Int> dig_v     = math::calDirExp<Int, Real>(alpha, 1); // I, T-1, 2
-	FixedSizeMultiVector<Real, Int> dig_theta = math::calDirExp<Int, Real>(beta,  0); // I, 2
-	FixedSizeMultiVector<Real, Int> dig_pi    = math::calDirExp<Int, Real>(gamma, 0); // I, N
-	FixedSizeMultiVector<Real, Int> dig_f     = math::calDirExp<Int, Real>(eta,   1); // T, L, maxMl
-	FixedSizeMultiVector<Real, Int> g         = dbData.g; // N, l, maxMl
-	FixedSizeMultiVector<Real, Int> dig_v_sig(0.0, I, T); // I, T
+	FixedSizeMultiVector<Real> dig_v     = math::calDirExp<Real>(alpha, 1); // I, T-1, 2
+	FixedSizeMultiVector<Real> dig_theta = math::calDirExp<Real>(beta,  0); // I, 2
+	FixedSizeMultiVector<Real> dig_pi    = math::calDirExp<Real>(gamma, 0); // I, N
+	FixedSizeMultiVector<Real> dig_f     = math::calDirExp<Real>(eta,   1); // T, L, maxMl
+	FixedSizeMultiVector<Real> g         = dbData.g; // N, l, maxMl
+	FixedSizeMultiVector<Real> dig_v_sig(0.0, I, T); // I, T
 
-	FixedSizeMultiVector<bool, Int> EZFilter(true, I, maxJ, T);   math::makeFilter(EZFilter,  I, Js, FixedSizeMultiVector<Int, Int>(T, maxJ) );
-	FixedSizeMultiVector<bool, Int> ESFilter(true, I, maxJ, 2);   math::makeFilter(ESFilter,  I, Js, FixedSizeMultiVector<Int, Int>(2, maxJ) );
-	FixedSizeMultiVector<bool, Int> EYFilter(true, I, maxJ, N);   math::makeFilter(EYFilter,  I, Js, FixedSizeMultiVector<Int, Int>(N, maxJ) );
-	FixedSizeMultiVector<bool, Int> etaFilter(true, T, L, maxMl); math::makeFilter(etaFilter, T, FixedSizeMultiVector<Int, Int>(L, T), ml);
-	FixedSizeMultiVector<bool, Int> gFilter(true, N, L, maxMl);   math::makeFilter(gFilter,   N, FixedSizeMultiVector<Int, Int>(L, N), ml);
+	FixedSizeMultiVector<bool> EZFilter(true, I, maxJ, T);   math::makeFilter(EZFilter,  I, Js, FixedSizeMultiVector<Int>(T, maxJ) );
+	FixedSizeMultiVector<bool> ESFilter(true, I, maxJ, 2);   math::makeFilter(ESFilter,  I, Js, FixedSizeMultiVector<Int>(2, maxJ) );
+	FixedSizeMultiVector<bool> EYFilter(true, I, maxJ, N);   math::makeFilter(EYFilter,  I, Js, FixedSizeMultiVector<Int>(N, maxJ) );
+	FixedSizeMultiVector<bool> etaFilter(true, T, L, maxMl); math::makeFilter(etaFilter, T, FixedSizeMultiVector<Int>(L, T), ml);
+	FixedSizeMultiVector<bool> gFilter(true, N, L, maxMl);   math::makeFilter(gFilter,   N, FixedSizeMultiVector<Int>(L, N), ml);
 
-	FixedSizeMultiVector<Real, Int> lnEZ = math::applied<Int, Real>(EZ, std::log, EZFilter) ; // I, maxJ, T
-	FixedSizeMultiVector<Real, Int> lnES = math::applied<Int, Real>(ES, std::log, ESFilter) ; // I, maxJ, 2
-	FixedSizeMultiVector<Real, Int> lnEY = math::applied<Int, Real>(EY, std::log, EYFilter) ; // I, maxJ, N
-	FixedSizeMultiVector<Real, Int> lng  = math::applied<Int, Real>(g,  std::log,  gFilter) ; // I, maxJ, N
+	FixedSizeMultiVector<Real> lnEZ = math::applied<Real>(EZ, std::log, EZFilter) ; // I, maxJ, T
+	FixedSizeMultiVector<Real> lnES = math::applied<Real>(ES, std::log, ESFilter) ; // I, maxJ, 2
+	FixedSizeMultiVector<Real> lnEY = math::applied<Real>(EY, std::log, EYFilter) ; // I, maxJ, N
+	FixedSizeMultiVector<Real> lng  = math::applied<Real>(g,  std::log,  gFilter) ; // I, maxJ, N
+
+	// {   // init g
+	// 	Real eps = 1e-300;
+	// 	math::filter<Int, Real>(g, gFilter, 0);
+	// 	math::norm<Int, Real>(g, 1);
+	// 	for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++)if(g(n,l,m) < eps) g(n,l,m) = eps;
+	// }
 
     Real beforeLq = -1.0 * 1e30;
     Real nextLq = -1.0 * 1e30;
@@ -443,10 +457,10 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 
 		{// nextLq = 0.0
 			nextLq = 0.0;
-			nextLq += math::calELogDir<Int, Real>(dig_f,     prior.eta,    1, etaFilter); // T, L, maxMl
-			nextLq += math::calELogDir<Int, Real>(dig_v,     prior.alpha,  1); // I, T-1, 2
-			nextLq += math::calELogDir<Int, Real>(dig_theta, prior.beta,   0); // I, 2
-			nextLq += math::calELogDir<Int, Real>(dig_pi,    prior.gamma,  0); // I, N
+			nextLq += math::calELogDir<Real>(dig_f,     prior.eta,    1, etaFilter); // T, L, maxMl
+			nextLq += math::calELogDir<Real>(dig_v,     prior.alpha,  1); // I, T-1, 2
+			nextLq += math::calELogDir<Real>(dig_theta, prior.beta,   0); // I, 2
+			nextLq += math::calELogDir<Real>(dig_pi,    prior.gamma,  0); // I, N
 
 	    	std::vector<Real> tmpXLogY = {0, 0};
 			{//dig_v_sig
@@ -480,10 +494,10 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 					// nextLq     += tmpXLogY[ (EY(i,j,n) * ES(i,j,1) * X(i,j,l,m) != 0.0)  ];
 			}
 
-			nextLq -= math::calELogDir<Int, Real>(dig_f,     eta,    1, etaFilter);  // T, L, maxMl
-			nextLq -= math::calELogDir<Int, Real>(dig_v,     alpha,  1); 			 // I, T-1, 2
-			nextLq -= math::calELogDir<Int, Real>(dig_theta, beta,   0); 			 // I, 2
-			nextLq -= math::calELogDir<Int, Real>(dig_pi,    gamma,  0); 			 // I, N
+			nextLq -= math::calELogDir<Real>(dig_f,     eta,    1, etaFilter);  // T, L, maxMl
+			nextLq -= math::calELogDir<Real>(dig_v,     alpha,  1); 			 // I, T-1, 2
+			nextLq -= math::calELogDir<Real>(dig_theta, beta,   0); 			 // I, 2
+			nextLq -= math::calELogDir<Real>(dig_pi,    gamma,  0); 			 // I, N
 
 			for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
 				for(Int k = 0; k < T; k++){
@@ -506,9 +520,9 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 			}
 		}
 
-		if(updateDB){std::cerr << "ok vb, with g update, update : ";}
-		else{std::cerr << "ok vb, update : ";}
-    	std::cerr << update << ", beforeLq :" << beforeLq << " nextLq : "  << nextLq << ", nextLq-beforeLq/beforeLq :" << (nextLq - beforeLq)/std::abs(beforeLq) << std::endl;
+		// if(updateDB){std::cerr << "ok vb, with g update, update : ";}
+		// else{std::cerr << "ok vb, update : ";}
+    	// std::cerr << update << ", beforeLq :" << beforeLq << " nextLq : "  << nextLq << ", nextLq-beforeLq/beforeLq :" << (nextLq - beforeLq)/std::abs(beforeLq) << std::endl;
     	assert( !(std::isnan(beforeLq) || std::isnan(nextLq) ) ) ;
     	assert( !(std::isinf(beforeLq) || std::isinf(nextLq) ) ) ;
 		if( not first && (beforeLq - nextLq)/std::abs(beforeLq) >=  epsilon ){
@@ -570,22 +584,23 @@ pmswitch::InferenceData<Int, Real> pmswitch::Inference<Int, Real>::vb(bool updat
 
 // EZ_{i,j, }     :: T-dimensional non-negative simplex // EZ_{i,j,k   }
 template<typename Int, typename Real>
-pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T, std::string inputPath) const{
+pmswitch::FixedSizeMultiVector<Real> pmswitch::Inference<Int, Real>::initEZ(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int T, std::string inputPath) const{
 	std::ifstream ifs(inputPath);
 	if(ifs.fail()) {
 		ifs.close();
 		pmswitch::FixedSizeMultiVector<Real> EZ(0.0, I, maxJ, T);
-		std::vector<Real> alpha; for(Int k = 0; k < T; k++) alpha.push_back((Real)2.0);
+		std::vector<Real> alpha; for(Int k = 0; k < T; k++) alpha.push_back((Real)1.0);
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
-			std::vector<Real> rand = pmswitch::math::random::sampleDirichlet<std::mt19937, Real, Int>(gen, alpha);
+			std::vector<Real> rand = pmswitch::math::random::sampleDirichlet<std::mt19937, Real>(gen, alpha);
 			for(Int k = 0; k < T; k++) EZ(i,j,k) = rand[k];
 		}
 		return EZ;
 	}else{
+		std::cerr << "parse EZ from file " << std::endl;
 		ifs.close();
-	    FixedSizeMultiVector<Real, Int> EZ = FixedSizeMultiVectorCreator<Real, Int>::createFixedSizeMultiVector(inputPath, FixedSizeMultiVectorCreator<Real, Int>::strToReal);
+	    FixedSizeMultiVector<Real> EZ = FixedSizeMultiVectorCreator<Real>::createFixedSizeMultiVector(inputPath, FixedSizeMultiVectorCreator<Real>::strToReal);
 	    if(EZ.dim() != 3){ pmswitch::die("invalid dimension @ pmswitch::Inference<Int, Real>::initEZ"); }
 	    if(EZ.size(0) != I || EZ.size(1) != maxJ || EZ.size(2) != T){pmswitch::die("invalid dimension size @ pmswitch::Inference<Int, Real>::initEZ");}
 	    return EZ;
@@ -594,22 +609,23 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initEZ
 
 // ES_{i, }	   :: 2-dimensional non-negative simplex // ES_{i,{0,1} }
 template<typename Int, typename Real>
-pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initES(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, std::string inputPath) const{
+pmswitch::FixedSizeMultiVector<Real> pmswitch::Inference<Int, Real>::initES(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, std::string inputPath) const{
 	std::ifstream ifs(inputPath);
 	if(ifs.fail()) {
 		ifs.close();
 		pmswitch::FixedSizeMultiVector<Real> ES(0.0, I, maxJ, 2);
-		std::vector<Real> alpha = {2.0, 2.0};
+		std::vector<Real> alpha = {1.0, 1.0};
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
-			std::vector<Real> rand = pmswitch::math::random::sampleDirichlet<std::mt19937, Real, Int>(gen, alpha);
+			std::vector<Real> rand = pmswitch::math::random::sampleDirichlet<std::mt19937, Real>(gen, alpha);
 			ES(i,j,0) = rand[0]; ES(i,j,1) = rand[1];
 		}
 		return ES;
 	}else{
+		std::cerr << "parse ES from file " << std::endl;
 		ifs.close();
-	    FixedSizeMultiVector<Real, Int> ES = FixedSizeMultiVectorCreator<Real, Int>::createFixedSizeMultiVector(inputPath, FixedSizeMultiVectorCreator<Real, Int>::strToReal);
+	    FixedSizeMultiVector<Real> ES = FixedSizeMultiVectorCreator<Real>::createFixedSizeMultiVector(inputPath, FixedSizeMultiVectorCreator<Real>::strToReal);
 	    if(ES.dim() != 3){ pmswitch::die("invalid dimension @ pmswitch::Inference<Int, Real>::initES"); }
 	    if(ES.size(0) != I || ES.size(1) != maxJ || ES.size(2) != 2){pmswitch::die("invalid dimension size @ pmswitch::Inference<Int, Real>::initES");}
 	    return ES;
@@ -618,22 +634,23 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initES
 
 // EY_{i, }       :: N-dimensional non-negative simplex // EY_{i,n}
 template<typename Int, typename Real>
-pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initEY(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int N, std::string inputPath) const{
+pmswitch::FixedSizeMultiVector<Real> pmswitch::Inference<Int, Real>::initEY(Int I, FixedSizeMultiVector<Int> Js, Int maxJ, Int N, std::string inputPath) const{
 	std::ifstream ifs(inputPath);
 	if(ifs.fail()) {
 		ifs.close();
 		pmswitch::FixedSizeMultiVector<Real> EY(0.0, I, maxJ, N);
-		std::vector<Real> alpha; for(Int n = 0; n < N; n++) alpha.push_back((Real)2.0);
+		std::vector<Real> alpha; for(Int n = 0; n < N; n++) alpha.push_back((Real)1.0);
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
-			std::vector<Real> rand = pmswitch::math::random::sampleDirichlet<std::mt19937, Real, Int>(gen, alpha);
+			std::vector<Real> rand = pmswitch::math::random::sampleDirichlet<std::mt19937, Real>(gen, alpha);
 			for(Int n = 0; n < N; n++){ EY(i,j,n) = rand[n];}
 		}
 		return EY;
 	}else{
+		std::cerr << "parse EY from file " << std::endl;
 		ifs.close();
-	    FixedSizeMultiVector<Real, Int> EY = FixedSizeMultiVectorCreator<Real, Int>::createFixedSizeMultiVector(inputPath, FixedSizeMultiVectorCreator<Real, Int>::strToReal);
+	    FixedSizeMultiVector<Real> EY = FixedSizeMultiVectorCreator<Real>::createFixedSizeMultiVector(inputPath, FixedSizeMultiVectorCreator<Real>::strToReal);
 	    if(EY.dim() != 3){ pmswitch::die("invalid dimension @ pmswitch::Inference<Int, Real>::initEY"); }
 	    if(EY.size(0) != I || EY.size(1) != maxJ || EY.size(2) != N){pmswitch::die("invalid dimension size @ pmswitch::Inference<Int, Real>::initEY");}
 	    return EY;
@@ -641,10 +658,10 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::initEY
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::updateEZ(FixedSizeMultiVector<Real, Int> &EZ, FixedSizeMultiVector<Real, Int> &lnEZ, const FixedSizeMultiVector<bool, Int> &EZFilter,
-			  const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, const Int &N,
-	          const FixedSizeMultiVector<Real, Int> &dig_f, const FixedSizeMultiVector<Real, Int> &ES,
-	          const FixedSizeMultiVector<Int, Int>  &X,     const FixedSizeMultiVector<Real, Int> &dig_v) const {
+void pmswitch::Inference<Int, Real>::updateEZ(FixedSizeMultiVector<Real> &EZ, FixedSizeMultiVector<Real> &lnEZ, const FixedSizeMultiVector<bool> &EZFilter,
+			  const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int> &ml, const Int &N,
+	          const FixedSizeMultiVector<Real> &dig_f, const FixedSizeMultiVector<Real> &ES,
+	          const FixedSizeMultiVector<Int>  &X,     const FixedSizeMultiVector<Real> &dig_v) const {
     for(Int i = 0; i < I; i++)for(Int j = 0; j < maxJ; j++)for(Int k = 0; k < T; k++) EZ(i,j,k) = 0.0;
 
     for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int k = 0; k < T; k++){
@@ -654,19 +671,19 @@ void pmswitch::Inference<Int, Real>::updateEZ(FixedSizeMultiVector<Real, Int> &E
 			EZ(i,j,k) += ES(i,j,0) * X(i,j,l,m) * dig_f(k, l, m);
 		}
     }
-	math::subMax<Int, Real>(EZ, 1);
-	math::apply<Int, Real>(EZ, std::exp);
-	math::filter<Int, Real>(EZ, EZFilter, 0.0);
-	math::norm<Int, Real>(EZ, 1);
-	lnEZ = math::applied<Int, Real>(EZ, std::log, EZFilter);
+	math::subMax<Real>(EZ, 1);
+	math::apply<Real>(EZ, std::exp);
+	math::filter<Real>(EZ, EZFilter, 0.0);
+	math::norm<Real>(EZ, 1);
+	lnEZ = math::applied<Real>(EZ, std::log, EZFilter);
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::updateES(FixedSizeMultiVector<Real, Int> &ES, FixedSizeMultiVector<Real, Int> &lnES, const FixedSizeMultiVector<bool, Int> &ESFilter,
-			 const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, const Int &N,
-			  const FixedSizeMultiVector<Real, Int> &dig_f, const FixedSizeMultiVector<Real, Int> &EZ,
-			  const FixedSizeMultiVector<Real, Int> &lng,   const FixedSizeMultiVector<Real, Int> &EY,
-			  const FixedSizeMultiVector<Int, Int>  &X,     const FixedSizeMultiVector<Real, Int> &dig_theta) const {
+void pmswitch::Inference<Int, Real>::updateES(FixedSizeMultiVector<Real> &ES, FixedSizeMultiVector<Real> &lnES, const FixedSizeMultiVector<bool> &ESFilter,
+			 const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int> &ml, const Int &N,
+			  const FixedSizeMultiVector<Real> &dig_f, const FixedSizeMultiVector<Real> &EZ,
+			  const FixedSizeMultiVector<Real> &lng,   const FixedSizeMultiVector<Real> &EY,
+			  const FixedSizeMultiVector<Int>  &X,     const FixedSizeMultiVector<Real> &dig_theta) const {
 	std::vector<Real> tmpXLogY = {0, 0};
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < maxJ; j++){ES(i,j,0) = 0.0; ES(i,j,1) = 0.0;}
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++ ){
@@ -680,18 +697,18 @@ void pmswitch::Inference<Int, Real>::updateES(FixedSizeMultiVector<Real, Int> &E
 			ES(i,j,1) += tmpXLogY[!std::isnan(tmpXLogY[1])];
 		}
 	}
-	math::subMax<Int, Real>(ES, 1);
-	math::apply<Int, Real>(ES, std::exp);
-	math::filter<Int, Real>(ES, ESFilter, 0.0);
-	math::norm<Int, Real>(ES, 1);
-	lnES = math::applied<Int, Real>(ES, std::log, ESFilter);
+	math::subMax<Real>(ES, 1);
+	math::apply<Real>(ES, std::exp);
+	math::filter<Real>(ES, ESFilter, 0.0);
+	math::norm<Real>(ES, 1);
+	lnES = math::applied<Real>(ES, std::log, ESFilter);
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::updateEY(FixedSizeMultiVector<Real, Int> &EY, FixedSizeMultiVector<Real, Int> &lnEY, const FixedSizeMultiVector<bool, Int> &EYFilter,
-			  const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, const Int &N,
-			  const FixedSizeMultiVector<Real, Int> &lng,   const FixedSizeMultiVector<Real, Int> &ES,
-			  const FixedSizeMultiVector<Int, Int>  &X,     const FixedSizeMultiVector<Real, Int> &dig_pi) const {
+void pmswitch::Inference<Int, Real>::updateEY(FixedSizeMultiVector<Real> &EY, FixedSizeMultiVector<Real> &lnEY, const FixedSizeMultiVector<bool> &EYFilter,
+			  const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &maxJ, const Int &L, const FixedSizeMultiVector<Int> &ml, const Int &N,
+			  const FixedSizeMultiVector<Real> &lng,   const FixedSizeMultiVector<Real> &ES,
+			  const FixedSizeMultiVector<Int>  &X,     const FixedSizeMultiVector<Real> &dig_pi) const {
 	std::vector<Real> tmpXLogY = {0, 0};
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < maxJ; j++)for(Int n = 0; n < N; n++){EY(i,j,n) = 0.0;}
 
@@ -702,106 +719,106 @@ void pmswitch::Inference<Int, Real>::updateEY(FixedSizeMultiVector<Real, Int> &E
 			EY(i,j,n) += tmpXLogY[!std::isnan(tmpXLogY[1])];
 		}
 	}
-	math::subMax<Int, Real>(EY, 1);
-	math::apply<Int, Real>(EY, std::exp);
-	math::filter<Int, Real>(EY, EYFilter, 0.0);
-	math::norm<Int, Real>(EY, 1);
-	lnEY = math::applied<Int, Real>(EY, std::log, EYFilter);
+	math::subMax<Real>(EY, 1);
+	math::apply<Real>(EY, std::exp);
+	math::filter<Real>(EY, EYFilter, 0.0);
+	math::norm<Real>(EY, 1);
+	lnEY = math::applied<Real>(EY, std::log, EYFilter);
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::udpateF(FixedSizeMultiVector<Real, Int> &eta, const FixedSizeMultiVector<bool, Int> &etaFilter, FixedSizeMultiVector<Real, Int> &dig_f,
-			const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml,
-			const PriorParameters<Int, Real> &prior,   const FixedSizeMultiVector<Int, Int>  &X,
-			const FixedSizeMultiVector<Real, Int> &EZ, const FixedSizeMultiVector<Real, Int> &ES) const {
+void pmswitch::Inference<Int, Real>::udpateF(FixedSizeMultiVector<Real> &eta, const FixedSizeMultiVector<bool> &etaFilter, FixedSizeMultiVector<Real> &dig_f,
+			const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &T, const Int &L, const FixedSizeMultiVector<Int> &ml,
+			const PriorParameters<Int, Real> &prior,   const FixedSizeMultiVector<Int>  &X,
+			const FixedSizeMultiVector<Real> &EZ, const FixedSizeMultiVector<Real> &ES) const {
 		eta = prior.eta;
 		for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int k = 0; k < T; k++){
 			for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++){
 				eta(k,l,m) += X(i,j,l,m) * EZ(i,j,k) * ES(i,j,0);
 			}
 		}
-		dig_f = math::calDirExp<Int, Real>(eta, 1, etaFilter);
+		dig_f = math::calDirExp<Real>(eta, 1, etaFilter);
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::updateTheta(FixedSizeMultiVector<Real, Int> &beta, FixedSizeMultiVector<Real, Int> &dig_theta,
-				 const Int &I, const FixedSizeMultiVector<Int, Int> &Js,
-				 const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real, Int> &ES) const {
+void pmswitch::Inference<Int, Real>::updateTheta(FixedSizeMultiVector<Real> &beta, FixedSizeMultiVector<Real> &dig_theta,
+				 const Int &I, const FixedSizeMultiVector<Int> &Js,
+				 const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real> &ES) const {
 	beta  = prior.beta;  // I, 2
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
 		beta(i, 0) += ES(i,j,0); beta(i, 1) += ES(i,j,1);
 	}
-	dig_theta = math::calDirExp<Int, Real>(beta,  0);
+	dig_theta = math::calDirExp<Real>(beta,  0);
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::updateThetaWithBetaDistributed(FixedSizeMultiVector<Real, Int> &beta, FixedSizeMultiVector<Real, Int> &dig_theta,
-																	const Int &I, const FixedSizeMultiVector<Int, Int> &Js,
-																	const FixedSizeMultiVector<Real, Int> &avgBeta,
-																	const FixedSizeMultiVector<Real, Int> &ES) const {
+void pmswitch::Inference<Int, Real>::updateThetaWithBetaDistributed(FixedSizeMultiVector<Real> &beta, FixedSizeMultiVector<Real> &dig_theta,
+																	const Int &I, const FixedSizeMultiVector<Int> &Js,
+																	const FixedSizeMultiVector<Real> &avgBeta,
+																	const FixedSizeMultiVector<Real> &ES) const {
 	beta  = avgBeta;  // I, 2
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++){
 		beta(i, 0) += ES(i,j,0); beta(i, 1) += ES(i,j,1);
 	}
-	dig_theta = math::calDirExp<Int, Real>(beta,  0);
+	dig_theta = math::calDirExp<Real>(beta,  0);
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::updatePi(FixedSizeMultiVector<Real, Int> &gamma, FixedSizeMultiVector<Real, Int> &dig_pi,
-			  const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &N,
-			  const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real, Int> &EY) const {
+void pmswitch::Inference<Int, Real>::updatePi(FixedSizeMultiVector<Real> &gamma, FixedSizeMultiVector<Real> &dig_pi,
+			  const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &N,
+			  const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real> &EY) const {
 	gamma = prior.gamma; // I, N
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int n = 0; n < N; n++){
 			gamma(i,n) += EY(i,j,n);
 	}
- 	dig_pi    = math::calDirExp<Int, Real>(gamma, 0); // I, N
+ 	dig_pi    = math::calDirExp<Real>(gamma, 0); // I, N
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::updateV(FixedSizeMultiVector<Real, Int> &alpha, FixedSizeMultiVector<Real, Int> &dig_v,
-	                       const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &T,
-	                       const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real, Int> &EZ) const {
+void pmswitch::Inference<Int, Real>::updateV(FixedSizeMultiVector<Real> &alpha, FixedSizeMultiVector<Real> &dig_v,
+	                       const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &T,
+	                       const PriorParameters<Int, Real> &prior, const FixedSizeMultiVector<Real> &EZ) const {
 	alpha = prior.alpha; // I, T-1, 2
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int k = 0; k < T-1; k++){
 		alpha(i,k,0) += EZ(i,j,k);
 		for(Int t = k+1; t < T; t++){ alpha(i,k,1) += EZ(i,j,t);}
 	}
-	dig_v = math::calDirExp<Int, Real>(alpha, 1); // I, T-1, 2
+	dig_v = math::calDirExp<Real>(alpha, 1); // I, T-1, 2
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::updateVWithAlphaDistributed(FixedSizeMultiVector<Real, Int> &alpha, FixedSizeMultiVector<Real, Int> &dig_v,
-	                       const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &T,
-	                       const FixedSizeMultiVector<Real, Int> &avgAlpha, const FixedSizeMultiVector<Real, Int> &EZ) const {
+void pmswitch::Inference<Int, Real>::updateVWithAlphaDistributed(FixedSizeMultiVector<Real> &alpha, FixedSizeMultiVector<Real> &dig_v,
+	                       const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &T,
+	                       const FixedSizeMultiVector<Real> &avgAlpha, const FixedSizeMultiVector<Real> &EZ) const {
 	alpha = avgAlpha; // I, T-1, 2
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int k = 0; k < T-1; k++){
 		alpha(i,k,0) += EZ(i,j,k);
 		for(Int t = k+1; t < T; t++){ alpha(i,k,1) += EZ(i,j,t);}
 	}
-	dig_v = math::calDirExp<Int, Real>(alpha, 1); // I, T-1, 2
+	dig_v = math::calDirExp<Real>(alpha, 1); // I, T-1, 2
 }
 
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::updateG(FixedSizeMultiVector<Real, Int> &g, FixedSizeMultiVector<Real, Int> &lng, const FixedSizeMultiVector<bool, Int> &gFilter,
-			 const Int &I, const FixedSizeMultiVector<Int, Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int, Int> &ml, Int maxMl, const Int &N,
-			 const FixedSizeMultiVector<Real, Int> &EY, const FixedSizeMultiVector<Real, Int> &ES,
-			  const FixedSizeMultiVector<Int, Int> &X, Real eps) const { // update < 275 -> pass ,update < 276 -> not pass
+void pmswitch::Inference<Int, Real>::updateG(FixedSizeMultiVector<Real> &g, FixedSizeMultiVector<Real> &lng, const FixedSizeMultiVector<bool> &gFilter,
+			 const Int &I, const FixedSizeMultiVector<Int> &Js, const Int &maxJ, const Int &T, const Int &L, const FixedSizeMultiVector<Int> &ml, Int maxMl, const Int &N,
+			 const FixedSizeMultiVector<Real> &EY, const FixedSizeMultiVector<Real> &ES,
+			  const FixedSizeMultiVector<Int> &X, Real eps) const { // update < 275 -> pass ,update < 276 -> not pass
 	for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < maxMl; m++){ g(n,l,m) = 0.0;}
 
 	for(Int i = 0; i < I; i++)for(Int j = 0; j < Js(i); j++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++)for(Int n = 0; n < N; n++){
 		g(n,l,m) += X(i,j,l,m) * EY(i,j,n) * ES(i,j,1);
 	}
-	math::filter<Int, Real>(g, gFilter, 0);
-	math::norm<Int, Real>(g, 1);
+	math::filter<Real>(g, gFilter, 0);
+	math::norm<Real>(g, 1);
 	for(Int n = 0; n < N; n++)for(Int l = 0; l < L; l++)for(Int m = 0; m < ml[l]; m++)if(g(n,l,m) < eps) g(n,l,m) = eps;
-	lng  = math::applied<Int, Real>(g,  std::log,  gFilter) ; // I, maxJ, N
+	lng  = math::applied<Real>(g,  std::log,  gFilter) ; // I, maxJ, N
 }
 
 template<typename Int, typename Real>
-pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::makeAvgAlpha(const FixedSizeMultiVector<Real, Int> &s, Int I, Int T) const{
+pmswitch::FixedSizeMultiVector<Real> pmswitch::Inference<Int, Real>::makeAvgAlpha(const FixedSizeMultiVector<Real> &s, Int I, Int T) const{
 	using namespace pmswitch;
-	FixedSizeMultiVector<Real, Int> ans((Real)0, I, T-1, 2);
+	FixedSizeMultiVector<Real> ans((Real)0, I, T-1, 2);
 	for(Int i = 0; i < I; i++)for(Int k = 0; k < T-1; k++){
 		ans(i,k,0) = (Real) 1.0;
 		ans(i,k,1) = (Real) ( s(0) / s(1) );
@@ -810,7 +827,7 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::makeAv
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::makeAvgAlpha(FixedSizeMultiVector<Real, Int> &ans, const FixedSizeMultiVector<Real, Int> &s, Int I, Int T) const{
+void pmswitch::Inference<Int, Real>::makeAvgAlpha(FixedSizeMultiVector<Real> &ans, const FixedSizeMultiVector<Real> &s, Int I, Int T) const{
 	for(Int i = 0; i < I; i++)for(Int k = 0; k < T-1; k++){
 		ans(i,k,0) = (Real) 1.0;
 		ans(i,k,1) = (Real) ( s(0) / s(1) );
@@ -819,9 +836,9 @@ void pmswitch::Inference<Int, Real>::makeAvgAlpha(FixedSizeMultiVector<Real, Int
 
 
 template<typename Int, typename Real>
-pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::makeAvgBeta(const FixedSizeMultiVector<Real, Int> &u, Int I) const{
+pmswitch::FixedSizeMultiVector<Real> pmswitch::Inference<Int, Real>::makeAvgBeta(const FixedSizeMultiVector<Real> &u, Int I) const{
 	using namespace pmswitch;
-	FixedSizeMultiVector<Real, Int> ans((Real)0, I, 2);
+	FixedSizeMultiVector<Real> ans((Real)0, I, 2);
 	for(Int i = 0; i < I; i++){
 		ans(i,0) = (Real) 1.0;
 		ans(i,1) = (Real) ( u(0) / u(1) );
@@ -830,7 +847,7 @@ pmswitch::FixedSizeMultiVector<Real, Int> pmswitch::Inference<Int, Real>::makeAv
 }
 
 template<typename Int, typename Real>
-void pmswitch::Inference<Int, Real>::makeAvgBeta(FixedSizeMultiVector<Real, Int> &ans, const FixedSizeMultiVector<Real, Int> &u, Int I) const{
+void pmswitch::Inference<Int, Real>::makeAvgBeta(FixedSizeMultiVector<Real> &ans, const FixedSizeMultiVector<Real> &u, Int I) const{
 	for(Int i = 0; i < I; i++){
 		ans(i,0) = (Real) 1.0;
 		ans(i,1) = (Real) ( u(0) / u(1) );

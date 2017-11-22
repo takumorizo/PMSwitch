@@ -4,32 +4,340 @@
 		"selected_items":
 		[
 			[
-				"idx",
-				"idxToPosSize	std::vector<Int> &"
+				"alpha",
+				"alpha"
 			],
 			[
-				"m",
-				"Ml	const FixedSizeMultiVector<long long>"
+				"mylo",
+				"myLogGamma(std::vector<long double> &sums, long double x)\tvoid"
 			],
 			[
-				"srand",
-				"srand(unsigned int)	void"
+				"push",
+				"push_back(const_reference __x)\tvoid"
 			],
 			[
-				"pos",
-				"posSizeEach	std::vector<long long>"
+				"gamma",
+				"tgammal(long double)\tlong double"
 			],
 			[
-				"sample",
-				"sampleSize	long long"
+				"floo",
+				"floor_x\tlong long"
+			],
+			[
+				"llroun",
+				"llroundl(long double)\tlong long"
+			],
+			[
+				"outpu",
+				"outputLatentDir"
+			],
+			[
+				"updateThe",
+				"updateThetaWithBetaDistributed"
+			],
+			[
+				"priro",
+				"priorBeta"
+			],
+			[
+				"pri",
+				"priorAlpha"
+			],
+			[
+				"Fix",
+				"FixedSizeMultiVector\tclassTemplate"
+			],
+			[
+				"no",
+				"norm"
+			],
+			[
+				"type",
+				"typeid(expression-or-type)\tKeyWord"
+			],
+			[
+				"output",
+				"pathOutputDir"
+			],
+			[
+				"FI",
+				"FixedSizeMultiVector"
+			],
+			[
+				"get",
+				"getAlpha() const\tFixedSizeMultiVector<double, long long>"
+			],
+			[
+				"gete",
+				"getEta() const\tFixedSizeMultiVector<double, long long>"
+			],
+			[
+				"print",
+				"printLatents(std::string baseDir) const\tvoid"
+			],
+			[
+				"path",
+				"pathOutputDir\tstd::string"
+			],
+			[
+				"pmsi",
+				"pmswitch::\tnamespace"
+			],
+			[
+				"inc",
+				"include \"header\"\tKeyWord"
+			],
+			[
+				"str",
+				"str() const\tstring_type"
+			],
+			[
+				"EXPECT_nea",
+				"EXPECT_NEAR(val1, val2, abs_error)\tMacro"
+			],
+			[
+				"to_strin",
+				"to_string(double __val)\tstring"
+			],
+			[
+				"EXPE",
+				"EXPECT_TRUE(condition)\tMacro"
+			],
+			[
+				"strtod",
+				"strtod(const char *, char **)\tdouble"
+			],
+			[
+				"cre",
+				"createFixedSizeMultiVector(std::string path, double (*strToE)(std::string))\tFixedSizeMultiVector<double, long long>"
+			],
+			[
+				"Fixed",
+				"FixedSizeMultiVector\tconstructor"
+			],
+			[
+				"Fi",
+				"FixedSizeMultiVectorCreator\tconstructor"
+			],
+			[
+				"Fie",
+				"FixedSizeMultiVectorCreator\tclassTemplate"
+			],
+			[
+				"FIx",
+				"FixedSizeMultiVectorCreator\tclassTemplate"
+			],
+			[
+				"data",
+				"data_path\tstd::string"
+			],
+			[
+				"volume",
+				"volumeVec"
+			],
+			[
+				"strtoul",
+				"strtoull(const char *, char **, int)\tunsigned long long"
+			],
+			[
+				"stirn",
+				"StringUtil"
 			],
 			[
 				"vec",
-				"vector	classTemplate"
+				"vector\tstd::vector"
+			],
+			[
+				"incl",
+				"include <header>\tKeyWord"
+			],
+			[
+				"befr",
+				"beforeLq"
+			],
+			[
+				"ga",
+				"gamma"
+			],
+			[
+				"before",
+				"beforeLq"
+			],
+			[
+				"EZ",
+				"EZFilter"
+			],
+			[
+				"Inference",
+				"Inference"
+			],
+			[
+				"Inf",
+				"Inference\tclassTemplate"
+			],
+			[
+				"Infe",
+				"InferenceCreator\tclassTemplate"
+			],
+			[
+				"fv",
+				"fvFile\tstatement"
+			],
+			[
+				"write",
+				"writelines\tfunction"
+			],
+			[
+				"__m",
+				"__Ml\tstatement"
+			],
+			[
+				"J",
+				"__JsLambda"
+			],
+			[
+				"app",
+				"applied(const pmswitch::FixedSizeMultiVector<Real, Int> &vec, Real (*func)(Real), const FixedSizeMultiVector<bool, Int> &filter)\tpmswitch::FixedSizeMultiVector<Real, Int>"
+			],
+			[
+				"appl",
+				"applied"
+			],
+			[
+				"D1vec",
+				"D1VecDig1\tpmswitch::FixedSizeMultiVector<double>"
+			],
+			[
+				"EXPECT_",
+				"EXPECT_NEAR(val1, val2, abs_error)\tMacro"
+			],
+			[
+				"elog",
+				"elogdirD2\tdouble"
+			],
+			[
+				"D2ve",
+				"D2VecParam"
+			],
+			[
+				"D1Ve",
+				"D1Vec1Dig\tpmswitch::FixedSizeMultiVector<double>"
+			],
+			[
+				"Expe",
+				"EXPECT_EQ(expected, actual)\tMacro"
+			],
+			[
+				"fil",
+				"filtVal\tbool"
+			],
+			[
+				"EXPEP",
+				"EXPECT_EQ(expected, actual)\tMacro"
+			],
+			[
+				"filt",
+				"filtVal\tbool"
+			],
+			[
+				"make",
+				"makeFilter(pmswitch::FixedSizeMultiVector<bool, Int> &vec, Int range, const Args &args...)\tvoid"
 			],
 			[
 				"EX",
-				"EXPECT_TRUE(condition)	Macro"
+				"EXPECT_TRUE(condition)\tMacro"
+			],
+			[
+				"nor",
+				"norm(pmswitch::FixedSizeMultiVector<Real, Int> &vec, Int dim)\tvoid"
+			],
+			[
+				"norm",
+				"norm(pmswitch::FixedSizeMultiVector<Real, Int> &vec)\tvoid"
+			],
+			[
+				"m",
+				"ml\tFixedSizeMultiVector<Int>"
+			],
+			[
+				"cal",
+				"calELogDir(const pmswitch::FixedSizeMultiVector<Real, Int> &logTheta, const pmswitch::FixedSizeMultiVector<Real, Int> &param)\tReal"
+			],
+			[
+				"sum",
+				"sum(const pmswitch::FixedSizeMultiVector<Real, Int> &vec, const pmswitch::FixedSizeMultiVector<bool, Int> &filter)\tReal"
+			],
+			[
+				"di",
+				"calELogDir(const pmswitch::FixedSizeMultiVector<Real, Int> &logTheta, const pmswitch::FixedSizeMultiVector<Real, Int> &param)\tReal"
+			],
+			[
+				"update",
+				"updateDB\tbool"
+			],
+			[
+				"local",
+				"localMax\tReal"
+			],
+			[
+				"makeFilter",
+				"makeFilterImpl"
+			],
+			[
+				"vo",
+				"volume"
+			],
+			[
+				"makefilter",
+				"makeFilterImpl(const pmswitch::FixedSizeMultiVector<bool, Int> &vec, Int n, Int idx, bool val, const pmswitch::FixedSizeMultiVector<Int, Int> &range, const Args &args...)\tpmswitch::FixedSizeMultiVector<bool, Int>"
+			],
+			[
+				"local_sum",
+				"local_sum_par_lt\tReal"
+			],
+			[
+				"lga",
+				"lgamma(double)\tdouble"
+			],
+			[
+				"DB",
+				"DBData\tclassTemplate"
+			],
+			[
+				"inferene",
+				"inferenceCreator\tInferenceCreator<Int, Real>"
+			],
+			[
+				"Infere",
+				"Inference\tclassTemplate"
+			],
+			[
+				"Prior",
+				"PriorParameters\tclassTemplate"
+			],
+			[
+				"prio",
+				"PriorParameters\tclassTemplate"
+			],
+			[
+				"fre",
+				"FeatureData\tclassTemplate"
+			],
+			[
+				"idx",
+				"idxToPosSize\tstd::vector<Int> &"
+			],
+			[
+				"srand",
+				"srand(unsigned int)\tvoid"
+			],
+			[
+				"pos",
+				"posSizeEach\tstd::vector<long long>"
+			],
+			[
+				"sample",
+				"sampleSize\tlong long"
 			],
 			[
 				"size",
@@ -37,19 +345,15 @@
 			],
 			[
 				"EXpe",
-				"EXPECT_NO_THROW(statement)	Macro"
+				"EXPECT_NO_THROW(statement)\tMacro"
 			],
 			[
 				"test",
-				"testDBPath	std::string"
-			],
-			[
-				"inc",
-				"include \"header\"	KeyWord"
+				"testDBPath\tstd::string"
 			],
 			[
 				"ar",
-				"argv	char **"
+				"argv\tchar **"
 			],
 			[
 				"math",
@@ -57,7 +361,7 @@
 			],
 			[
 				"kill",
-				"killkillkill()	int"
+				"killkillkill()\tint"
 			],
 			[
 				"gtes",
@@ -65,15 +369,15 @@
 			],
 			[
 				"in",
-				"include <header>	KeyWord"
+				"include <header>\tKeyWord"
 			],
 			[
 				"sh",
-				"sh..	qsubjob"
+				"sh..\tqsubjob"
 			],
 			[
 				"var",
-				"varOutput	statement"
+				"varOutput\tstatement"
 			],
 			[
 				"out",
@@ -85,11 +389,11 @@
 			],
 			[
 				"for",
-				"forin	for … in … done"
+				"forin\tfor … in … done"
 			],
 			[
 				"len",
-				"length	statement"
+				"length\tstatement"
 			],
 			[
 				"NO",
@@ -105,75 +409,67 @@
 			],
 			[
 				"normal",
-				"normalReadTypes	std::vector<std::vector<int> >"
+				"normalReadTypes\tstd::vector<std::vector<int> >"
 			],
 			[
 				"norma",
-				"normalLiks	std::vector<std::vector<double> >"
+				"normalLiks\tstd::vector<std::vector<double> >"
 			],
 			[
 				"tumor",
-				"tumorLiks	std::vector<std::vector<double> >"
+				"tumorLiks\tstd::vector<std::vector<double> >"
 			],
 			[
 				"OHVA",
-				"OHVARFINDER2NOCATEGORY	Parameters::ALGO"
+				"OHVARFINDER2NOCATEGORY\tParameters::ALGO"
 			],
 			[
 				"al",
-				"algorithmType	std::string"
+				"algorithmType\tstd::string"
 			],
 			[
 				"max",
-				"maxNum	int"
+				"maxNum\tint"
 			],
 			[
 				"pro",
-				"proportions	statement"
+				"proportions\tstatement"
 			],
 			[
 				"int",
-				"intCols	statement"
+				"intCols\tstatement"
 			],
 			[
 				"min",
-				"minDepth	statement"
+				"minDepth\tstatement"
 			],
 			[
 				"range",
-				"rangeDic	statement"
-			],
-			[
-				"output",
-				"outputList	statement"
+				"rangeDic\tstatement"
 			],
 			[
 				"tumorREads",
-				"tumorReadsOverlap	std::vector<IRead *>"
+				"tumorReadsOverlap\tstd::vector<IRead *>"
 			],
 			[
 				"metho",
-				"method	ALGO"
+				"method\tALGO"
 			],
 			[
 				"met",
-				"method	ALGO"
+				"method\tALGO"
 			],
 			[
 				"me",
-				"methodStr	std::string"
-			],
-			[
-				"pri",
-				"prior"
+				"methodStr\tstd::string"
 			],
 			[
 				"new_alpha",
-				"new_alpha_pcr	statement"
+				"new_alpha_pcr\tstatement"
 			],
 			[
 				"non",
-				"nonRefIdx	statement"
+				"nonRefIdx\tstatement"
 			],
 			[
 				"Ref",
@@ -181,19 +477,15 @@
 			],
 			[
 				"ref",
-				"refIdx	statement"
-			],
-			[
-				"alpha",
-				"alpha_m	statement"
+				"refIdx\tstatement"
 			],
 			[
 				"new_gamma",
-				"new_gamma_v3	statement"
+				"new_gamma_v3\tstatement"
 			],
 			[
 				"alhpa",
-				"alpha	param"
+				"alpha\tparam"
 			],
 			[
 				"re",
@@ -205,325 +497,50 @@
 			],
 			[
 				"upda",
-				"updateCount	statement"
-			],
-			[
-				"ga",
-				"gamma	param"
+				"updateCount\tstatement"
 			],
 			[
 				"pile",
-				"pileUpInPath	statement"
+				"pileUpInPath\tstatement"
 			],
 			[
 				"pilen",
-				"pileUpInPath	statement"
+				"pileUpInPath\tstatement"
 			],
 			[
 				"dig_",
-				"dig_gamma_v1	statement"
+				"dig_gamma_v1\tstatement"
 			],
 			[
 				"dig_alpha",
-				"dig_alpha_v	statement"
-			],
-			[
-				"B_pma",
-				"B_p_mat_List"
-			],
-			[
-				"flo",
-				"float64"
-			],
-			[
-				"piled",
-				"piledAnsList"
-			],
-			[
-				"try",
-				"try	Try/Except"
-			],
-			[
-				"P_m",
-				"P_m_mat_List	param"
-			],
-			[
-				"__obs",
-				"__obsBaseIdx"
-			],
-			[
-				"sim",
-				"SimParamGeneratorTumor	class"
-			],
-			[
-				"updae",
-				"updateCount"
-			],
-			[
-				"__ref",
-				"__refBaseIdx	statement"
-			],
-			[
-				"up",
-				"updateCount	statement"
-			],
-			[
-				"col",
-				"colSize_List	param"
-			],
-			[
-				"Exe",
-				"Exception	class"
-			],
-			[
-				"Lq",
-				"Lq_new	statement"
-			],
-			[
-				"Lq_",
-				"Lq_old	statement"
-			],
-			[
-				"gamma",
-				"gamma_v	statement"
-			],
-			[
-				"data",
-				"dataList	statement"
-			],
-			[
-				"obar",
-				"obarCall	statement"
-			],
-			[
-				"makeData",
-				"makeDataList"
-			],
-			[
-				"su",
-				"summaryAll	statement"
-			],
-			[
-				"py",
-				"py..	Let's Python coding"
-			],
-			[
-				"base",
-				"baseP	param"
-			],
-			[
-				"pi_",
-				"pi_vs	statement"
-			],
-			[
-				"__genE",
-				"__genEpsPcr	function"
-			],
-			[
-				"eps_p",
-				"eps_pcr	statement"
-			],
-			[
-				"gamam",
-				"gamma_v"
-			],
-			[
-				"nor",
-				"normal	function"
-			],
-			[
-				"hye",
-				"hyperparams	statement"
-			],
-			[
-				"filter",
-				"filterCommand	statement"
-			],
-			[
-				"filte",
-				"filterDic	statement"
-			],
-			[
-				"extra",
-				"extractGenesAndScoresANNOVAR	function"
-			],
-			[
-				"Chr",
-				"ChrSpecified	statement"
-			],
-			[
-				"fasta",
-				"fastaPath	statement"
-			],
-			[
-				"exp",
-				"exceptionValues	param"
-			],
-			[
-				"fli",
-				"filterDic	statement"
-			],
-			[
-				"ex",
-				"extractGenesAndScoresOVar	function"
-			],
-			[
-				"ovar",
-				"ovarDic	statement"
-			],
-			[
-				"lien",
-				"lineCols	statement"
-			],
-			[
-				"anno",
-				"annovarFile	withstmt"
-			],
-			[
-				"inpu",
-				"inputAnnovar	param"
-			],
-			[
-				"Typ",
-				"TYPE	statement"
-			],
-			[
-				"input",
-				"inputVCF"
-			],
-			[
-				"fil",
-				"filterCommand	statement"
-			],
-			[
-				"is",
-				"isVCF"
-			],
-			[
-				"line",
-				"lineCols	statement"
-			],
-			[
-				"dpe",
-				"depthMinus	statement"
-			],
-			[
-				"depth",
-				"depthPlus"
-			],
-			[
-				"sta",
-				"satisfiedAll"
-			],
-			[
-				"chr",
-				"Chr	statement"
-			],
-			[
-				"tag",
-				"tagDic	statement"
-			],
-			[
-				"fa",
-				"fastq1"
-			],
-			[
-				"bq",
-				"bqStrings	function"
-			],
-			[
-				"bar",
-				"barcodeLen	statement"
-			],
-			[
-				"bs",
-				"bases	statement"
-			],
-			[
-				"outpu",
-				"outputDir"
-			],
-			[
-				"ouput",
-				"outputDir"
-			],
-			[
-				"write",
-				"writelines	function"
-			],
-			[
-				"bamf",
-				"bamFilesList	statement"
-			],
-			[
-				"mar",
-				"markCols	statement"
-			],
-			[
-				"bas",
-				"bases	statement"
-			],
-			[
-				"he",
-				"headerCols	statement"
-			],
-			[
-				"ba",
-				"barcodeLen	statement"
-			],
-			[
-				"pie",
-				"piledLine"
-			],
-			[
-				"resu",
-				"resultN"
-			],
-			[
-				"outpt",
-				"outputList"
-			],
-			[
-				"simula",
-				"simulateOnce"
-			],
-			[
-				"obsBq",
-				"obsBqsFiltered"
-			],
-			[
-				"obs",
-				"obsBqs"
-			],
-			[
-				"de",
-				"depth"
-			],
-			[
-				"lne",
-				"lineCols"
-			],
-			[
-				"set",
-				"setValue"
-			],
-			[
-				"OHV",
-				"OHVarfinDer"
-			],
-			[
-				"arra",
-				"arrayT"
+				"dig_alpha_v\tstatement"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "tests/src/main.cpp",
+			"file": "src/main.cpp",
 			"settings":
 			{
-				"buffer_size": 522,
+				"buffer_size": 1133,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/PriorParameters.hpp",
+			"settings":
+			{
+				"buffer_size": 14829,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Parameters.hpp",
+			"settings":
+			{
+				"buffer_size": 4042,
 				"line_ending": "Unix"
 			}
 		},
@@ -531,47 +548,34 @@
 			"file": "tests/src/sim_test.hpp",
 			"settings":
 			{
-				"buffer_size": 28994,
+				"buffer_size": 24153,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/FeatureData.hpp",
+			"file": "src/Inference.hpp",
 			"settings":
 			{
-				"buffer_size": 1569,
+				"buffer_size": 44523,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/FixedSizeMultiVector.hpp",
+			"file": "src/MathUtil.hpp",
 			"settings":
 			{
-				"buffer_size": 5005,
+				"buffer_size": 20645,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/InputFileParser.hpp",
+			"file": "utils/sampleConfig.ini",
 			"settings":
 			{
-				"buffer_size": 9259,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/DBData.hpp",
-			"settings":
-			{
-				"buffer_size": 870,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/ExceptionUtil.hpp",
-			"settings":
-			{
-				"buffer_size": 277,
+				"buffer_size": 230,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
@@ -583,14 +587,10 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 392.0,
-		"last_filter": "list",
+		"height": 187.0,
+		"last_filter": "",
 		"selected_items":
 		[
-			[
-				"list",
-				"Package Control: List Packages"
-			],
 			[
 				"install",
 				"Package Control: Install Package"
@@ -598,6 +598,14 @@
 			[
 				"remove",
 				"Package Control: Remove Package"
+			],
+			[
+				"list ",
+				"Package Control: List Packages"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
 			],
 			[
 				"listpa",
@@ -710,22 +718,66 @@
 	"expanded_folders":
 	[
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/obj",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/obj",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/src"
 	],
 	"file_history":
 	[
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/PMSwitch.sublime-project",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/main.cpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/InferenceData.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/FeatureData.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/DBData.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/InputFileParser.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/PriorParameters.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/Parameters.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/Inference.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/FixedSizeMultiVector.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/D2Vector.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/ExceptionUtil.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/MultiVector.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/MathUtil.hpp",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/Makefile",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/alpha.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/alpha.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simDB.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/simFV.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/beta.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/eta.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/EY.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/EYnew.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/EZnew.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/gamma.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/ESnew.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/s.txt",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/Makefile",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/u.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/src/sim_test.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/StringUtil.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/err/ES.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/sampleConfig.ini",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/libs/boost_1_45_0_subset/boost/math/special_functions/digamma.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/src/main.cpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/main.cpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/libs/boost_1_45_0_subset/boost/exception/exception.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/simDB.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/param.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/temp/alpha.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/temp/gamma.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/simDataGenerator.py",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/docs/memo.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/libs/boost_1_45_0_subset/boost/format.hpp",
+		"/Users/moriyamatakuya/Library/Application Support/Sublime Text 3/Packages/User/SFTP.errors.log",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/test.db",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/param.txt",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/simFV",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/utils/simDB",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/data/test.fv",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/pmswitch.sublime-project",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/MultiRange.hpp",
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/PMSwitch.sublime-project",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/src/sim_test.h",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/PMSwitch.sublime-project",
 		"/Users/moriyamatakuya/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/ExceptionUtil.hpp",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/tests/src/main.cpp",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160312_overlapWhole/tools/OHVarFinder/OHVarFinder/tests/test_call.sh",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/OVarCall/src/main/py/__init__.py",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/runAllOHVarWhole.sh",
@@ -799,52 +851,7 @@
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallers/OHVarfinDerNoCategory/runOHVar.sh",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/OHVarfinDerNoCategory/eachOHVar.sh",
 		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallers/OHVarfinDer/collectOHVar.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/OHVarfinDer/ParamWhole3.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/OHVarfinDer/ParamWhole2.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/VarScan2/eachVarScan2.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/VarScan2/config.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/compareWithOVar/configExome.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/compareWithOVar/configWhole.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/OHVarfinDer/ParamWhole4.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/OHVarfinDer/runOHVar.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/runROCAll.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160312_overlapWhole/tools/OHVarFinder/OHVarFinder/tests/src/main.cpp",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160312_overlapWhole/tools/OHVarFinder/OHVarFinder/src/OHVarfinDer2.cpp",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160312_overlapWhole/tools/OHVarFinder/OHVarFinder/tests/Makefile",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160312_overlapWhole/tools/OHVarFinder/OHVarFinder/tests/src/sim_test.h",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160312_overlapWhole/tools/OHVarFinder/OHVarFinder/tests/libs/Makefile",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/findAnsMutationInPureData/runFindAns/ParamAns.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/inputWholeBams1.txt",
-		"/Users/moriyamatakuya/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compSimulationData/genSimulationData/eachProcessSimulation.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compSimulationData/genSimulationData/config.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallers/OHVarfinDer/setValue.py",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallers/OHVarfinDer/eachOHVar.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallers/OHVarfinDerNoCategory/eachOHVar.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallers/OHVarfinDer/runOHVar.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/findAnsMutationInPureData/runFindAns/runOHVar.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/OVarCall/src/experiments/reviewExperiment/measureTime/eachHapMuC.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/OVarCall/src/experiments/reviewExperiment/measureTime/usedData.txt",
-		"/Users/moriyamatakuya/Dropbox/book/compiler/memo.txt",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/OVarCallPackage/lib/OVarCall/run.py",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/OVarCallPackage/lib/OVarCall/utilOVar/bamDAO.py",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/OVarCallPackage/OVarCall",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/OVarCallPackage/OVarCall.ini",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/OVarCallPackage/OVarFilter",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/OVarCallPackage/setup.py",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/OVarCallPackage/README.md",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallers/OVarCall/runOVarCallWithAns.sh",
-		"/Users/moriyamatakuya/Desktop/All/study/codes/lex_yacc/sample4.l",
-		"/Users/moriyamatakuya/Desktop/All/study/codes/lex_yacc/sample.l",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallers/OHVarfinDer/ParamLow_2.sh",
-		"/Users/moriyamatakuya/Desktop/All/study/codes/lex_yacc/sample3.l",
-		"/Users/moriyamatakuya/Desktop/All/study/codes/lex_yacc/sample2.l",
-		"/Users/moriyamatakuya/Desktop/All/study/codes/lex_yacc/sample1.l",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/OVarCall/src/experiments/reviewExperiment/measureTime/eachOHVarfinDer.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/OVarCall/src/experiments/reviewExperiment/measureTime/ParamsLow.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compSimulationData/genSimulationData/collectResults.sh",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/OVarCall/src/experiments/reviewExperiment/measureTime/usedDataSmall.txt",
-		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160312_overlapWhole/tools/OHVarFinder/OHVarFinderTemp/execOHVar.sh"
+		"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/160521_ohvarfinder/src/compRealData/runCallersWhole/OHVarfinDer/ParamWhole3.sh"
 	],
 	"find":
 	{
@@ -855,6 +862,8 @@
 		"height": 93.0,
 		"where_history":
 		[
+			"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src/",
+			"/Users/moriyamatakuya/Desktop/All/work/sftp_scripts/github/packages/PMSwitch/src",
 			""
 		]
 	},
@@ -863,134 +872,134 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"cout",
-			"cerr",
-			"updateSampleNameIndexRelationFV",
+			"long double",
+			"updateG",
+			"float",
+			"long double",
+			"makealpha",
+			"int",
 			"prepareParseFV",
-			"parseFVX",
-			"getJsInfoFV",
-			"updateSampleNameIndexRelationFV",
-			"getJsInfoFV",
-			"prepare",
-			"parseFVX",
-			"prepare",
-			"updateSampleNameIndexRelationFV",
-			"prepareParseFV",
+			"parseFeatureFile",
+			"long long",
+			"double",
+			"math::",
+			"(Real)0",
+			"updateES",
+			"double",
+			"updateG",
+			"long double",
+			"lnES",
+			"updateES",
+			"makealpha",
+			"ES",
+			"::norm",
+			"updateG",
+			"::init",
+			"vbFull",
+			"updateG",
+			"dec",
+			"initEZ",
+			"::vb",
+			"createInference",
+			"printHyperParameters",
+			"1.05",
+			"s.txt",
+			"s.",
+			"beta",
+			"alpha",
+			"EZnew",
+			"/EZ",
+			"2.0",
+			"::initE",
+			"init",
+			"s.",
+			"gamma",
+			"eta",
+			"beta",
+			"alpha",
+			"::print",
+			"gamma",
+			"beta",
 			"print",
-			"dimVec",
-			"sizeVec",
-			"SizeVec",
-			"InitGoogleTest",
-			"REF",
-			"PYTHON",
-			"SAMTOOLS",
-			"${OUTPUTDIR}",
-			"OUTPUT",
-			"output",
-			"OUTPUT",
-			"output",
-			"OUTPUT",
-			"NUM",
-			"+",
-			"mapto",
-			"haplotype",
-			"data",
-			"data_path",
-			"PairedEnds",
-			".1.",
-			"pairedBamS",
-			"pairedBam",
-			"pairedBamF",
-			"HapMuCTest",
-			"checkIfVariantIsIncluded",
-			"TotalDel",
-			"HaplotypeBuilderBasic",
-			"ProfileHMM",
-			"HaplotypeBuilderDeletion",
-			"HaplotypeBuilderBasic",
-			"RUN_ALL_TESTS",
-			">>>>>>>",
-			"<<<<<<<",
-			"version",
-			"__minAvgBaseQuality",
-			"--ohvar2",
-			"--ohvar2_",
-			"ignoreHapMuCReadFilter",
-			"--ohvar2",
-			"ohvar2_",
-			"_N",
-			"_T",
-			"noCategory_",
-			"err",
-			"whole",
-			"${OHVARDIR}/bin/ohvarfinder \\\n--algorithm OHVarfinDer2 \\\n-f ${REF}    \\\n-a ${TUMOR}  \\\n-b ${NORMAL} \\\n-o ${OUTPUTDIR}/OHVarfinDer.tmp \\\n--maxInsertSize=${maxInsertSize} \\\n--tumorMinDepth=${tumorMinDepth} \\\n--tumorMinObsRate=${tumorMinObsRate} \\\n--tumorMaxObsRate=${tumorMaxObsRate} \\\n--tumorMinObsNum=${tumorMinObsNum} \\\n--normalMinDepth=${normalMinDepth} \\\n--normalMaxObsRate=${normalMaxObsRate} \\\n--normalMaxObsNum=${normalMaxObsNum} \\\n--heteroSNPMinDepth=${heteroSNPMinDepth} \\\n--heteroSNPMinObsRate=${heteroSNPMinObsRate} \\\n--heteroSNPMinObsNum=${heteroSNPMinObsNum} \\\n--withoutBayesFactor \\\n--softClipPosessionFreqThreshold=${softClipPosessionFreqThreshold} \\\n--tumorMinAvgBaseQuality=${tumorMinAvgBaseQuality} \\\n--normalMinAvgBaseQuality=${normalMinAvgBaseQuality} \\\n--heteroSNPMinAvgBaseQuality=${heteroSNPMinAvgBaseQuality} \\\n--maxReadLength=100 \\\n--averageMapQualThreshold=${averageMapQualThreshold} \\\n--ignoreHapMuCReadFilter \\\n-R ${REGION}",
-			" -l",
-			"-hold_jid",
-			" -l",
-			"-hold_jid",
-			"ae",
-			"${SAMTOOLS}",
-			"samtools",
-			"SAMTOOLS",
-			"samtools",
-			"cut -f 9-16",
-			"1 8 8 false",
-			"false >",
-			"FALSE",
+			"lnProbGamma",
+			"param",
+			"lnProbGamma",
+			"makeAvgAlpha",
+			"myLogGamma",
+			"long double",
+			"myLogGamma",
+			"lgamma",
+			"lnProbGamma",
+			"updateVWithAlphaDistributed",
+			"lnProbGamma",
+			"updateEY(EY, lnEY, EYFilter, I, Js, maxJ, L, ml, N, lng, ES, X, dig_pi);",
+			"caldir",
+			"updateVWithAlphaDistributed",
+			"makeavgalpha",
+			"::makeavgalpha",
+			"makeAlpha",
+			"make",
+			"for(Int i = 0; i < I; i++)for(Int k = 0; k < T; k++){ dig_v_sig(i,k) = 0.0; }\n\t\t\t\tfor(Int i = 0; i < I; i++)for(Int k = 0; k < T; k++){\n\t\t\t\t\tif(k < T-1){ dig_v_sig(i, k) += dig_v(i, k, 0);}\n\t\t\t\t\tfor(Int t = 0; t <= k-1; t++ ){ dig_v_sig(i, k) += dig_v(i, t, 1);}\n\t\t\t\t}",
+			"updateVWithAlphaDistributed",
+			"makeAvgAlpha",
+			"avg_alpha",
+			"first",
+			"EZ.txt",
+			"eta",
+			"gamma",
+			"u.",
+			"U.",
+			"u.",
+			"U",
+			"u",
+			"makeAvgAlpha",
+			"updateG",
+			"::updateES",
+			"updateES",
+			"updateThetaWithBetaDistributed",
+			"lnProbGamma",
+			"updateThetaWithBetaDistributed",
+			"makeAvgBeta",
+			"updateVWithAlphaDistributed",
+			"if( !ofs.fail())",
+			"makeAvgBeta",
+			"updateVWithAlphaDistributed",
+			"makeAvgAlpha",
+			"makeAvgBeta",
+			"createInference",
+			"updateThetaWithBetaDistributed",
+			"::vb",
+			"dim",
+			"outputLatentDir",
+			"vbFull",
+			"full",
+			"ofstream",
+			"ifstream",
+			"ifstrem",
+			"ofstrem",
+			"initES",
+			"EZ",
+			"initEZ",
+			"die",
+			"init",
+			"createInference",
+			"strToReal",
+			"updateVector",
+			"createFixedSizeMultiVector",
+			"cre",
+			"initEZ",
 			"false",
-			"t.M",
-			".t.M",
-			".M",
-			".t",
-			".t.",
-			"${DIR}/toProportion.py",
-			"SRC",
-			"t",
-			"M",
-			"TRUE",
-			".n",
-			".M",
-			".t",
-			"TRUE",
-			".n",
-			".t",
-			".t.",
-			"cut -f 9-16",
-			"grep",
-			".t",
-			".pos.Hap.t",
-			".pos.Hap.t.pile",
-			"-hold_jid \\\"OHVar.${tagJob}*\\\"",
-			"-hold_jid \"OHVar.${tagJob}*\"",
-			"NORMALDIR",
-			"-hold_jid ",
-			"-hold_jid \\\"AnsOHVar",
-			"\"collectOHVar.*\"",
-			"\\\"collectOHVar.*\\\"",
-			"collectOHVar",
-			"AnscollectOHVar",
-			"-N collectOHVar",
-			"-hold_jid \"OHVar",
-			"-hold_jid \\\"OHVar",
-			"OHVar.${tagJob}",
-			"filtAns",
-			"TRUE",
-			"qsub",
-			"callMutations.sh",
-			"callMutations",
-			"qsub -q",
-			"-l ljob -N",
-			"-soft -l ljob",
-			"-hold_jid \"${jobTag}.OVarCall.${tagJob}*\"",
-			"mjobs,q.ljobs.q",
-			"OHVarfinDer.output.filt.tmp",
-			"config",
-			"CONFIG",
-			"triAlleleMinObsNum",
-			"--",
-			"found no candidate mutations. could not make any windows.",
-			"OHVarfinDer.tmp",
-			"OHVarfinDer.tmp.calls"
+			"init",
+			"makeAvgAlpha",
+			"makeBeta",
+			"makeAlpha",
+			"updateV",
+			"updateVWithAlphaFixed",
+			"=",
+			"void",
+			"createPriorParameters",
+			"ans",
+			"using"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1008,97 +1017,24 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "tests/src/main.cpp",
+					"file": "src/main.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 522,
+						"buffer_size": 1133,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								518,
-								518
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"is_init_dirty_state": false,
-							"open_with_edit": true,
-							"origin_encoding": "ASCII",
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "tests/src/sim_test.hpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 28994,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2903,
-								2903
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"is_init_dirty_state": false,
-							"origin_encoding": "ASCII",
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/FeatureData.hpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1569,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								816,
-								816
+								949,
+								949
 							]
 						],
 						"settings":
@@ -1113,27 +1049,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 120.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "src/FixedSizeMultiVector.hpp",
+					"buffer": 1,
+					"file": "src/PriorParameters.hpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5005,
+						"buffer_size": 14829,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3086,
-								3091
+								281,
+								281
 							]
 						],
 						"settings":
@@ -1146,6 +1082,42 @@
 							"synced": false,
 							"syntax": "Packages/C++/C++.sublime-syntax",
 							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1175.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/Parameters.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4042,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3356,
+								3356
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"is_init_dirty_state": false,
+							"origin_encoding": "ASCII",
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1155,20 +1127,56 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "src/InputFileParser.hpp",
+					"buffer": 3,
+					"file": "tests/src/sim_test.hpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9259,
+						"buffer_size": 24153,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8830,
-								8830
+								22909,
+								22909
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"is_init_dirty_state": false,
+							"origin_encoding": "UTF-8",
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7645.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/Inference.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 44523,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								30708,
+								30708
 							]
 						],
 						"settings":
@@ -1183,27 +1191,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3658.0,
+						"translation.y": 618.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "src/DBData.hpp",
+					"file": "src/MathUtil.hpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 870,
+						"buffer_size": 20645,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								592,
-								592
+								10927,
+								10927
 							]
 						],
 						"settings":
@@ -1226,19 +1234,19 @@
 				},
 				{
 					"buffer": 6,
-					"file": "src/ExceptionUtil.hpp",
+					"file": "utils/sampleConfig.ini",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 277,
+						"buffer_size": 230,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								86,
-								86
+								105,
+								105
 							]
 						],
 						"settings":
@@ -1249,7 +1257,7 @@
 							"origin_encoding": "ASCII",
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/C++/C++.sublime-syntax"
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1263,7 +1271,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 23.0
+		"height": 21.0
 	},
 	"input":
 	{
@@ -1302,13 +1310,13 @@
 	},
 	"output.sftp":
 	{
-		"height": 90.0
+		"height": 83.0
 	},
 	"pinned_build_system": "",
 	"project": "pmswitch.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 40.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1317,6 +1325,30 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"inferenc",
+				"src/Inference.hpp"
+			],
+			[
+				"fixedsize",
+				"src/FixedSizeMultiVector.hpp"
+			],
+			[
+				"parame",
+				"src/Parameters.hpp"
+			],
+			[
+				"fixedsie",
+				"src/FixedSizeMultiVector.hpp"
+			],
+			[
+				"inpu",
+				"src/InputFileParser.hpp"
+			],
+			[
+				"dbda",
+				"src/DBData.hpp"
+			],
 			[
 				"dbdata",
 				"src/DBData.hpp"
@@ -1804,14 +1836,6 @@
 			[
 				"pilup.py",
 				"sftp_scripts/github/packages/OVarCallPackage/lib/OVarCall/filter/pileUp.py"
-			],
-			[
-				"params.py",
-				"codes/phylosub-master/c++/params.py"
-			],
-			[
-				"tssb",
-				"codes/phylosub-master/c++/tssb.py"
 			]
 		],
 		"width": 0.0
@@ -1842,7 +1866,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 235.0,
+	"side_bar_width": 242.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
